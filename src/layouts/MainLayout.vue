@@ -4,8 +4,9 @@
       elevated
       style="background: linear-gradient(45deg, #cb2a45, #2a4a82)"
     >
-      <q-toolbar>
+      <q-toolbar class="row justify-center">
         <q-toolbar-title class="col-1"> Miss Lover </q-toolbar-title>
+        <q-space />
         <q-input
           class="col-4 q-ml-md q-mr-md bg-white"
           v-model="keyword"

@@ -1,9 +1,9 @@
 <template>
-  <div style="width: 274px">
-    <router-link :to="`/product/${props.id}`">
-      <q-img class="product-img" :src="props.link" fit="contain" />
+  <div style="width: 250px">
+    <router-link :to="`/star/${route.params.id}/product/${props.id}`">
+      <q-img class="star-product-img" :src="props.link" fit="contain" />
     </router-link>
-    <div class="column q-mt-sm">
+    <div class="column q-mt-sm q-px-sm">
       <span>{{ props.desc }}</span>
       <span style="font-weight: bold">$3.85</span>
     </div>
@@ -11,18 +11,24 @@
 </template>
 
 <script setup>
+import { useRoute } from "vue-router";
+
 defineOptions({
   name: "ProductItem",
 });
+
+const route = useRoute();
 
 const props = defineProps({
   id: {
     type: String,
     default: "",
+    required: true,
   },
   link: {
     type: String,
     default: "",
+    required: true,
   },
   desc: {
     type: String,
@@ -31,13 +37,4 @@ const props = defineProps({
 });
 </script>
 
-<style scoped>
-.product-img {
-  width: 274px;
-  height: 256px;
-}
-
-.product-img:hover {
-  cursor: pointer;
-}
-</style>
+<style scoped></style>

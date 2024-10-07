@@ -4,11 +4,15 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: [
       {
-        path: "",
-        component: () => import("pages/ProductList.vue"),
+        path: "/",
+        component: () => import("pages/StarList.vue"),
       },
       {
-        path: "/product/:id",
+        path: "/star/:id",
+        component: () => import("pages/StarDetail.vue"),
+      },
+      {
+        path: "/star/:starId/product/:productId",
         component: () => import("pages/ProductDetail.vue"),
       },
     ],

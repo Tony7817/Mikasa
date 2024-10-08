@@ -1,9 +1,6 @@
 <template>
   <q-layout view="hHh Lpr fFf">
-    <q-header
-      elevated
-      style="background: linear-gradient(45deg, #cb2a45, #2a4a82)"
-    >
+    <q-header elevated class="gradient-linear">
       <q-toolbar class="row justify-center">
         <q-toolbar-title class="col-1"> Miss Lover </q-toolbar-title>
         <q-space />
@@ -30,6 +27,14 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <!--Footer-->
+    <div class="row justify-center q-pa-md text-white gradient-linear">
+      <div class="col column items-center q-gutter-sm">
+        <div>Contact Us</div>
+        <div>MissLover@gmail.com</div>
+      </div>
+    </div>
   </q-layout>
 </template>
 
@@ -46,5 +51,9 @@ const keyword = ref("");
 <style scoped>
 .searchInput {
   width: 500px;
+}
+
+.gradient-linear {
+  background: linear-gradient(45deg, #cb2a45, #2a4a82);
 }
 </style>

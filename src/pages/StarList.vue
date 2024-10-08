@@ -1,8 +1,11 @@
 <template>
-  <q-page>
-    <div class="row q-pt-lg">
+  <q-page padding style="background-color: #f7f7f7">
+    <div class="row q-gutter-sm">
       <!--Left display area-->
-      <div class="col-2 column q-gutter-md q-px-sm" style="width: 20.5%">
+      <div
+        class="column q-gutter-sm col-2 q-pa-sm"
+        style="background-color: white"
+      >
         <StarBrand
           v-for="b in starbrands"
           :key="b.id"
@@ -13,16 +16,17 @@
         />
       </div>
       <!--Right star display area-->
-      <div class="col">
-        <div class="row q-gutter-md">
+      <div class="col" style="background-color: white">
+        <div class="row q-gutter-lg">
           <StarItem
-            class="q-mt-sm"
+            class="q-pa-sm col-2"
             v-for="s in stars"
             :key="s.link"
             :id="s.id"
             :link="s.link"
             :name="s.name"
             :desc="s.desc"
+            style="width: 256px"
           />
         </div>
       </div>
@@ -48,7 +52,7 @@ const stars = ref([
   },
   {
     id: "2",
-    link: "https://m.media-amazon.com/images/I/71OIiMeephL._AC_SY879_.jpg",
+    link: "https://m.media-amazon.com/images/I/81N6NNr+G4L._AC_UL640_QL65_.jpg",
     name: "Ava",
     desc: "See me in the youtube https://youtube.com/sxxxx",
   },
@@ -82,12 +86,12 @@ const starbrands = ref([
   {
     id: "1",
     avatar: "https://cdn.quasar.dev/img/avatar.png",
-    desc: "Lucy wears a sexy black stocking on Pornhub, come and watch it",
+    desc: "Lucy wears a sexy black stocking recently, come and watch it",
   },
   {
     id: "2",
     avatar: "https://cdn.quasar.dev/img/avatar6.jpg",
-    desc: "Ruby wore a red sexy lingerie, come and watch it on pornhub",
+    desc: "Ruby wore a red sexy lingerie, come and watch",
   },
   {
     id: "3",

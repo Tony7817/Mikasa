@@ -1,6 +1,6 @@
 <template>
-  <div style="width: 274px; border: 1px solid #2a4a82">
-    <div style="background-color: #f7f7f7">
+  <div>
+    <div>
       <router-link :to="`/star/${props.id}`">
         <q-img class="star-product-img" :src="props.link" fit="contain" />
       </router-link>

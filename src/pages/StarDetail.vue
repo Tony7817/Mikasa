@@ -28,6 +28,9 @@
           <q-card-section>
             Twiter <a class="text-primary" href="">@Ruby</a>
           </q-card-section>
+          <q-card-section>
+            TikTok <a class="text-primary" href="">@Ruby</a>
+          </q-card-section>
         </q-card>
       </div>
       <div class="col" style="background-color: white">

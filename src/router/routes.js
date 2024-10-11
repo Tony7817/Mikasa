@@ -17,6 +17,10 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/login",
+    component: () => import("layouts/LoginLayout.vue"),
+  },
 
   // Always leave this as last one,
   // but you can also remove it

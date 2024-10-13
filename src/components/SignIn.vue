@@ -7,8 +7,22 @@
     </div>
     <div class="text-center q-mb-sm text-grey">or use your account</div>
     <q-form class="q-gutter-md q-px-lg" @submit="onSubmit">
-      <q-input v-model="email" label="Email" />
-      <q-input v-model="password" label="Password" />
+      <q-input
+        v-model="email"
+        :rules="[validateEmail]"
+        :error="emailError !== ''"
+        :error-message="emailError"
+        type="text"
+        label="Email"
+      />
+      <q-input
+        v-model="password"
+        :rules="[validatePassword]"
+        :error="passwordError !== ''"
+        :error-message="passwordError"
+        type="password"
+        label="Password"
+      />
       <div class="text-grey text-center forget-pass">Forget your password?</div>
       <div class="column items-center">
         <q-btn
@@ -32,7 +46,10 @@
 <script setup>
 import { useQuasar } from "quasar";
 import { userService } from "src/services/userService";
+import { validateEmailx } from "src/composables/user";
+import { tools } from "src/uril/tool";
 import { ref } from "vue";
+import { StatusOK } from "src/composables/consts";
 
 defineOptions({
   name: "SignIn",
@@ -48,19 +65,43 @@ const props = defineProps({
 
 const emit = defineEmits(["update:mode"]);
 const email = ref("");
+const { emailError, validateEmail } = validateEmailx();
 const password = ref("");
+const passwordError = ref("");
 
-const q = useQuasar();
+const validatePassword = (val) => {
+  if (val === "") {
+    passwordError.value = "Please enter your password";
+    return false;
+  }
+
+  passwordError.value = "";
+  return true;
+};
+
+const $q = useQuasar();
 
 async function onSubmit() {
+  const formData = new FormData();
+  formData.append("email", email.value);
+  formData.append("password", password.value);
+
   try {
-    const credentials = { emial: email.value, password: password.value };
-    const response = await userService.login(credentials);
-    console.log(response);
+    const response = await userService.postFormData("user/login", formData);
+    if (response.data.msg !== StatusOK) {
+      $q.notify({
+        type: "negative",
+        message: tools.parseError(response.data.msg),
+        position: "top",
+      });
+    } else {
+    }
   } catch (error) {
+    console.log("errro: ", error);
     $q.notify({
       type: "negative",
-      message: "Login failed",
+      message: "Something went wrong",
+      position: "top",
     });
   }
 }

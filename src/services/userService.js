@@ -1,19 +1,14 @@
 // src/services/userService.js
-import api from "./api";
+import { api } from "boot/axios";
 
 export const userService = {
   // 获取用户信息
-  getUserInfo(userId) {
-    return api.get(`/users/${userId}`);
-  },
 
   // 用户登录
-  login(credentials) {
-    return api.post("/user/login", credentials);
+  postFormData(url, data) {
+    return api.post(url, data, {
+      "Content-Type": "multipart/form-data",
+    });
   },
-
   // 用户注册
-  register(userData) {
-    return api.post("/user/register", userData);
-  },
 };

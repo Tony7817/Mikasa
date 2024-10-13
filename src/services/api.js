@@ -15,7 +15,11 @@ export default {
   // 通用的 POST 请求
   post(url, data) {
     return api
-      .post(url, data)
+      .post(url, JSON.stringify(data), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => response.data)
       .catch((error) => {
         console.error("API POST request failed:", error);

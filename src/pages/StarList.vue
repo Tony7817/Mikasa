@@ -11,7 +11,7 @@
           :key="b.id"
           :avatar="b.avatar"
           :id="b.id"
-          :link="tes"
+          :link="b.link"
           :desc="b.desc"
         />
       </div>

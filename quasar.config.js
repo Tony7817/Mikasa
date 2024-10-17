@@ -55,7 +55,7 @@ module.exports = configure(function (ctx) {
       // analyze: true,
       env: ctx.dev
         ? {
-            API_ROOT: "http://127.0.0.1:8888",
+            API_ROOT: "http://127.0.0.1:1001",
           }
         : {},
       // rawDefine: {}

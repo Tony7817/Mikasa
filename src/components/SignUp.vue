@@ -75,10 +75,8 @@
 import { useQuasar } from "quasar";
 import { userService } from "src/services/userService";
 import { validateEmailx } from "src/composables/user";
-import { tools } from "src/uril/tool";
 import { ref } from "vue";
 import { SigninMode, StatusOK } from "src/composables/consts";
-import SignIn from "./SignIn.vue";
 
 defineOptions({
   name: "SignUp",
@@ -168,7 +166,7 @@ async function onSubmit() {
     if (response.data.msg != StatusOK) {
       $q.notify({
         type: "negative",
-        message: tools.parseError(response.data.msg),
+        message: response.data.msg,
       });
     } else {
       $q.dialog({

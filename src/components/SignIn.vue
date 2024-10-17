@@ -47,7 +47,6 @@
 import { useQuasar } from "quasar";
 import { userService } from "src/services/userService";
 import { validateEmailx } from "src/composables/user";
-import { tools } from "src/uril/tool";
 import { ref } from "vue";
 import { StatusOK } from "src/composables/consts";
 
@@ -88,19 +87,12 @@ async function onSubmit() {
 
   try {
     const response = await userService.postFormData("user/login", formData);
-    if (response.data.msg !== StatusOK) {
-      $q.notify({
-        type: "negative",
-        message: tools.parseError(response.data.msg),
-        position: "top",
-      });
-    } else {
-    }
+    console.log(response);
   } catch (error) {
     console.log("errro: ", error);
     $q.notify({
       type: "negative",
-      message: "Something went wrong",
+      message: error.response.data.msg,
       position: "top",
     });
   }

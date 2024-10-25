@@ -21,13 +21,16 @@
           <StarItem
             class="q-pa-sm col-2"
             v-for="s in stars"
-            :key="s.link"
+            :key="s.id"
             :id="s.id"
-            :link="s.link"
+            :link="s.image_url"
             :name="s.name"
-            :desc="s.desc"
+            :desc="s.description"
             style="width: 256px"
           />
+        </div>
+        <div v-if="stars.length > 20" class="row justify-center">
+          <q-pagination v-model="currentPage" :max="9" direction-links />
         </div>
       </div>
     </div>
@@ -35,70 +38,60 @@
 </template>
 
 <script setup>
+import { useQuasar } from "quasar";
 import StarBrand from "src/components/StarBrand.vue";
 import StarItem from "src/components/StarItem.vue";
-import { ref } from "vue";
+import { service } from "src/services/api";
+import { onMounted, ref, watch } from "vue";
 
 defineOptions({
   name: "StarList",
 });
 
-const stars = ref([
-  {
-    id: "1",
-    link: "https://m.media-amazon.com/images/I/81kOQC3knnL._AC_SY879_.jpg",
-    name: "Olivia",
-    desc: "Pornhub Homepage: https://www.pornhub.com/xxx",
+const props = defineProps({
+  keyword: {
+    type: String,
+    required: false,
   },
-  {
-    id: "2",
-    link: "https://m.media-amazon.com/images/I/81N6NNr+G4L._AC_UL640_QL65_.jpg",
-    name: "Ava",
-    desc: "See me in the youtube https://youtube.com/sxxxx",
+  triggerSearch: {
+    type: Boolean,
+    required: false,
   },
-  {
-    id: "3",
-    link: "https://m.media-amazon.com/images/I/81isle9qwaL._AC_SY879_.jpg",
-    name: "Scarlett",
-    desc: "Find me in pornhub: https://www.pornhub.com/",
-  },
-  {
-    id: "4",
-    link: "https://m.media-amazon.com/images/I/61ZFIlnKNkL._AC_.jpg",
-    name: "Lucy",
-    desc: "Pornhub Homepage: https://www.pornhub.com/",
-  },
-  {
-    id: "5",
-    link: "https://m.media-amazon.com/images/I/81A4D9VAa1L._AC_SY879_.jpg",
-    name: "Audrey",
-    desc: "Pornhub Homepage: https://www.pornhub.com/",
-  },
-  {
-    id: "6",
-    link: "https://m.media-amazon.com/images/I/81IL7GpFdEL._AC_SY879_.jpg",
-    name: "Lily",
-    desc: "Pornhub Homepage: https://www.pornhub.com/",
-  },
-]);
+});
 
-const starbrands = ref([
-  {
-    id: "1",
-    avatar: "https://cdn.quasar.dev/img/avatar.png",
-    desc: "Lucy wears a sexy black stocking recently, come and watch it",
-  },
-  {
-    id: "2",
-    avatar: "https://cdn.quasar.dev/img/avatar6.jpg",
-    desc: "Ruby wore a red sexy lingerie, come and watch",
-  },
-  {
-    id: "3",
-    avatar: "https://cdn.quasar.dev/img/avatar2.jpg",
-    desc: "What did Ava wear today? Come and find out.",
-  },
-]);
+const starbrands = ref([]);
+const stars = ref([]);
+const currentPage = ref(1);
+const $q = useQuasar();
+
+watch(
+  () => props.triggerSearch,
+  async () => {
+    await onload();
+  }
+);
+
+async function onload() {
+  try {
+    const response = await service.getStarList({
+      page: currentPage.value,
+      size: 20,
+      keyword: props.keyword,
+    });
+    stars.value = response.data.data.stars;
+  } catch (error) {
+    console.log(error);
+    $q.notify({
+      type: "negative",
+      message: error.response.data.msg,
+      position: "top",
+    });
+  }
+}
+
+onMounted(() => {
+  onload();
+});
 </script>
 
 <style scoped></style>

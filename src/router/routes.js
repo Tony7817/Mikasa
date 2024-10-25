@@ -6,6 +6,7 @@ const routes = [
       {
         path: "/",
         component: () => import("pages/StarList.vue"),
+        props: true,
       },
       {
         path: "/star/:id",

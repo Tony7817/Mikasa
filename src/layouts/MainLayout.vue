@@ -1,31 +1,29 @@
 <template>
   <q-layout view="hHh Lpr fFf">
-    <q-header elevated class="gradient-linear">
-      <q-toolbar class="row justify-center">
-        <q-toolbar-title class="col-1"> Miss Lover </q-toolbar-title>
-        <q-space />
-        <q-input
-          class="col-4 q-ml-md q-mr-md bg-white"
-          v-model="keyword"
-          filled
-          placeholder="Search..."
-          dense
-          clearable
-        >
-          <template v-slot:prepend>
-            <q-icon name="search" />
-          </template>
-          <template v-slot:append>
-            <q-btn round dense flat label="Go" />
-          </template>
-        </q-input>
-        <q-space />
-        <q-btn dense flat icon="person" />
-      </q-toolbar>
-    </q-header>
+    <div class="row q-py-md justify-center gradient-linear">
+      <div class="col-4"></div>
+      <q-input
+        class="col"
+        v-model="keyword"
+        placeholder="Search..."
+        dense
+        filled
+        bg-color="white"
+        clearable
+        @keyup.enter="onSearch"
+      >
+        <template v-slot:prepend>
+          <q-icon name="search" />
+        </template>
+        <template v-slot:append>
+          <q-btn round dense flat label="Go" />
+        </template>
+      </q-input>
+      <div class="col-4"></div>
+    </div>
 
     <q-page-container>
-      <router-view />
+      <router-view :keyword="keyword" :triggerSearch="triggerSearch" />
     </q-page-container>
 
     <!--Footer-->
@@ -46,6 +44,11 @@ defineOptions({
 });
 
 const keyword = ref("");
+const triggerSearch = ref(false);
+
+function onSearch() {
+  triggerSearch.value = !triggerSearch.value;
+}
 </script>
 
 <style scoped>
@@ -54,6 +57,8 @@ const keyword = ref("");
 }
 
 .gradient-linear {
+  /* background-color: #9A3E56; */
+  /* background-color: #f6f7fc; */
   background: linear-gradient(45deg, #cb2a45, #2a4a82);
 }
 </style>

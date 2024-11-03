@@ -6,10 +6,9 @@
       </router-link>
     </div>
     <div class="q-ma-sm">
-      <div class="row justify-center">
-        <span class="text-bold text-h6">{{ props.name }}</span>
+      <div class="column q-ml-md">
+        <div class="" style="font-size: 16px">{{ props.name }}</div>
       </div>
-      <div style="word-wrap: break-word">{{ props.desc }}</div>
     </div>
   </div>
 </template>
@@ -34,10 +33,6 @@ const props = defineProps({
     type: String,
     default: "",
     required: true,
-  },
-  desc: {
-    type: String,
-    default: "",
   },
 });
 </script>

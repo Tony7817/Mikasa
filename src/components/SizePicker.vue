@@ -1,38 +1,33 @@
 <template>
   <div class="row q-gutter-xs q-ml-none">
     <q-btn
-      v-for="s in scales"
-      :key="s.label"
-      :label="s.label"
+      v-for="s in props.size"
+      :key="s"
+      :label="s"
       flat
       outline
       dense
       :style="{
-        backgroundColor: selectedBtn === s.value ? '#CB2A45' : 'white',
-        color: selectedBtn === s.value ? 'white' : 'black',
+        backgroundColor: selectedBtn === s ? '#CB2A45' : 'white',
+        color: selectedBtn === s ? 'white' : 'black',
         width: '36px',
       }"
-      @click="selectedBtn = s.value"
+      @click="selectedBtn = s"
     />
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-
 defineOptions({
   name: "ProductDetail",
 });
 
+const props = defineProps({
+  size: {
+    type: Array,
+    required: true,
+  },
+});
+
 const selectedBtn = defineModel();
-const scales = ref([
-  { label: "XXS", value: "xxs" },
-  { label: "XS ", value: "xs" },
-  { label: " S ", value: "s" },
-  { label: " M ", value: "m" },
-  { label: " L ", value: "l" },
-  { label: "XL ", value: "xl" },
-  { label: "XXL ", value: "xxl" },
-  { label: "3XL", value: "3xl" },
-]);
 </script>

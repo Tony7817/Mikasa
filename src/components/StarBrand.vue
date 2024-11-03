@@ -4,10 +4,10 @@
       <q-img :src="props.avatar" />
     </q-avatar>
     <div class="col q-ml-sm">
-      <a class="text-primary" :href="props.link">
+      <router-link class="text-primary" :to="props.link">
         <!-- Lucy wears a sexy black stocking on Pornhub, come and watch it -->
-        {{ props.desc }}
-      </a>
+        {{ props.content }}
+      </router-link>
     </div>
   </div>
 </template>
@@ -31,7 +31,7 @@ const props = defineProps({
     default: "",
     required: true,
   },
-  desc: {
+  content: {
     type: String,
     default: "",
     required: true,

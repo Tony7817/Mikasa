@@ -6,14 +6,22 @@
         class="column q-gutter-sm col-2 q-pa-sm"
         style="background-color: white"
       >
-        <StarBrand
-          v-for="b in starbrands"
-          :key="b.id"
-          :avatar="b.avatar"
-          :id="b.id"
-          :link="b.link"
-          :desc="b.desc"
-        />
+        <q-infinite-scroll @load="onloadBrands" :offset="250">
+          <StarBrand
+            class="q-mb-md"
+            v-for="b in starbrands"
+            :key="b.id"
+            :avatar="b.star_avatar"
+            :id="b.id"
+            :link="b.star_home_url ? b.star_home_url : `/star/${b.star_id}`"
+            :content="b.content"
+          />
+          <template v-slot:loading>
+            <div class="row justify-center q-my-md">
+              <q-spinner-dots color="primary" size="40px" />
+            </div>
+          </template>
+        </q-infinite-scroll>
       </div>
       <!--Right star display area-->
       <div class="col" style="background-color: white">
@@ -25,7 +33,6 @@
             :id="s.id"
             :link="s.image_url"
             :name="s.name"
-            :desc="s.description"
             style="width: 256px"
           />
         </div>
@@ -60,22 +67,34 @@ const props = defineProps({
 });
 
 const starbrands = ref([]);
+const starBrandsPage = ref(1);
 const stars = ref([]);
 const currentPage = ref(1);
 const $q = useQuasar();
+const PageSize = 20;
+const IsMoreBrands = ref(false);
 
 watch(
   () => props.triggerSearch,
   async () => {
-    await onload();
+    await onloadStars();
   }
 );
 
-async function onload() {
+watch(
+  () => props.keyword,
+  async (newValue) => {
+    if (newValue == "") {
+      await onloadStars();
+    }
+  }
+);
+
+async function onloadStars() {
   try {
     const response = await service.getStarList({
       page: currentPage.value,
-      size: 20,
+      size: PageSize,
       keyword: props.keyword,
     });
     stars.value = response.data.data.stars;
@@ -89,8 +108,33 @@ async function onload() {
   }
 }
 
+async function onloadBrands(index, done) {
+  if (!IsMoreBrands.value) {
+    done(true);
+  }
+
+  try {
+    const response = await service.getBrandList({
+      page: starBrandsPage.value,
+      size: PageSize,
+    });
+    if (response.data.data.brands.length < PageSize) {
+      IsMoreBrands.value = false;
+    }
+    starbrands.value.push(...response.data.data.brands);
+  } catch (error) {
+    $q.notify({
+      type: "negative",
+      message: error.response.msg,
+      position: "top",
+    });
+  }
+  starBrandsPage.value++;
+  done();
+}
+
 onMounted(() => {
-  onload();
+  onloadStars();
 });
 </script>
 

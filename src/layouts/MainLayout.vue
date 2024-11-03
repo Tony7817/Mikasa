@@ -1,6 +1,8 @@
 <template>
   <q-layout view="hHh Lpr fFf">
-    <div class="row q-py-md justify-center gradient-linear">
+    <div class="row q-py-sm justify-center bg-primary">
+      <!-- <div class="row q-py-sm justify-center gradient-linear"> -->
+      <!-- <div class="row q-py-sm justify-center" style="background-color: #822678"> -->
       <div class="col-4"></div>
       <q-input
         class="col"
@@ -19,7 +21,11 @@
           <q-btn round dense flat label="Go" />
         </template>
       </q-input>
-      <div class="col-4"></div>
+      <div class="col-4 row q-pr-md">
+        <q-space />
+        <q-btn icon="shopping_cart" flat color="white" :to="`/cart`" />
+        <q-btn icon="person" flat color="white" />
+      </div>
     </div>
 
     <q-page-container>

@@ -55,7 +55,7 @@
               :key="p.link"
               :id="p.id"
               :link="p.link"
-              :desc="p.desc"
+              :description="p.desc"
             />
           </div>
         </div>

@@ -23,8 +23,17 @@
       </q-input>
       <div class="col-4 row q-pr-md">
         <q-space />
-        <q-btn icon="shopping_cart" flat color="white" :to="`/cart`" />
-        <q-btn icon="person" flat color="white" />
+        <div>
+          <q-btn icon="shopping_cart" flat color="white" :to="`/cart`" />
+          <q-btn icon="person" flat color="white" @click="signIn()" />
+          <q-menu v-if="userStore.isAuthenticated">
+            <q-list style="min-width: 100px">
+              <q-item clickable v-close-popup>
+                <q-item-section> Profile </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </div>
       </div>
     </div>
 
@@ -43,7 +52,9 @@
 </template>
 
 <script setup>
+import { useUserStore } from "src/stores/user";
 import { ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
 
 defineOptions({
   name: "MainLayout",
@@ -51,9 +62,18 @@ defineOptions({
 
 const keyword = ref("");
 const triggerSearch = ref(false);
+const userStore = useUserStore();
+const router = useRouter();
+const route = useRoute();
 
 function onSearch() {
   triggerSearch.value = !triggerSearch.value;
+}
+
+function signIn() {
+  if (!userStore.isAuthenticated) {
+    router.push({ name: "login", query: { next: route.path } });
+  }
 }
 </script>
 

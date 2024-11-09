@@ -92,38 +92,46 @@
         </div>
         <div class="col-1"></div>
       </div>
+      <div class="row justify-center q-mt-lg">
+        <q-pagination :max="9" direction-links />
+      </div>
     </div>
   </q-page>
 </template>
 
 <script setup>
+import { service } from "src/services/api";
 import { tool } from "src/uril/tool";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 const cartList = ref([
-  {
-    id: "test1",
-    name: "product1",
-    imageUrl: "https://m.media-amazon.com/images/I/71Gi2kz4MQL._AC_SY879_.jpg",
-    size: "XS",
-    all_size: ["XS", "L", "XL"],
-    price: 4.5,
-    unit: "USD",
-    num: 3,
-    total: 13.5,
-  },
-  {
-    id: "test2",
-    name: "product2",
-    imageUrl: "https://m.media-amazon.com/images/I/814q4L+ZnIL._AC_SY879_.jpg",
-    size: "XXS",
-    all_size: ["XS", "L", "XL"],
-    price: 4.5,
-    unit: "USD",
-    num: 3,
-    total: 13.5,
-  },
+  // {
+  //   id: "test1",
+  //   name: "product1",
+  //   imageUrl: "https://m.media-amazon.com/images/I/71Gi2kz4MQL._AC_SY879_.jpg",
+  //   size: "XS",
+  //   all_size: ["XS", "L", "XL"],
+  //   price: 4.5,
+  //   unit: "USD",
+  //   num: 3,
+  //   total: 13.5,
+  // },
+  // {
+  //   id: "test2",
+  //   name: "product2",
+  //   imageUrl: "https://m.media-amazon.com/images/I/814q4L+ZnIL._AC_SY879_.jpg",
+  //   size: "XXS",
+  //   all_size: ["XS", "L", "XL"],
+  //   price: 4.5,
+  //   unit: "USD",
+  //   num: 3,
+  //   total: 13.5,
+  // },
 ]);
+
+async function onLoad() {
+  response = await service.getCartList({});
+}
 </script>
 
 <style scoped>

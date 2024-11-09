@@ -26,4 +26,10 @@ export const service = {
   getStarDetail(id, data) {
     return api.post(`/star/${id}`, data);
   },
+
+  getCartList(data) {
+    return api.post("/cart/list", data, {
+      "Content-Type": "application/json",
+    });
+  },
 };

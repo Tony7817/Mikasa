@@ -44,11 +44,12 @@
 </template>
 
 <script setup>
-import { useQuasar } from "quasar";
+import { Cookies, useQuasar } from "quasar";
 import { userService } from "src/services/userService";
 import { validateEmailx } from "src/composables/user";
 import { ref } from "vue";
-import { StatusOK } from "src/composables/consts";
+import { useUserStore } from "src/stores/user";
+import { useRoute, useRouter } from "vue-router";
 
 defineOptions({
   name: "SignIn",
@@ -67,6 +68,9 @@ const email = ref("");
 const { emailError, validateEmail } = validateEmailx();
 const password = ref("");
 const passwordError = ref("");
+const userStore = useUserStore();
+const router = useRouter();
+const route = useRoute();
 
 const validatePassword = (val) => {
   if (val === "") {
@@ -87,12 +91,26 @@ async function onSubmit() {
 
   try {
     const response = await userService.postFormData("user/login", formData);
-    console.log(response);
+    const data = response.data.data;
+
+    if (data.user_id) {
+      Cookies.set("auth_token", data.accessToken, {
+        expires: 7,
+        secure: false,
+      });
+      userStore.setUser({
+        id: data.user_id,
+        name: data.name,
+        token: data.accessToken,
+      });
+    }
+    const redirectPath = route.query.next || "/";
+    router.push(redirectPath);
   } catch (error) {
-    console.log("errro: ", error);
+    console.log(error);
     $q.notify({
       type: "negative",
-      message: error.response.data.msg,
+      message: "error",
       position: "top",
     });
   }

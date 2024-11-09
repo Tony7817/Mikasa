@@ -163,10 +163,10 @@ async function onSubmit() {
   formData.append("password", password.value);
   try {
     const response = await userService.postFormData("/user/register", formData);
-    if (response.data.msg != StatusOK) {
+    if (response.data.status != StatusOK) {
       $q.notify({
         type: "negative",
-        message: response.data.msg,
+        message: response.data.data.msg,
       });
     } else {
       $q.dialog({

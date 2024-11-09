@@ -1,3 +1,5 @@
+import { useUserStore } from "src/stores/user";
+
 const routes = [
   {
     path: "/",
@@ -5,6 +7,7 @@ const routes = [
     children: [
       {
         path: "/",
+        name: "home",
         component: () => import("pages/StarList.vue"),
         props: true,
       },
@@ -19,12 +22,22 @@ const routes = [
       {
         path: "/cart",
         component: () => import("pages/ProductCart.vue"),
+        meta: { requiresAuth: true },
       },
     ],
   },
   {
     path: "/login",
+    name: "login",
     component: () => import("layouts/LoginLayout.vue"),
+    beforeEnter: (to, from, next) => {
+      const userStore = useUserStore();
+      if (userStore.isAuthenticated) {
+        next(from.path);
+      } else {
+        next();
+      }
+    },
   },
 
   // Always leave this as last one,

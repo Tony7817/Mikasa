@@ -1,7 +1,6 @@
 // src/stores/user.js
 import { defineStore } from "pinia";
 import { Cookies } from "quasar";
-import { ref } from "vue";
 
 // Have to use option API. Composition API won't work
 export const useUserStore = defineStore("user", {
@@ -9,19 +8,17 @@ export const useUserStore = defineStore("user", {
     return {
       isAuthenticated: false,
       user: null,
-      token: "",
     };
   },
   actions: {
     setUser(userData) {
       this.user = userData;
       this.isAuthenticated = true;
-      this.token = userData.token;
+      this.user.token = userData.token;
     },
     clearUser() {
       this.user = null;
       this.isAuthenticated = false;
-      this.token = "";
     },
     hydrate() {
       const token = Cookies.get("auth_token");

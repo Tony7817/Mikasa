@@ -14,7 +14,7 @@
         <q-item class="row items-center">
           <q-item-section class="col-6">
             <div class="row q-gutter-sm">
-              <q-img :src="c.imageUrl" style="width: 50px" fit="contain" />
+              <q-img :src="c.image_url" style="width: 50px" fit="contain" />
               <div>
                 <div style="font-size: 16px">{{ c.name }}</div>
                 <q-badge class="size-picker" color="primary">
@@ -22,7 +22,7 @@
                 </q-badge>
                 <q-menu>
                   <q-list
-                    v-for="s in c.all_size"
+                    v-for="s in c._all_size"
                     :key="s"
                     dense
                     style="min-width: 100px"
@@ -47,14 +47,15 @@
               class="row q-gutter-sm items-center"
               style="margin-left: -16px"
             >
-              <q-btn icon="remove" flat dense />
-              <div class="bg-gray">{{ c.num }}</div>
-              <q-btn icon="add" flat dense />
+              <q-btn icon="remove" flat dense @click="decreaseAmount(c.id)" />
+              <q-spinner-bars v-if="amountLoading" color="purple" />
+              <div v-else class="bg-gray">{{ c.amount }}</div>
+              <q-btn icon="add" flat dense @click="addAmount(c.id)" />
             </div>
           </q-item-section>
           <q-item-section>
             <div class="text-h6" style="margin-left: -3px">
-              {{ tool.getUnit(c.unit) }}{{ c.total }}
+              {{ tool.getUnit(c.unit) }}{{ c.amount * c.price }}
             </div>
           </q-item-section>
           <q-item-section class="col-1">
@@ -74,7 +75,7 @@
             <q-item class="row">
               <q-item-section> Total </q-item-section>
               <q-item-section side class="text-h6 text-black text-bold">
-                $293</q-item-section
+                ${{ totalMoney }}</q-item-section
               >
             </q-item>
             <q-item>
@@ -92,46 +93,107 @@
         </div>
         <div class="col-1"></div>
       </div>
-      <div class="row justify-center q-mt-lg">
-        <q-pagination :max="9" direction-links />
+      <div v-if="cartList.length > 20" class="row justify-center q-mt-lg">
+        <q-pagination v-model="currentPage" :max="9" direction-links />
       </div>
     </div>
   </q-page>
 </template>
 
 <script setup>
+import { useQuasar } from "quasar";
 import { service } from "src/services/api";
+import { useUserStore } from "src/stores/user";
 import { tool } from "src/uril/tool";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
-const cartList = ref([
-  // {
-  //   id: "test1",
-  //   name: "product1",
-  //   imageUrl: "https://m.media-amazon.com/images/I/71Gi2kz4MQL._AC_SY879_.jpg",
-  //   size: "XS",
-  //   all_size: ["XS", "L", "XL"],
-  //   price: 4.5,
-  //   unit: "USD",
-  //   num: 3,
-  //   total: 13.5,
-  // },
-  // {
-  //   id: "test2",
-  //   name: "product2",
-  //   imageUrl: "https://m.media-amazon.com/images/I/814q4L+ZnIL._AC_SY879_.jpg",
-  //   size: "XXS",
-  //   all_size: ["XS", "L", "XL"],
-  //   price: 4.5,
-  //   unit: "USD",
-  //   num: 3,
-  //   total: 13.5,
-  // },
-]);
+const userStore = useUserStore();
+const currentPage = ref(1);
+const cartList = ref([]);
+const $q = useQuasar();
+const amountLoading = ref(false);
+
+const totalMoney = computed(() => {
+  return cartList.value.reduce((acc, p) => acc + p.amount * p.price, 0);
+});
+
+async function addAmount(productId) {
+  if (amountLoading.value) {
+    return;
+  }
+  amountLoading.value = true;
+  try {
+    const response = await service.addAmount(productId, {
+      user_id: userStore.user.id,
+    });
+    const data = response.data.data;
+    const p = cartList.value.find((p) => p.id === data.product_id);
+    if (p) {
+      p.amount = data.amount;
+    }
+  } catch (error) {
+    $q.notify({
+      type: "negative",
+      message: "error",
+      position: "top",
+    });
+  }
+  amountLoading.value = false;
+}
+
+async function decreaseAmount(productId) {
+  if (amountLoading.value) {
+    return;
+  }
+
+  amountLoading.value = true;
+  try {
+    const response = await service.decreaseAmount(productId, {
+      user_id: userStore.user.id,
+    });
+    const data = response.data.data;
+    const p = cartList.value.find((p) => p.id === data.product_id);
+    if (p) {
+      p.amount = data.amount;
+    }
+  } catch (error) {
+    $q.notify({
+      type: "negative",
+      message: "error",
+      position: "top",
+    });
+  }
+  amountLoading.value = false;
+}
 
 async function onLoad() {
-  response = await service.getCartList({});
+  try {
+    const response = await service.getCartList({
+      user_id: userStore.user.id,
+      page: currentPage.value,
+      size: 20,
+    });
+    const data = response.data.data;
+    cartList.value = data.products;
+    cartList.value.forEach((p) => {
+      p._all_size = p.all_size.split(",");
+    });
+  } catch (error) {
+    if (error.response.status == 401) {
+      userStore.clearUser();
+    } else {
+      $q.notify({
+        type: "negative",
+        message: "error",
+        position: "top",
+      });
+    }
+  }
 }
+
+onMounted(() => {
+  onLoad();
+});
 </script>
 
 <style scoped>

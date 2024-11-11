@@ -94,10 +94,6 @@ async function onSubmit() {
     const data = response.data.data;
 
     if (data.user_id) {
-      Cookies.set("auth_token", data.accessToken, {
-        expires: 7,
-        secure: false,
-      });
       userStore.setUser({
         id: data.user_id,
         name: data.name,

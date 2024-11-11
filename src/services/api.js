@@ -1,11 +1,13 @@
 import { api } from "boot/axios";
 import { useUserStore } from "src/stores/user";
 
+const userStore = useUserStore();
+
 export const service = {
   getStarList(data) {
     return api.post("/star/list", data, {
       headers: {
-        "Content-Type:": "application/json",
+        "Content-Type": "application/json",
       },
     });
   },
@@ -35,7 +37,6 @@ export const service = {
   },
 
   getCartList(data) {
-    const userStore = useUserStore();
     return api.post("/cart/list", data, {
       headers: {
         "Content-Type": "application/json",
@@ -44,9 +45,8 @@ export const service = {
     });
   },
 
-  addAmount(productId, data) {
-    const userStore = useUserStore();
-    return api.post(`/cart/product/${productId}/add`, data, {
+  addAmount(productCartId, data) {
+    return api.post(`/cart/product/${productCartId}/add`, data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${userStore.user.token}`,
@@ -54,9 +54,26 @@ export const service = {
     });
   },
 
-  decreaseAmount(productId, data) {
-    const userStore = useUserStore();
-    return api.post(`/cart/product/${productId}/decrease`, data, {
+  decreaseAmount(productCartId, data) {
+    return api.post(`/cart/product/${productCartId}/decrease`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userStore.user.token}`,
+      },
+    });
+  },
+
+  addProductToCart(productId, data) {
+    return api.post(`/cart/add/${productId}`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userStore.user.token}`,
+      },
+    });
+  },
+
+  removeProductFromCart(productCartId, data) {
+    return api.post(`/cart/remove/${productCartId}`, data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${userStore.user.token}`,

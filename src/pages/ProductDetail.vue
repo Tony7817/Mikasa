@@ -41,7 +41,7 @@
         </div>
         <div class="row q-mt-sm items-center">
           <div class="q-ml-sm text-bold text-h7">Size:</div>
-          <SizePicker v-model="selectedBtn" :size="product.size" />
+          <SizePicker v-model="selectedSize" :size="product.size" />
         </div>
         <div class="q-mt-sm q-ml-sm">
           <div class="text-h7 text-bold">Color:</div>
@@ -58,17 +58,7 @@
         </div>
         <div>
           <div class="text-h7 text-bold q-mt-md">Product Details</div>
-          <div>
-            Style: 4 piece lingerie sets, teddy bodysuit, sexy lingerie, bra and
-            panty set, bralette lingerie set, lingerie with garter, lace corset
-            lingerie, corset and panty set, garter lingerie set.
-          </div>
-          <div>
-            Design: Delicate eyelash lace adorns the underrwired corset with
-            adjustable shoulder straps and garter belt，that high waistline
-            shows off your amazing proportions, leg rings show your sexiness and
-            charm even more.
-          </div>
+          <div>{{ product.detail }}</div>
         </div>
       </div>
       <div class="col q-mt-lg">
@@ -77,6 +67,7 @@
             label="Add to cart"
             outline
             color="primary"
+            @click="addToCart"
             style="width: 150px"
           />
           <q-btn label="Buy" outline color="primary" style="width: 150px" />
@@ -107,10 +98,11 @@ const route = useRoute();
 
 const id = ref(route.params.id);
 const slide = ref("pic1");
-const selectedBtn = ref("");
+const selectedSize = ref("");
 const productId = route.params.productId;
 const selectedColor = ref({});
 const selectedImage = ref({});
+const loadingAddCart = ref(false);
 const product = ref({
   id: "",
   price: 0,
@@ -159,6 +151,45 @@ async function onLoadProduct() {
       position: "top",
     });
   }
+}
+
+async function addToCart() {
+  if (loadingAddCart.value) {
+    return;
+  }
+  if (!selectedSize.value) {
+    $q.notify({
+      type: "negative",
+      message: "Please select your size",
+      position: "top",
+    });
+    return;
+  }
+
+  loadingAddCart.value = true;
+
+  try {
+    const response = await service.addProductToCart(product.value.id, {
+      size: selectedSize.value,
+    });
+    const status = response.data.code;
+    if (status === 200) {
+      $q.notify({
+        type: "positive",
+        message: "success",
+        position: "top",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    $q.notify({
+      type: "negative",
+      message: "Something went wrong",
+      position: "top",
+    });
+  }
+
+  loadingAddCart.value = false;
 }
 
 onMounted(() => {

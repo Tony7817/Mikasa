@@ -14,26 +14,33 @@
         <q-item class="row items-center">
           <q-item-section class="col-6">
             <div class="row q-gutter-sm">
-              <q-img :src="c.image_url" style="width: 50px" fit="contain" />
+              <q-img
+                :src="c.image_url"
+                style="width: 50px"
+                fit="contain"
+                @click="ToProductDetailPage(c.star_id, c.product_id)"
+              />
               <div>
-                <div style="font-size: 16px">{{ c.name }}</div>
+                <div style="font-size: 16px; cursor: pointer">
+                  {{ c.name }}
+                </div>
                 <q-badge class="size-picker" color="primary">
                   {{ c.size }}
+                  <q-menu>
+                    <q-list
+                      v-for="s in c._all_size"
+                      :key="s"
+                      dense
+                      style="min-width: 100px"
+                    >
+                      <q-item clickable v-close-popup>
+                        <q-item-section @click="c.size = s">{{
+                          s
+                        }}</q-item-section>
+                      </q-item>
+                    </q-list>
+                  </q-menu>
                 </q-badge>
-                <q-menu>
-                  <q-list
-                    v-for="s in c._all_size"
-                    :key="s"
-                    dense
-                    style="min-width: 100px"
-                  >
-                    <q-item clickable v-close-popup>
-                      <q-item-section @click="c.size = s">{{
-                        s
-                      }}</q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-menu>
               </div>
             </div>
           </q-item-section>
@@ -47,19 +54,26 @@
               class="row q-gutter-sm items-center"
               style="margin-left: -16px"
             >
-              <q-btn icon="remove" flat dense @click="decreaseAmount(c.id)" />
-              <q-spinner-bars v-if="amountLoading" color="purple" />
+              <q-btn icon="remove" flat dense @click="decreaseAmount(c)" />
+              <q-spinner v-if="c.amountLoading" color="purple" />
               <div v-else class="bg-gray">{{ c.amount }}</div>
-              <q-btn icon="add" flat dense @click="addAmount(c.id)" />
+              <q-btn icon="add" flat dense @click="addAmount(c)" />
             </div>
           </q-item-section>
           <q-item-section>
             <div class="text-h6" style="margin-left: -3px">
-              {{ tool.getUnit(c.unit) }}{{ c.amount * c.price }}
+              {{ tool.getUnit(c.unit) }}{{ (c.amount * c.price).toFixed(2) }}
             </div>
           </q-item-section>
           <q-item-section class="col-1">
-            <q-btn icon="delete" flat dense color="secondary" />
+            <q-btn
+              icon="delete"
+              flat
+              dense
+              color="secondary"
+              :disable="removeProductLoading"
+              @click="ShowRemoveProductDialog(c.id)"
+            />
           </q-item-section>
         </q-item>
         <q-separator />
@@ -106,51 +120,59 @@ import { service } from "src/services/api";
 import { useUserStore } from "src/stores/user";
 import { tool } from "src/uril/tool";
 import { computed, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
 const currentPage = ref(1);
 const cartList = ref([]);
 const $q = useQuasar();
 const amountLoading = ref(false);
+const removeProductLoading = ref(false);
+const router = useRouter();
 
-const totalMoney = computed(() => {
-  return cartList.value.reduce((acc, p) => acc + p.amount * p.price, 0);
-});
-
-async function addAmount(productId) {
-  if (amountLoading.value) {
-    return;
-  }
-  amountLoading.value = true;
-  try {
-    const response = await service.addAmount(productId, {
-      user_id: userStore.user.id,
-    });
-    const data = response.data.data;
-    const p = cartList.value.find((p) => p.id === data.product_id);
-    if (p) {
-      p.amount = data.amount;
-    }
-  } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "error",
-      position: "top",
-    });
-  }
-  amountLoading.value = false;
+function InitFilter(products) {
+  products.forEach((p) => {
+    p._amountLoading = false;
+    p._all_size = p.all_size.split(",");
+  });
 }
 
-async function decreaseAmount(productId) {
-  if (amountLoading.value) {
+const totalMoney = computed(() => {
+  return cartList.value
+    .reduce((acc, p) => acc + p.amount * p.price, 0)
+    .toFixed(2);
+});
+
+async function addAmount(productCart) {
+  if (productCart.amountLoading) {
+    return;
+  }
+  productCart.amountLoading = true;
+  try {
+    const response = await service.addAmount(productCart.id, {});
+    const data = response.data.data;
+    const p = cartList.value.find((c) => c.id === data.cart_id);
+    if (p) {
+      p.amount = data.amount;
+    }
+  } catch (error) {
+    $q.notify({
+      type: "negative",
+      message: "error",
+      position: "top",
+    });
+  }
+  productCart.amountLoading = false;
+}
+
+async function decreaseAmount(productCart) {
+  if (productCart.amountLoading) {
     return;
   }
 
-  amountLoading.value = true;
+  productCart.amountLoading = true;
   try {
-    const response = await service.decreaseAmount(productId, {
-      user_id: userStore.user.id,
-    });
+    const response = await service.decreaseAmount(productCart.id, {});
     const data = response.data.data;
     const p = cartList.value.find((p) => p.id === data.product_id);
     if (p) {
@@ -163,7 +185,7 @@ async function decreaseAmount(productId) {
       position: "top",
     });
   }
-  amountLoading.value = false;
+  productCart.amountLoading = false;
 }
 
 async function onLoad() {
@@ -175,11 +197,9 @@ async function onLoad() {
     });
     const data = response.data.data;
     cartList.value = data.products;
-    cartList.value.forEach((p) => {
-      p._all_size = p.all_size.split(",");
-    });
+    InitFilter(cartList.value);
   } catch (error) {
-    if (error.response.status == 401) {
+    if (error.response?.status == 401) {
       userStore.clearUser();
     } else {
       $q.notify({
@@ -189,6 +209,49 @@ async function onLoad() {
       });
     }
   }
+}
+
+async function removeProduct(productCartId) {
+  if (removeProductLoading.value) {
+    return;
+  }
+
+  removeProductLoading.value = true;
+
+  try {
+    const response = await service.removeProductFromCart(productCartId, {});
+    const data = response.data.data;
+    const idx = cartList.value.findIndex((c) => c.id === data.id);
+    if (idx !== -1) {
+      cartList.value.splice(idx, 1);
+    }
+    $q.notify({
+      type: "positive",
+      message: "success",
+      position: "top",
+    });
+  } catch (error) {
+    $q.notify({
+      type: "negative",
+      message: "error",
+      position: "top",
+    });
+  }
+
+  removeProductLoading.value = false;
+}
+
+function ToProductDetailPage(starId, productId) {
+  router.push(`/star/${starId}/product/${productId}`);
+}
+
+function ShowRemoveProductDialog(productCartId) {
+  $q.dialog({
+    title: "Confirm",
+    message: "Are you sure you want to remove this product?",
+  }).onOk(async () => {
+    await removeProduct(productCartId);
+  });
 }
 
 onMounted(() => {

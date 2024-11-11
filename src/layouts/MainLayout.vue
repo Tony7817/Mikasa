@@ -25,14 +25,15 @@
         <q-space />
         <div>
           <q-btn icon="shopping_cart" flat color="white" :to="`/cart`" />
-          <q-btn icon="person" flat color="white" @click="signIn()" />
-          <q-menu v-if="userStore.isAuthenticated">
-            <q-list style="min-width: 100px">
-              <q-item clickable v-close-popup>
-                <q-item-section> Profile </q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
+          <q-btn icon="person" flat color="white" @click="signIn()">
+            <q-menu v-if="userStore.isAuthenticated">
+              <q-list style="min-width: 100px">
+                <q-item clickable v-close-popup>
+                  <q-item-section> Profile </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </div>
       </div>
     </div>
@@ -65,9 +66,25 @@ const triggerSearch = ref(false);
 const userStore = useUserStore();
 const router = useRouter();
 const route = useRoute();
+const productAmountInCart = ref(0);
+const loading = ref(false);
 
 function onSearch() {
   triggerSearch.value = !triggerSearch.value;
+}
+
+async function onload() {
+  if (loading.value) {
+    return;
+  }
+
+  loading.value = true;
+
+  try {
+    
+  } catch (error) {}
+
+  loading.value = false;
 }
 
 function signIn() {

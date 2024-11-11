@@ -102,7 +102,7 @@ async function onloadStars() {
     console.log(error);
     $q.notify({
       type: "negative",
-      message: error.response.data.msg,
+      message: "error",
       position: "top",
     });
   }
@@ -125,7 +125,7 @@ async function onloadBrands(index, done) {
   } catch (error) {
     $q.notify({
       type: "negative",
-      message: error.response.msg,
+      message: "error",
       position: "top",
     });
   }

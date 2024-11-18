@@ -1,5 +1,5 @@
 <template>
-  <q-page padding style="background-color: #f7f7f7">
+  <q-page style="background-color: #f2f2f2; padding: 10px 10px 0px 10px">
     <div class="row q-gutter-sm">
       <!--Left display area-->
       <div

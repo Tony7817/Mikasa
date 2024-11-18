@@ -4,6 +4,7 @@
     <div class="row justify-center q-mb-sm q-gutter-md">
       <q-btn icon="fab fa-google" outline rounded dense />
       <q-btn icon="fab fa-facebook-f" outline rounded dense />
+      <q-btn icon="phone_iphone" outline rounded dense />
     </div>
     <div class="text-center q-mb-sm text-grey">or use your account</div>
     <q-form class="q-gutter-md q-px-lg" @submit="onSubmit">
@@ -44,12 +45,12 @@
 </template>
 
 <script setup>
-import { Cookies, useQuasar } from "quasar";
-import { userService } from "src/services/userService";
-import { validateEmailx } from "src/composables/user";
+import { useQuasar } from "quasar";
+import { validator } from "src/composables/user";
 import { ref } from "vue";
 import { useUserStore } from "src/stores/user";
 import { useRoute, useRouter } from "vue-router";
+import { service } from "src/services/api";
 
 defineOptions({
   name: "SignIn",
@@ -65,7 +66,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:mode"]);
 const email = ref("");
-const { emailError, validateEmail } = validateEmailx();
+const { emailError, validateEmail } = validator();
 const password = ref("");
 const passwordError = ref("");
 const userStore = useUserStore();
@@ -85,12 +86,13 @@ const validatePassword = (val) => {
 const $q = useQuasar();
 
 async function onSubmit() {
-  const formData = new FormData();
-  formData.append("email", email.value);
-  formData.append("password", password.value);
-
   try {
-    const response = await userService.postFormData("user/login", formData);
+    const body = { password: password.value };
+    if (email.value) {
+      body.email = email.value;
+    } else {
+    }
+    const response = await service.login(body);
     const data = response.data.data;
 
     if (data.user_id) {

@@ -24,6 +24,10 @@ const routes = [
         component: () => import("pages/ProductCart.vue"),
         meta: { requiresAuth: true },
       },
+      {
+        path: "/user",
+        component: () => import("pages/UserDetail.vue"),
+      },
     ],
   },
   {

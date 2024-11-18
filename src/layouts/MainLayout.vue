@@ -28,8 +28,11 @@
           <q-btn icon="person" flat color="white" @click="signIn()">
             <q-menu v-if="userStore.isAuthenticated">
               <q-list style="min-width: 100px">
-                <q-item clickable v-close-popup>
+                <q-item clickable v-close-popup :to="`/user`">
                   <q-item-section> Profile </q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup @click="userStore.clearUser()">
+                  <q-item-section> Log Out </q-item-section>
                 </q-item>
               </q-list>
             </q-menu>
@@ -81,7 +84,6 @@ async function onload() {
   loading.value = true;
 
   try {
-    
   } catch (error) {}
 
   loading.value = false;

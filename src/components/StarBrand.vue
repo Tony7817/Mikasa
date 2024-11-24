@@ -1,13 +1,21 @@
 <template>
-  <div class="row">
-    <q-avatar size="50px">
-      <q-img :src="props.avatar" />
-    </q-avatar>
-    <div class="col q-ml-sm">
-      <router-link class="text-primary" :to="props.link">
-        <!-- Lucy wears a sexy black stocking on Pornhub, come and watch it -->
+  <div class="row items-center">
+    <div class="col-2">
+      <q-avatar size="50px">
+        <q-img :src="props.avatar" />
+      </q-avatar>
+    </div>
+    <div class="col q-ml-sm text-center">
+      <router-link
+        class="text-black"
+        style="font-size: 14px; text-decoration: none"
+        :to="props.link"
+      >
         {{ props.content }}
       </router-link>
+    </div>
+    <div class="col-1 text-center">
+      <q-icon name="trending_up" />
     </div>
   </div>
 </template>

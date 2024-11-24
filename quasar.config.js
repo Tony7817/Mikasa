@@ -55,9 +55,11 @@ module.exports = configure(function (ctx) {
       // analyze: true,
       env: ctx.dev
         ? {
-            API_ROOT: "http://127.0.0.1:8081",
+            API_ROOT: "http://127.0.0.1",
           }
-        : {},
+        : {
+            API_ROOT: "http://127.0.0.1",
+          },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
@@ -88,6 +90,7 @@ module.exports = configure(function (ctx) {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
+      cssAddon: true,
       config: {},
 
       // iconSet: 'material-icons', // Quasar icon set

@@ -19,21 +19,21 @@ rwIDAQAB
 
 export const service = {
   register(data) {
-    return api.post("/user/register", data, {
+    return api.post("/api/user/register", data, {
       headers: {
         "Content-Type": "application/json",
       },
     });
   },
   login(data) {
-    return api.post("/user/login", data, {
+    return api.post("/api/user/login", data, {
       headers: {
         "Content-Type": "application/json",
       },
     });
   },
   getStarList(data) {
-    return api.post("/star/list", data, {
+    return api.post("/api/star/list", data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -41,7 +41,7 @@ export const service = {
   },
 
   getBrandList(data) {
-    return api.post("/brand/list", data, {
+    return api.post("/api/brand/list", data, {
       header: {
         "Content-Type:": "application/json",
       },
@@ -49,7 +49,7 @@ export const service = {
   },
 
   getProductList(data) {
-    return api.post("/product/list", data, {
+    return api.post("/api/product/list", data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -57,15 +57,15 @@ export const service = {
   },
 
   getProductDetail(id, data) {
-    return api.post(`/product/${id}`, data);
+    return api.post(`/api/product/${id}`, data);
   },
 
   getStarDetail(id, data) {
-    return api.post(`/star/${id}`, data);
+    return api.post(`/api/star/${id}`, data);
   },
 
   getCartList(data) {
-    return api.post("/cart/list", data, {
+    return api.post("/api/cart/list", data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${userStore.user.token}`,
@@ -74,7 +74,7 @@ export const service = {
   },
 
   addAmount(productCartId, data) {
-    return api.post(`/cart/product/${productCartId}/add`, data, {
+    return api.post(`/api/cart/product/${productCartId}/add`, data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${userStore.user.token}`,
@@ -83,7 +83,7 @@ export const service = {
   },
 
   decreaseAmount(productCartId, data) {
-    return api.post(`/cart/product/${productCartId}/decrease`, data, {
+    return api.post(`/api/cart/product/${productCartId}/decrease`, data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${userStore.user.token}`,
@@ -92,7 +92,7 @@ export const service = {
   },
 
   addProductToCart(productId, data) {
-    return api.post(`/cart/add/${productId}`, data, {
+    return api.post(`/api/cart/add/${productId}`, data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${userStore.user.token}`,
@@ -101,7 +101,7 @@ export const service = {
   },
 
   removeProductFromCart(productCartId, data) {
-    return api.post(`/cart/remove/${productCartId}`, data, {
+    return api.post(`/api/cart/remove/${productCartId}`, data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${userStore.user.token}`,
@@ -110,7 +110,7 @@ export const service = {
   },
 
   getIp() {
-    return api.get("user/ip");
+    return api.get("/api/user/ip");
   },
 
   stableJSONStringify(obj) {
@@ -133,7 +133,7 @@ export const service = {
   },
 
   sendSignupCaptcha(data) {
-    const route = "/user/signup/captcha";
+    const route = "/api/user/signup/captcha";
     const bodyStr = this.stableJSONStringify(data);
     const xcs = this.sign(bodyStr, route);
 
@@ -146,7 +146,7 @@ export const service = {
   },
 
   sendForgetPasswordCaptcha(data) {
-    const route = "/user/forgetpassword/captcha";
+    const route = "/api/user/forgetpassword/captcha";
     const bodyStr = this.stableJSONStringify(data);
     const xcs = this.sign(bodyStr, route);
 
@@ -159,7 +159,7 @@ export const service = {
   },
 
   verifyCaptcha(data) {
-    return api.post("/user/verify/captcha", data, {
+    return api.post("/api/user/verify/captcha", data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -167,7 +167,7 @@ export const service = {
   },
 
   verifyAccountCaptcha(data) {
-    return api.post("/user/verifyaccount/captcha", data, {
+    return api.post("/api/user/verifyaccount/captcha", data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -175,7 +175,7 @@ export const service = {
   },
 
   resetPassword(data) {
-    return api.post("/user/forgetpass/reset", data, {
+    return api.post("/api/user/forgetpass/reset", data, {
       headers: {
         "Content-Type": "application/json",
       },

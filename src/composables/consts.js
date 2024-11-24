@@ -4,3 +4,6 @@ export const SignupMode = "SignUp";
 export const ForgetPasswordMode = "ForgetPassword";
 export const Email = "Email";
 export const Phone = "Phone";
+export const HomeTab = "Home";
+export const StarsTab = "Stars";
+export const ContactTab = "Contact";

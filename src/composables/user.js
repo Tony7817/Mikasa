@@ -19,6 +19,7 @@ export async function getLocation(ip) {
 }
 
 export function validator() {
+  const passwordStrengthRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
   const emailError = ref("");
   const validateEmail = (val) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -45,6 +46,11 @@ export function validator() {
   const validatePassword = (val) => {
     if (val === "") {
       passwordError.value = "Please enter your password";
+      return false;
+    }
+    if (!passwordStrengthRegex.test(val)) {
+      passwordError.value =
+        "Password must be at least 6 characters long and contain at least one letter and one number";
       return false;
     }
 

@@ -1,28 +1,8 @@
 <template>
-  <q-page style="background-color: #f2f2f2; padding: 10px 10px 0px 10px">
+  <q-page style="background-color: #f5f5f5; padding: 10px 10px 0px 10px">
     <div class="row q-gutter-sm">
       <!--Left display area-->
-      <div
-        class="column q-gutter-sm col-2 q-pa-sm"
-        style="background-color: white"
-      >
-        <q-infinite-scroll @load="onloadBrands" :offset="250">
-          <StarBrand
-            class="q-mb-md"
-            v-for="b in starbrands"
-            :key="b.id"
-            :avatar="b.star_avatar"
-            :id="b.id"
-            :link="b.star_home_url ? b.star_home_url : `/star/${b.star_id}`"
-            :content="b.content"
-          />
-          <template v-slot:loading>
-            <div class="row justify-center q-my-md">
-              <q-spinner-dots color="primary" size="40px" />
-            </div>
-          </template>
-        </q-infinite-scroll>
-      </div>
+      <StarPromotionList class="col-2" />
       <!--Right star display area-->
       <div class="col" style="background-color: white">
         <div class="row q-gutter-lg">
@@ -46,8 +26,8 @@
 
 <script setup>
 import { useQuasar } from "quasar";
-import StarBrand from "src/components/StarBrand.vue";
 import StarItem from "src/components/StarItem.vue";
+import StarPromotionList from "src/components/StarPromotionList.vue";
 import { service } from "src/services/api";
 import { onMounted, ref, watch } from "vue";
 
@@ -66,13 +46,10 @@ const props = defineProps({
   },
 });
 
-const starbrands = ref([]);
-const starBrandsPage = ref(1);
 const stars = ref([]);
 const currentPage = ref(1);
 const $q = useQuasar();
 const PageSize = 20;
-const IsMoreBrands = ref(false);
 
 watch(
   () => props.triggerSearch,
@@ -106,31 +83,6 @@ async function onloadStars() {
       position: "top",
     });
   }
-}
-
-async function onloadBrands(index, done) {
-  if (!IsMoreBrands.value) {
-    done(true);
-  }
-
-  try {
-    const response = await service.getBrandList({
-      page: starBrandsPage.value,
-      size: PageSize,
-    });
-    if (response.data.data.brands.length < PageSize) {
-      IsMoreBrands.value = false;
-    }
-    starbrands.value.push(...response.data.data.brands);
-  } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "error",
-      position: "top",
-    });
-  }
-  starBrandsPage.value++;
-  done();
 }
 
 onMounted(() => {

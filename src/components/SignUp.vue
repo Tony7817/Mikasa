@@ -137,7 +137,7 @@ const email = ref("");
 const { emailError, validateEmail } = validator();
 const phonenumber = ref("");
 const password = ref("");
-const passwordError = ref("");
+const { passwordError, validatePassword } = validator();
 const passwordVisiable = ref(false);
 const passwordEyeIcon = ref("visibility");
 const repassword = ref("");
@@ -155,19 +155,11 @@ const validateRepassword = (val) => {
     repasswordError.value = "Please enter your password again";
     return false;
   }
-  repasswordError.value = "";
-  return true;
-};
-
-const validatePassword = (val) => {
-  if (val === "") {
-    passwordError.value = "Please enter your password";
-    return false;
-  } else if (repassword.value !== "" && val !== repassword.value) {
-    passwordError.value = "Password does not match";
+  if (val !== "" && val !== password.value) {
+    repasswordError.value = "Password does not match";
     return false;
   }
-  passwordError.value = "";
+  repasswordError.value = "";
   return true;
 };
 

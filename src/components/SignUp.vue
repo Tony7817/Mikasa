@@ -20,10 +20,10 @@
       />
     </div>
     <div v-if="registerMode === Phone" class="text-center text-grey">
-      or use email
+      or use mobile phone
     </div>
     <div v-if="registerMode === Email" class="text-center text-grey">
-      or use mobile phone
+      or use email
     </div>
     <q-form class="q-gutter-sm q-px-lg" @submit="sendVerifyCode">
       <q-input
@@ -35,39 +35,12 @@
         :error-message="emailError"
         label="Email"
       />
-      <q-input
-        v-if="registerMode == Phone"
-        v-model="phonenumber"
-        type="text"
-        :rules="[validatePhone]"
-        :error="phoneError !== ''"
-        :error-message="phoneError"
-        placeholder="Phone number"
-      >
-        <template v-slot:prepend>
-          <div class="row">
-            <span style="font-size: 16px">
-              {{ countryCode }} {{ countryDailCode }}
-            </span>
-            <q-menu>
-              <q-list style="max-width: 100px">
-                <q-item
-                  v-for="c in countryCodeDialMap"
-                  :key="c.countryCode"
-                  clickable
-                  v-close-popup
-                  @click="changeCountryCode(c)"
-                >
-                  <q-item-section>
-                    {{ c.countryCode }} {{ c.dailCode }}
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-            <q-separator />
-          </div>
-        </template>
-      </q-input>
+      <PhonenumberInput
+        v-if="registerMode === Phone"
+        :country-code="countryDailCode.countryCode"
+        :country-dail-code="countryDailCode.countryDailCode"
+        @update:model-value="getPhoneNumber"
+      />
       <q-input
         v-model="password"
         :type="passwordVisiable ? 'text' : 'password'"
@@ -124,11 +97,12 @@
     <VerificationDialog
       :show="isVerifyDialogShow"
       :mode="registerMode"
-      :target="registerMode === Email ? email : phonenumberWithCountryCode"
-      :country-dial-code="countryDailCode"
+      :target="registerMode === Email ? email : phonenumber"
       :loading="sendVerifyLoading"
+      :usage="SignupMode"
+      :captcha-time="captchaTime"
       @disable-dialog="isVerifyDialogShow = false"
-      @signup="signup"
+      @callback="signup"
     />
   </div>
 </template>
@@ -137,12 +111,13 @@
 import { useQuasar } from "quasar";
 import { validator } from "src/composables/user";
 import { computed, onMounted, ref } from "vue";
-import { SigninMode, StatusOK } from "src/composables/consts";
-import { countryCodeDialMap } from "src/uril/tool";
+import { SigninMode, SignupMode, StatusOK } from "src/composables/consts";
+import { countryCodeDialMap, tool } from "src/uril/tool";
 import { getLocation } from "src/composables/user";
 import { service } from "src/services/api";
 import VerificationDialog from "./VerificationDialog.vue";
 import { Email, Phone } from "src/composables/consts";
+import PhonenumberInput from "./PhonenumberInput.vue";
 
 defineOptions({
   name: "SignUp",
@@ -161,9 +136,6 @@ const emit = defineEmits(["update-mode"]);
 const email = ref("");
 const { emailError, validateEmail } = validator();
 const phonenumber = ref("");
-const countryCode = ref("");
-const countryDailCode = ref("");
-const { phoneError, validatePhone } = validator();
 const password = ref("");
 const passwordError = ref("");
 const passwordVisiable = ref(false);
@@ -175,6 +147,8 @@ const repasswordEyeIcon = ref("visibility");
 const registerMode = ref(Email);
 const isVerifyDialogShow = ref(false);
 const sendVerifyLoading = ref(false);
+const captchaTime = ref(0);
+const countryDailCode = ref({});
 
 const validateRepassword = (val) => {
   if (val === "") {
@@ -197,9 +171,9 @@ const validatePassword = (val) => {
   return true;
 };
 
-const phonenumberWithCountryCode = computed(() => {
-  return `(${countryDailCode.value})${phonenumber.value}`;
-});
+function getPhoneNumber(val) {
+  phonenumber.value = val;
+}
 
 function convertPasswordIcon(type) {
   if (type == "password") {
@@ -222,15 +196,17 @@ function convertPasswordIcon(type) {
 }
 
 async function signup() {
-  const data = { password: password.value };
+  const body = { password: password.value };
   if (registerMode.value === Email) {
-    data.email = email.value;
+    body.email = email.value;
   } else {
-    data.phone_number = phonenumberWithCountryCode.value;
+    body.phone_number = phonenumber.value;
   }
   try {
-    const response = await service.register(data);
-    if (response.data.status != StatusOK) {
+    const response = await service.register(body);
+
+    const data = response.data;
+    if (!data.ok) {
       $q.notify({
         type: "negative",
         message: response.data.data.msg,
@@ -253,58 +229,26 @@ async function signup() {
   }
 }
 
-function changeCountryCode(c) {
-  countryCode.value = c.countryCode;
-  countryDailCode.value = c.dailCode;
-}
-
-async function getIp() {
-  try {
-    const response = await service.getIp();
-    console.log(response);
-    return response.data.data.ip;
-  } catch (error) {
-    console.log(error);
-    return "";
-  }
-}
-
-async function getCode(ip) {
-  try {
-    // const data = await getLocation(ip);
-    countryCode.value = data.country_code;
-    countryDailCode.value = data.calling_code;
-    const idx = countryCodeDialMap.find((item) => {
-      item.countryCode === countryCode.value;
-      item.dailCode === countryCode.value;
-    });
-    if (idx === -1) {
-      countryCode.value = countryCodeDialMap[0].countryCode;
-      countryCode.value = countryCodeDialMap[0].dailCode;
-    }
-  } catch (error) {
-    countryCode.value = countryCodeDialMap[0].countryCode;
-    countryDailCode.value = countryCodeDialMap[0].dailCode;
-    console.log(error);
-  }
-}
-
 async function sendVerifyCode() {
   if (sendVerifyLoading.value) {
     return;
   }
   sendVerifyLoading.value = true;
-  const data = {};
+  const body = {};
   if (registerMode.value === Email) {
-    data.email = email.value;
+    body.email = email.value;
   } else {
-    data.phone_number = phonenumberWithCountryCode.value;
+    body.phone_number = phonenumber.value;
   }
 
   try {
-    const response = await service.sendCaptcha(data);
-    console.log(response);
+    const response = await service.sendSignupCaptcha(body);
+    const data = response.data.data;
+    captchaTime.value = data.created_at;
+    isVerifyDialogShow.value = true;
   } catch (error) {
+    console.log(error);
+
     $q.notify({
       type: "negative",
       message: "Something went wrong",
@@ -312,14 +256,13 @@ async function sendVerifyCode() {
     });
     console.log(error);
   }
-  isVerifyDialogShow.value = true;
   sendVerifyLoading.value = false;
 }
 
 onMounted(async () => {
-  const ip = await getIp();
+  const ip = await tool.getIp();
   if (ip) {
-    await getCode(ip);
+    countryDailCode.value = await tool.getCode(ip);
   }
 });
 </script>

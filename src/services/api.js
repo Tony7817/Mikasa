@@ -118,7 +118,7 @@ export const service = {
     return JSON.stringify(obj, Object.keys(obj).sort());
   },
 
-  sign(bodyStr) {
+  sign(bodyStr, route) {
     const time = (Date.now() / 1000).toFixed();
     const secret = `type=0;key=${btoa(key)};time=${time}`;
     var encryptor = new JSEncrypt();
@@ -126,26 +126,56 @@ export const service = {
     const secretEncoded = encryptor.encrypt(secret);
     const hash = CryptoJS.SHA256(bodyStr);
     const dataStr = hash.toString(CryptoJS.enc.Hex);
-    const signature = `${time}\nPOST\n/user/captcha\n\n${dataStr}`;
+    const signature = `${time}\nPOST\n${route}\n\n${dataStr}`;
     const signatureHash = CryptoJS.HmacSHA256(signature, key);
     const signatureEncoded = CryptoJS.enc.Base64.stringify(signatureHash);
     return `key=${key};secret=${secretEncoded};signature=${signatureEncoded}`;
   },
 
-  sendCaptcha(data) {
+  sendSignupCaptcha(data) {
+    const route = "/user/signup/captcha";
     const bodyStr = this.stableJSONStringify(data);
-    const XCS = this.sign(bodyStr);
+    const xcs = this.sign(bodyStr, route);
 
-    return api.post("/user/captcha", bodyStr, {
+    return api.post(route, bodyStr, {
       headers: {
-        "X-Content-Security": XCS,
+        "X-Content-Security": xcs,
+        "Content-Type": "application/json",
+      },
+    });
+  },
+
+  sendForgetPasswordCaptcha(data) {
+    const route = "/user/forgetpassword/captcha";
+    const bodyStr = this.stableJSONStringify(data);
+    const xcs = this.sign(bodyStr, route);
+
+    return api.post(route, bodyStr, {
+      headers: {
+        "X-Content-Security": xcs,
         "Content-Type": "application/json",
       },
     });
   },
 
   verifyCaptcha(data) {
-    return api.post("/user/verifycaptcha", data, {
+    return api.post("/user/verify/captcha", data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  },
+
+  verifyAccountCaptcha(data) {
+    return api.post("/user/verifyaccount/captcha", data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  },
+
+  resetPassword(data) {
+    return api.post("/user/forgetpass/reset", data, {
       headers: {
         "Content-Type": "application/json",
       },

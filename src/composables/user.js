@@ -35,9 +35,20 @@ export function validator() {
     const phonePattern = /^\+?[1-9]\d{1,14}$/;
     if (!phonePattern.test(val)) {
       phoneError.value = "Please enter a valid phone number";
-      return fase;
+      return false;
     }
     phoneError.value = "";
+    return true;
+  };
+
+  const passwordError = ref("");
+  const validatePassword = (val) => {
+    if (val === "") {
+      passwordError.value = "Please enter your password";
+      return false;
+    }
+
+    passwordError.value = "";
     return true;
   };
 
@@ -46,5 +57,7 @@ export function validator() {
     validateEmail,
     validatePhone,
     phoneError,
+    passwordError,
+    validatePassword,
   };
 }

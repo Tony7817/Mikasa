@@ -14,13 +14,19 @@
                 </div>
                 <!--Right Side-->
                 <SignIn
-                  v-if="mode == 'SIGNIN'"
+                  v-if="mode == SigninMode"
                   class="col-8"
                   :mode="mode"
                   @update-mode="mode = $event"
                 />
                 <SignUp
-                  v-else-if="mode == 'SIGNUP'"
+                  v-else-if="mode == SignupMode"
+                  class="col-8"
+                  :mode="mode"
+                  @update-mode="mode = $event"
+                />
+                <ForgetPassword
+                  v-else-if="mode === ForgetPasswordMode"
                   class="col-8"
                   :mode="mode"
                   @update-mode="mode = $event"
@@ -35,15 +41,21 @@
 </template>
 
 <script setup>
+import ForgetPassword from "src/components/ForgetPassword.vue";
 import SignIn from "src/components/SignIn.vue";
 import SignUp from "src/components/SignUp.vue";
+import {
+  ForgetPasswordMode,
+  SigninMode,
+  SignupMode,
+} from "src/composables/consts";
 import { ref } from "vue";
 
 defineOptions({
   name: "LoginLayout",
 });
 
-const mode = ref("SIGNIN");
+const mode = ref(SigninMode);
 </script>
 
 <style scoped>

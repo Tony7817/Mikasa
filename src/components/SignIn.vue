@@ -4,17 +4,30 @@
     <div class="row justify-center q-mb-sm q-gutter-md">
       <q-btn icon="fab fa-google" outline rounded dense />
       <q-btn icon="fab fa-facebook-f" outline rounded dense />
-      <q-btn icon="phone_iphone" outline rounded dense />
+      <q-btn
+        icon="phone_iphone"
+        outline
+        rounded
+        dense
+        @click="signinMode = Phone"
+      />
     </div>
     <div class="text-center q-mb-sm text-grey">or use your account</div>
     <q-form class="q-gutter-md q-px-lg" @submit="onSubmit">
       <q-input
+        v-if="signinMode === Email"
         v-model="email"
         :rules="[validateEmail]"
         :error="emailError !== ''"
         :error-message="emailError"
         type="text"
         label="Email"
+      />
+      <PhonenumberInput
+        v-if="signinMode === Phone"
+        :country-code="countryDialCode.countryCode"
+        :country-dail-code="countryDialCode.countryDailCode"
+        @update:model-value="getPhoneNumber"
       />
       <q-input
         v-model="password"
@@ -24,7 +37,12 @@
         type="password"
         label="Password"
       />
-      <div class="text-grey text-center forget-pass">Forget your password?</div>
+      <div
+        class="text-grey text-center forget-pass"
+        @click="$emit('update-mode', ForgetPasswordMode)"
+      >
+        Forget your password?
+      </div>
       <div class="column items-center">
         <q-btn
           class="q-mb-md"
@@ -37,7 +55,7 @@
           label="SIGN UP"
           rounded
           color="secondary"
-          @click="$emit('update-mode', 'SIGNUP')"
+          @click="$emit('update-mode', SignupMode)"
         />
       </div>
     </q-form>
@@ -47,20 +65,31 @@
 <script setup>
 import { useQuasar } from "quasar";
 import { validator } from "src/composables/user";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useUserStore } from "src/stores/user";
 import { useRoute, useRouter } from "vue-router";
 import { service } from "src/services/api";
+import {
+  Email,
+  ForgetPasswordMode,
+  Phone,
+  SigninMode,
+  SignupMode,
+} from "src/composables/consts";
+import PhonenumberInput from "./PhonenumberInput.vue";
+import { tool } from "src/uril/tool";
 
 defineOptions({
   name: "SignIn",
 });
 
+const $q = useQuasar();
+const router = useRouter();
+const route = useRoute();
 const props = defineProps({
   mode: {
     type: String,
     required: true,
-    default: "SIGNIN",
   },
 });
 
@@ -68,29 +97,19 @@ const emit = defineEmits(["update:mode"]);
 const email = ref("");
 const { emailError, validateEmail } = validator();
 const password = ref("");
-const passwordError = ref("");
+const { passwordError, validatePassword } = validator();
 const userStore = useUserStore();
-const router = useRouter();
-const route = useRoute();
-
-const validatePassword = (val) => {
-  if (val === "") {
-    passwordError.value = "Please enter your password";
-    return false;
-  }
-
-  passwordError.value = "";
-  return true;
-};
-
-const $q = useQuasar();
+const signinMode = ref(Email);
+const countryDialCode = ref({});
+const phoneNumber = ref("");
 
 async function onSubmit() {
   try {
     const body = { password: password.value };
-    if (email.value) {
+    if (signinMode.value === Email) {
       body.email = email.value;
     } else {
+      body.phone_number = phoneNumber.value;
     }
     const response = await service.login(body);
     const data = response.data.data;
@@ -108,10 +127,21 @@ async function onSubmit() {
     console.log(error);
     $q.notify({
       type: "negative",
-      message: "error",
+      message: error?.response?.data?.msg || "Login failed",
       position: "top",
     });
   }
+}
+
+onMounted(async () => {
+  const ip = await tool.getIp();
+  if (ip) {
+    countryDialCode.value = await tool.getCode(ip);
+  }
+});
+
+function getPhoneNumber(val) {
+  phoneNumber.value = val;
 }
 </script>
 

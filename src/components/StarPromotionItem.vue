@@ -6,13 +6,9 @@
       </q-avatar>
     </div>
     <div class="col q-ml-sm text-center">
-      <router-link
-        class="text-white"
-        style="font-size: 14px; text-decoration: none"
-        :to="props.link"
-      >
+      <div class="text-white" style="font-size: 14px; text-decoration: none">
         {{ props.content }}
-      </router-link>
+      </div>
     </div>
     <div class="col-1 text-center">
       <q-icon name="trending_up" />
@@ -30,11 +26,6 @@ const props = defineProps({
     required: true,
   },
   avatar: {
-    type: String,
-    default: "",
-    required: true,
-  },
-  link: {
     type: String,
     default: "",
     required: true,

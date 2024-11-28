@@ -3,14 +3,20 @@
     <q-list dense id="list">
       <div class="text-center" style="font-size: 16px">Hot Stars</div>
       <q-separator class="q-my-sm" />
-      <q-item v-for="s in stars" :key="s.id" clickable dense>
+      <q-item
+        :class="{ active: b._selected === true }"
+        v-for="b in brands"
+        :key="b.id"
+        clickable
+        dense
+        @click="selectStar(b.star_id)"
+      >
         <q-item-section>
           <StarBrand
-            :key="s.id"
-            :avatar="s.star_avatar"
-            :id="s.id"
-            :link="s.star_home_url ? s.star_home_url : `/star/${s.star_id}`"
-            :content="s.star_name"
+            :key="b.id"
+            :avatar="b.star_avatar"
+            :id="b.id"
+            :content="b.star_name"
           />
         </q-item-section>
       </q-item>
@@ -24,14 +30,22 @@ import { onMounted, ref } from "vue";
 import StarBrand from "src/components/StarPromotionItem.vue";
 import { useQuasar } from "quasar";
 
-defineOptions({
-  name: "StarPromotionList",
-});
 const emit = defineEmits(["update-star-id"]);
 
 const $q = useQuasar();
-const stars = ref([]);
+const brands = ref([]);
 const loading = ref(false);
+
+function selectStar(starId) {
+  brands.value.forEach((b) => {
+    if (b.star_id === starId) {
+      b._selected = true;
+    } else {
+      b._selected = false;
+    }
+  });
+  emit("update-star-id", starId);
+}
 
 async function onloadBrands() {
   if (loading.value) {
@@ -43,9 +57,15 @@ async function onloadBrands() {
   try {
     const response = await service.getBrandList({});
     const data = response.data.data;
-    stars.value.push(...data.brands);
+    brands.value.push(...data.brands);
+    brands.value.forEach((b) => {
+      b._selected = false;
+    });
+    brands.value[0]._selected = true;
     emit("update-star-id", data.default_star_id);
   } catch (error) {
+    console.log(error);
+
     $q.notify({
       type: "negative",
       message: "something went wrong",
@@ -60,4 +80,8 @@ onMounted(() => {
 });
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.q-item.active {
+  background: $pink-5;
+}
+</style>

@@ -58,7 +58,7 @@ module.exports = configure(function (ctx) {
             API_ROOT: "http://127.0.0.1",
           }
         : {
-            API_ROOT: "http://127.0.0.1",
+            API_ROOT: "http://39.105.153.22",
           },
       // rawDefine: {}
       // ignorePublicFolder: true,

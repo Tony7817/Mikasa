@@ -60,8 +60,16 @@
         </div>
       </div>
       <q-space />
-      <div class="col-2" style="width: 10%">
-        <q-btn label="Follow" size="md" outline icon="add" />
+      <div class="row col self-start justify-end q-gutter-md">
+        <q-btn
+          v-if="starId !== null"
+          class="col-4"
+          label="HomePage"
+          outline
+          icon="home"
+          :to="`/star/${starIdp}`"
+        />
+        <q-btn class="col-4" label="Follow" outline icon="add" />
       </div>
     </div>
     <!--Product list-->
@@ -97,7 +105,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import ProductItem from "src/components/ProductItem.vue";
 import { service } from "src/services/api";
 import { useQuasar } from "quasar";
@@ -122,11 +130,13 @@ const size = 20;
 const currentPage = ref(1);
 const $q = useQuasar();
 const route = useRoute();
-const starIdp = props.starId !== null ? props.starId : route.params.id;
+const starIdp = computed(() => {
+  return props.starId !== null ? props.starId : route.params.id;
+});
 
 async function onLoadStarDetail() {
   try {
-    const response = await service.getStarDetail(starIdp);
+    const response = await service.getStarDetail(starIdp.value);
     starDetail.value = response.data.data;
   } catch (error) {
     console.log(error);
@@ -138,10 +148,19 @@ async function onLoadStarDetail() {
   }
 }
 
+watch(starIdp, async () => {
+  await onload();
+});
+
+async function onload() {
+  onLoadStarDetail();
+  onLoadProducts();
+}
+
 async function onLoadProducts() {
   try {
     const response = await service.getProductList({
-      star_id: starIdp,
+      star_id: starIdp.value,
       page: currentPage.value,
       size: size,
     });
@@ -157,8 +176,7 @@ async function onLoadProducts() {
 }
 
 onMounted(() => {
-  onLoadStarDetail();
-  onLoadProducts();
+  onload();
 });
 </script>
 

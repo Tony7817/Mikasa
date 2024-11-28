@@ -1,9 +1,9 @@
 <template>
   <div style="width: 250px">
     <router-link :to="`/star/${route.params.id}/product/${props.id}`">
-      <q-img class="star-product-img" :src="props.coverUrl" fit="contain" />
+      <q-img class="star-product-img" :src="props.coverUrl" fit="cover" />
     </router-link>
-    <div class="column q-mt-sm q-px-sm">
+    <div class="column q-mt-sm q-px-sm" style="word-wrap: break-word">
       <span>{{ props.description }}</span>
       <span style="font-weight: bold; font-size: 20px">{{ price }}</span>
     </div>

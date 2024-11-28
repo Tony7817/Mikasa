@@ -1,5 +1,5 @@
 <template>
-  <div class="" style="background-color: white">
+  <div class="">
     <q-list dense id="list">
       <div class="text-center" style="font-size: 16px">Hot Stars</div>
       <q-separator class="q-my-sm" />
@@ -21,13 +21,13 @@
 <script setup>
 import { service } from "src/services/api";
 import { onMounted, ref } from "vue";
-import StarBrand from "src/components/StarBrand.vue";
+import StarBrand from "src/components/StarPromotionItem.vue";
 import { useQuasar } from "quasar";
 
 defineOptions({
   name: "StarPromotionList",
 });
-const emit = defineEmits(["update-brand-detail"]);
+const emit = defineEmits(["update-star-id"]);
 
 const $q = useQuasar();
 const stars = ref([]);
@@ -44,7 +44,7 @@ async function onloadBrands() {
     const response = await service.getBrandList({});
     const data = response.data.data;
     stars.value.push(...data.brands);
-    emit("update-brand-detail", data.default_brand_detail);
+    emit("update-star-id", data.default_star_id);
   } catch (error) {
     $q.notify({
       type: "negative",

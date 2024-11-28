@@ -1,10 +1,10 @@
 <template>
-  <q-page style="background-color: #f5f5f5; padding: 10px 10px 0px 10px">
+  <q-page style="padding: 10px 10px 0px 10px">
     <div class="row q-gutter-sm">
       <!--Left display area-->
       <StarPromotionList class="col-2" />
       <!--Right star display area-->
-      <div class="col" style="background-color: white">
+      <div class="col">
         <div class="row q-gutter-lg">
           <StarItem
             class="q-pa-sm col-2"

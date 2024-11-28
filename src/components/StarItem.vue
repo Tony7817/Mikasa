@@ -2,12 +2,14 @@
   <div>
     <div>
       <router-link :to="`/star/${props.id}`">
-        <q-img class="star-product-img" :src="props.link" fit="contain" />
+        <q-img class="star-product-img" :src="props.link" fit="cover" />
       </router-link>
     </div>
     <div class="q-ma-sm">
       <div class="column q-ml-md">
-        <div class="" style="font-size: 16px">{{ props.name }}</div>
+        <div class="text-bold text-center" style="font-size: 16px">
+          {{ props.name }}
+        </div>
       </div>
     </div>
   </div>

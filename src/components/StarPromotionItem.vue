@@ -7,7 +7,7 @@
     </div>
     <div class="col q-ml-sm text-center">
       <router-link
-        class="text-black"
+        class="text-white"
         style="font-size: 14px; text-decoration: none"
         :to="props.link"
       >

@@ -2,7 +2,7 @@
   <q-page padding style="padding-top: 0px">
     <div style="position: relative">
       <q-img
-        src="https://s21.ax1x.com/2024/11/28/pA5uBrt.jpg"
+        src="https://s1.locimg.com/2024/11/30/612351eb7afa3.jpg"
         style="height: 40vh; width: 100%"
         fit="cover"
       />

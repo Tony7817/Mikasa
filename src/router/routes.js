@@ -1,3 +1,9 @@
+import {
+  ContactTab,
+  HomeTab,
+  ProductTab,
+  StarsTab,
+} from "src/composables/consts";
 import { useUserStore } from "src/stores/user";
 
 const routes = [
@@ -9,29 +15,48 @@ const routes = [
         path: "/",
         name: "home",
         component: () => import("src/pages/desktop/DesktopHomePage.vue"),
+        meta: { tab: HomeTab },
       },
       {
         path: "/stars",
         name: "stars",
         component: () => import("pages/StarList.vue"),
         props: true,
+        meta: { tab: StarsTab },
       },
       {
         path: "/star/:id",
         component: () => import("pages/StarDetail.vue"),
+        meta: { tab: StarsTab },
       },
       {
-        path: "/star/:starId/product/:productId",
+        path: "/product/:productId",
         component: () => import("pages/ProductDetail.vue"),
+        meta: { tab: ProductTab },
+      },
+      {
+        path: "/product",
+        name: "product",
+        component: () => import("pages/ProductList.vue"),
+        meta: { tab: ProductTab },
       },
       {
         path: "/cart",
+        name: "product-cart",
         component: () => import("pages/ProductCart.vue"),
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, tab: ProductTab },
       },
       {
         path: "/user",
+        name: "user-detail",
         component: () => import("pages/UserDetail.vue"),
+        meta: { tab: null },
+      },
+      {
+        path: "/contact",
+        name: "contact",
+        component: () => import("pages/ContactPage.vue"),
+        meta: { tab: ContactTab },
       },
     ],
   },

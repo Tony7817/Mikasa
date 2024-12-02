@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import StarPromotionList from "src/components/StarPromotionList.vue";
+import StarPromotionList from "src/components/Desktop/StarPromotionList.vue";
 import { ref } from "vue";
 import StarDetail from "src/pages/StarDetail.vue";
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="row q-gutter-xs q-ml-none">
+  <div class="row q-gutter-sm q-ml-none">
     <q-btn
       v-for="s in props.size"
       :key="s"
@@ -8,7 +8,7 @@
       outline
       dense
       :style="{
-        backgroundColor: selectedBtn === s ? '#CB2A45' : 'white',
+        backgroundColor: selectedBtn === s ? '#da4f7a' : 'white',
         color: selectedBtn === s ? 'white' : 'black',
         width: '36px',
       }"
@@ -31,3 +31,5 @@ const props = defineProps({
 
 const selectedBtn = defineModel();
 </script>
+
+<style lang="scss" scoped></style>

@@ -1,7 +1,12 @@
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useUserStore } from "src/stores/user";
 import { useRouter, useRoute } from "vue-router";
-import { HomeTab, ContactTab, StarsTab } from "src/composables/consts";
+import {
+  HomeTab,
+  ContactTab,
+  StarsTab,
+  ProductTab,
+} from "src/composables/consts";
 
 export function setup() {
   const keyword = ref("");
@@ -11,24 +16,26 @@ export function setup() {
   const route = useRoute();
   const productAmountInCart = ref(0);
   const loading = ref(false);
-  const selectedTab = ref(HomeTab);
+  const selectedTab = ref(route.meta.tab);
 
   function onSearch() {
     triggerSearch.value = !triggerSearch.value;
   }
 
-  function toContact() {
-    selectedTab.value = ContactTab;
-  }
-
   function toStars() {
-    selectedTab.value = StarsTab;
     router.push({ name: "stars" });
   }
 
+  function toContact() {
+    router.push({ name: "contact" });
+  }
+
   function toHome() {
-    selectedTab.value = HomeTab;
     router.push({ name: "home" });
+  }
+
+  function toProduct() {
+    router.push({ name: "product" });
   }
 
   async function onload() {
@@ -63,6 +70,7 @@ export function setup() {
     toContact,
     toStars,
     toHome,
+    toProduct,
     onload,
     signIn,
   };

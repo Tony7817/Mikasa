@@ -27,7 +27,7 @@
 <script setup>
 import { service } from "src/services/api";
 import { onMounted, ref } from "vue";
-import StarBrand from "src/components/StarPromotionItem.vue";
+import StarBrand from "src/components/Desktop/StarPromotionItem.vue";
 import { useQuasar } from "quasar";
 
 const emit = defineEmits(["update-star-id"]);

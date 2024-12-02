@@ -7,13 +7,8 @@
 import DesktopMainLayout from "src/layouts/desktop/DesktopMainLayout.vue";
 import MobileMainLayout from "src/layouts/mobile/MobileMainLayout.vue";
 import { Platform } from "quasar";
-import { onMounted } from "vue";
 
 const isMobile = Platform.is.mobile;
-
-onMounted(() => {
-  console.log(isMobile);
-});
 </script>
 
 <style scoped>

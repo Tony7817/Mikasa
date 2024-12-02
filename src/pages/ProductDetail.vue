@@ -17,34 +17,50 @@
         </div>
       </div>
       <div class="col-6">
-        <div class="text-h5 q-mt-md">
+        <div class="text-h5 q-mt-md" style="position: relative">
           {{ product.description }}
         </div>
-        <div class="row">
-          <q-rating v-model="rating" size="2em" disable color="orange" />
-          <span v-if="product.rate" class="q-mt-xs q-ml-sm">{{
-            product.rate
-          }}</span>
-          <span class="q-mt-xs q-ml-md text-blue"
+        <div class="row q-gutter-x-md items-center">
+          <q-rating
+            v-model="rating"
+            icon="star_border"
+            icon-selected="star"
+            icon-half="star_half"
+            size="2em"
+            disable
+            color-selected="pink"
+            color-half="pink"
+          />
+          <span
+            v-if="product.rate"
+            class="q-mt-xs q-ml-sm"
+            style="font-size: 18px; margin-bottom: 2px"
+            >{{ product.rate }}</span
+          >
+          <span class="q-mt-xs q-ml-md text-primary text-bold"
             >{{ product.rate_count }} ratings</span
           >
-          <span class="q-mt-xs q-ml-md text-blue"
+          <span class="q-mt-xs q-ml-md text-primary text-bold"
             >{{ product.sold_num }} sold</span
           >
         </div>
         <q-separator class="q-my-md" />
         <div class="q-ml-sm">
-          <span class="text-bold">Price:</span
-          ><span class="q-ml-sm text-h6 text-bold text-red"
-            >{{ product.price }}{{ tool.getUnit(product.unit) }}</span
-          >
+          <div class="row items-center">
+            <span class="text-bold title">Price</span
+            ><span
+              class="q-ml-sm text-h6 text-bold text-primary"
+              style="font-size: 25px"
+              >{{ product.price }}{{ tool.getUnit(product.unit) }}</span
+            >
+          </div>
         </div>
         <div class="row q-mt-sm items-center">
-          <div class="q-ml-sm text-bold text-h7">Size:</div>
+          <div class="q-ml-sm text-bold text-h7 title">Size</div>
           <SizePicker v-model="selectedSize" :size="product.size" />
         </div>
         <div class="q-mt-sm q-ml-sm">
-          <div class="text-h7 text-bold">Color:</div>
+          <div class="text-h7 text-bold title">Color</div>
           <div class="row q-gutter-md">
             <div class="col-1" v-for="i in product.colors" :key="i">
               <q-img
@@ -57,20 +73,32 @@
           </div>
         </div>
         <div>
-          <div class="text-h7 text-bold q-mt-md">Product Details</div>
-          <div>{{ product.detail }}</div>
+          <div class="text-h7 text-bold q-mt-md title">Product Details</div>
+          <div style="font-size: 18px">{{ product.detail }}</div>
         </div>
-      </div>
-      <div class="col q-mt-lg">
-        <div class="column flex-center items-center q-gutter-md">
+        <div class="row q-gutter-lg q-mt-sm">
           <q-btn
             label="Add to cart"
-            outline
             color="primary"
             @click="addToCart"
             style="width: 150px"
           />
-          <q-btn label="Buy" outline color="primary" style="width: 150px" />
+          <q-btn label="Buy" color="primary" style="width: 150px" />
+        </div>
+      </div>
+      <div class="col-2 q-mt-md">
+        <div>
+          <div class="text-bold text-center text-h5">
+            {{ product.star_name }}'s Store
+          </div>
+          <div class="row justify-center q-mt-md">
+            <q-avatar>
+              <q-img :src="product.star_avatar" />
+            </q-avatar>
+          </div>
+          <div class="row justify-center q-mt-md">
+            <q-btn label="Homepage" color="primary" :to="`/star/${product.star_id}`" />
+          </div>
         </div>
       </div>
     </div>
@@ -83,7 +111,7 @@
 
 <script setup>
 import { useQuasar } from "quasar";
-import SizePicker from "src/components/SizePicker.vue";
+import SizePicker from "src/components/Desktop/SizePicker.vue";
 import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { service } from "src/services/api";
@@ -213,5 +241,9 @@ onMounted(() => {
 
 .product-img-children:hover {
   cursor: pointer;
+}
+
+.title {
+  font-size: 25px;
 }
 </style>

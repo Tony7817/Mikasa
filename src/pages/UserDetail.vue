@@ -27,7 +27,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import UserBasic from "src/components/UserBasic.vue";
+import UserBasic from "src/components/Desktop/UserBasic.vue";
 
 const selectedData = ref(null);
 const currentComponent = ref(null);

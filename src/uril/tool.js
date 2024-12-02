@@ -1,5 +1,6 @@
 import { service } from "src/services/api";
 import { ref } from "vue";
+import { mergeWith } from "lodash";
 
 export const tool = {
   getUnit(unit) {
@@ -72,3 +73,13 @@ export const countryCodeDialMap = [
     dailCode: "+65",
   },
 ];
+
+export function merge(target, source) {
+  mergeWith(target, source, (objValue, srcValue) => {
+    // 如果后端返回 null 或 undefined，保留原值
+    if (srcValue === null || srcValue === undefined) {
+      return objValue;
+    }
+    return srcValue; // 其他情况使用后端的值
+  });
+}

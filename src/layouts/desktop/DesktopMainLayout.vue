@@ -29,11 +29,16 @@
         >
         <span
           class="menu-font"
+          :class="{ active: selectedTab === ProductTab }"
+          @click="toProduct"
+          >Product</span
+        >
+        <span
+          class="menu-font"
           :class="{ active: selectedTab === ContactTab }"
           @click="toContact"
           >Contact</span
         >
-        <span class="menu-font">Product</span>
       </div>
       <q-input
         class="col"
@@ -79,11 +84,14 @@
 </template>
 
 <script setup>
-import { ContactTab, HomeTab, StarsTab } from "src/composables/consts";
+import {
+  ContactTab,
+  HomeTab,
+  ProductTab,
+  StarsTab,
+} from "src/composables/consts";
 import { setup } from "src/composables/MainLayout";
-import { useUserStore } from "src/stores/user";
-import { ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { watch } from "vue";
 
 const {
   keyword,
@@ -98,9 +106,17 @@ const {
   toContact,
   toStars,
   toHome,
+  toProduct,
   onload,
   signIn,
 } = setup();
+
+watch(
+  () => route.meta.tab,
+  (newTab) => {
+    selectedTab.value = newTab;
+  }
+);
 </script>
 
 <style lang="scss" scoped>

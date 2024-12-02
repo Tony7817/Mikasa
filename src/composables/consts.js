@@ -7,3 +7,4 @@ export const Phone = "Phone";
 export const HomeTab = "Home";
 export const StarsTab = "Stars";
 export const ContactTab = "Contact";
+export const ProductTab = "Products";

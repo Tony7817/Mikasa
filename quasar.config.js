@@ -18,7 +18,7 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ["axios", "router-check"],
+    boot: ["axios", "router-check", "platform"],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ["app.scss"],
@@ -94,7 +94,8 @@ module.exports = configure(function (ctx) {
       config: {
         dark: true,
         brand: {
-          primary: "#1d1d1d",
+          primary: "#da4f7a",
+          secondary: "#CB2A45",
           dark: "#000000",
         },
       },

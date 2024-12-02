@@ -49,7 +49,7 @@ export const service = {
   },
 
   getProductList(data) {
-    return api.post("/api/product/list", data, {
+    return api.post(`/api/product/list`, data, {
       headers: {
         "Content-Type": "application/json",
       },

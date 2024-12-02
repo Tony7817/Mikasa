@@ -1,8 +1,6 @@
 <template>
-  <q-page style="padding: 10px 10px 0px 10px">
+  <q-page>
     <div class="row q-gutter-sm">
-      <!--Left display area-->
-      <StarPromotionList class="col-2" />
       <!--Right star display area-->
       <div class="col">
         <div class="row q-gutter-lg">
@@ -16,7 +14,7 @@
             style="width: 256px"
           />
         </div>
-        <div v-if="stars.length > 20" class="row justify-center">
+        <div v-if="stars?.length > 20" class="row justify-center">
           <q-pagination v-model="currentPage" :max="9" direction-links />
         </div>
       </div>
@@ -26,8 +24,8 @@
 
 <script setup>
 import { useQuasar } from "quasar";
-import StarItem from "src/components/StarItem.vue";
-import StarPromotionList from "src/components/StarPromotionList.vue";
+import StarItem from "src/components/Desktop/StarItem.vue";
+import StarPromotionList from "src/components/Desktop/StarPromotionList.vue";
 import { service } from "src/services/api";
 import { onMounted, ref, watch } from "vue";
 
@@ -68,12 +66,15 @@ watch(
 );
 
 async function onloadStars() {
+  const data = {
+    page: currentPage.value,
+    size: PageSize,
+  };
+  if (props.keyword !== "") {
+    data.keyword = props.keyword;
+  }
   try {
-    const response = await service.getStarList({
-      page: currentPage.value,
-      size: PageSize,
-      keyword: props.keyword,
-    });
+    const response = await service.getStarList(data);
     stars.value = response.data.data.stars;
   } catch (error) {
     console.log(error);

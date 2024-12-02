@@ -2,7 +2,7 @@
   <q-page padding style="padding-top: 0px">
     <div style="position: relative">
       <q-img
-        src="https://s1.locimg.com/2024/11/30/612351eb7afa3.jpg"
+        :src="starDetail.poster_url"
         style="height: 40vh; width: 100%"
         fit="cover"
       />
@@ -67,7 +67,7 @@
           label="HomePage"
           outline
           icon="home"
-          :to="`/star/${starIdp}`"
+          :to="`/star/${starIdFinal}`"
         />
         <q-btn class="col-4" label="Follow" outline icon="add" />
       </div>
@@ -97,7 +97,7 @@
           <div></div>
         </div>
       </div>
-      <div v-if="products.length > 20" class="row justify-center">
+      <div class="row justify-center">
         <q-pagination v-model="currentPage" :max="9" direction-links />
       </div>
     </div>
@@ -106,7 +106,7 @@
 
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
-import ProductItem from "src/components/ProductItem.vue";
+import ProductItem from "src/components/Desktop/ProductItem.vue";
 import { service } from "src/services/api";
 import { useQuasar } from "quasar";
 import { useRoute } from "vue-router";
@@ -130,13 +130,13 @@ const size = 20;
 const currentPage = ref(1);
 const $q = useQuasar();
 const route = useRoute();
-const starIdp = computed(() => {
+const starIdFinal = computed(() => {
   return props.starId !== null ? props.starId : route.params.id;
 });
 
 async function onLoadStarDetail() {
   try {
-    const response = await service.getStarDetail(starIdp.value);
+    const response = await service.getStarDetail(starIdFinal.value);
     starDetail.value = response.data.data;
   } catch (error) {
     console.log(error);
@@ -148,7 +148,7 @@ async function onLoadStarDetail() {
   }
 }
 
-watch(starIdp, async () => {
+watch(starIdFinal, async () => {
   await onload();
 });
 
@@ -160,7 +160,7 @@ async function onload() {
 async function onLoadProducts() {
   try {
     const response = await service.getProductList({
-      star_id: starIdp.value,
+      star_id: starIdFinal.value,
       page: currentPage.value,
       size: size,
     });

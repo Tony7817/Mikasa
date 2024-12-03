@@ -78,7 +78,7 @@
           label="SIGN UP"
           rounded
           :loading="sendVerifyLoading"
-          color="secondary"
+          color="primary"
         />
       </div>
       <div

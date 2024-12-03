@@ -1,5 +1,24 @@
 <template>
   <q-layout view="hhh Lpr fFf">
+    <div
+      class="header row items-center gradient-background-lr q-px-md"
+      style="height: 8vh"
+    >
+      <div class="col-2">
+        <q-btn
+          flat
+          icon="arrow_back"
+          label="Back"
+          color="white"
+          @click="router.go(-1)"
+        >
+        </q-btn>
+      </div>
+      <div class="col text-center text-h6 text-bold">
+        A Wonderful Sexy Lingerie Store With Stars
+      </div>
+      <div class="col-2"></div>
+    </div>
     <q-page-container>
       <q-page class="bg-grey-10">
         <div class="row justify-center items-center" style="height: 100vh">
@@ -50,7 +69,9 @@ import {
   SignupMode,
 } from "src/composables/consts";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const mode = ref(SigninMode);
 </script>
 
@@ -58,6 +79,14 @@ const mode = ref(SigninMode);
 .gradient-background {
   background: linear-gradient(
     to bottom,
+    #cb2a45,
+    #2a4a82
+  ); /* 从上到下的竖直渐变 */
+}
+
+.gradient-background-lr {
+  background: linear-gradient(
+    to right,
     #cb2a45,
     #2a4a82
   ); /* 从上到下的竖直渐变 */

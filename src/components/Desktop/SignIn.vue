@@ -5,11 +5,20 @@
       <q-btn icon="fab fa-google" outline rounded dense />
       <q-btn icon="fab fa-facebook-f" outline rounded dense />
       <q-btn
+        v-if="signinMode === Email"
         icon="phone_iphone"
         outline
         rounded
         dense
         @click="signinMode = Phone"
+      />
+      <q-btn
+        v-if="signinMode === Phone"
+        icon="email"
+        outline
+        rounded
+        dense
+        @click="signinMode = Email"
       />
     </div>
     <div class="text-center q-mb-sm">or use your account</div>

@@ -3,12 +3,12 @@
     <div class="row">
       <div class="col-4 q-pa-md">
         <div>
-          <q-img :src="selectedImage.url" class="product-img" fit="contain" />
+          <q-img :src="selectedImage" class="product-img" fit="contain" />
         </div>
         <div class="row q-mt-sm q-gutter-x-sm">
           <div class="col-2" v-for="i in selectedColor.images" :key="i">
             <q-img
-              :src="i.url"
+              :src="i"
               class="product-img-children"
               fit="contain"
               @click="selectedImage = i"
@@ -64,7 +64,7 @@
           <div class="row q-gutter-md">
             <div class="col-1" v-for="i in product.colors" :key="i">
               <q-img
-                :src="i.images[0].url"
+                :src="i.images[0]"
                 class="product-img-children"
                 @click="selectedColor = i"
                 fit="contain"
@@ -97,7 +97,11 @@
             </q-avatar>
           </div>
           <div class="row justify-center q-mt-md">
-            <q-btn label="Homepage" color="primary" :to="`/star/${product.star_id}`" />
+            <q-btn
+              label="Homepage"
+              color="primary"
+              :to="`/star/${product.star_id}`"
+            />
           </div>
         </div>
       </div>
@@ -124,8 +128,6 @@ defineOptions({
 const $q = useQuasar();
 const route = useRoute();
 
-const id = ref(route.params.id);
-const slide = ref("pic1");
 const selectedSize = ref("");
 const productId = route.params.productId;
 const selectedColor = ref({});
@@ -141,7 +143,8 @@ const product = ref({
   colors: [],
   rating: 0,
   default_color: {
-    images_url: "",
+    color: "",
+    images: [],
   },
   rate_count: 0,
   sold_num: 0,
@@ -155,22 +158,8 @@ async function onLoadProduct() {
   try {
     const response = await service.getProductDetail(productId, {});
     product.value = response.data.data;
-    for (let i = 0; i < product.value.colors.length; i++) {
-      if (product.value.colors[i].id === product.value.default_color.id) {
-        product.value.colors[i]._selected = true;
-        selectedColor.value = product.value.colors[i];
-        for (let j = 0; j < product.value.colors[i]?.images.length; i++) {
-          if (j == 0) {
-            product.value.colors[i].images[j]._selected = true;
-            selectedImage.value = product.value.colors[i].images[j];
-          } else {
-            product.value.colors[i].images[j]._selected = false;
-          }
-        }
-      } else {
-        product.value.colors[i]._selected = false;
-      }
-    }
+    selectedColor.value = product.value.colors[0];
+    selectedImage.value = product.value.colors[0].images[0];
   } catch (error) {
     console.log(error);
     $q.notify({

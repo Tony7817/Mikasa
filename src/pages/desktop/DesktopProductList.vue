@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <div class="row q-gutter-lg justify-center">
+    <div class="row q-gutter-lg" style="margin: auto">
       <ProductItem
         class="q-mt-sm"
         v-for="p in products.products"

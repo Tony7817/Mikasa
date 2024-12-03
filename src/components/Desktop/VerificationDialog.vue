@@ -1,6 +1,6 @@
 <template>
   <q-dialog persistent :model-value="props.show">
-    <q-card style="width: 500px">
+    <q-card class="bg-grey-10" style="width: 500px">
       <q-card-section>
         <div class="row">
           <q-btn flat dense icon="arrow_back" @click="close" />
@@ -39,7 +39,7 @@
             :disable="isButtonDisabled"
             no-caps=""
             outline
-            color="secondary"
+            color="primary"
             @click="resend"
             :loading="resendLoading"
           >

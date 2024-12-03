@@ -1,5 +1,5 @@
 <template>
-  <div class="column q-pa-md">
+  <div class="column q-pa-md gradient-background">
     <div class="q-mb-sm text-h5 text-bold text-center">Sign up</div>
     <div class="row justify-center q-mb-sm q-gutter-md">
       <q-btn
@@ -29,10 +29,8 @@
       <q-input
         v-if="registerMode == Email"
         v-model="email"
+        color="white"
         type="email"
-        :rules="[validateEmail]"
-        :error="emailError !== ''"
-        :error-message="emailError"
         label="Email"
       />
       <PhonenumberInput
@@ -43,10 +41,8 @@
       />
       <q-input
         v-model="password"
+        color="white"
         :type="passwordVisiable ? 'text' : 'password'"
-        :rules="[validatePassword]"
-        :error="passwordError !== ''"
-        :error-message="passwordError"
         label="Password"
       >
         <template v-slot:append>
@@ -61,10 +57,8 @@
       </q-input>
       <q-input
         v-model="repassword"
+        color="white"
         :type="repasswordVisiable ? 'text' : 'password'"
-        :rules="[validateRepassword]"
-        :error="repasswordError !== ''"
-        :error-message="repasswordError"
         label="Password"
       >
         <template v-slot:append>
@@ -138,6 +132,7 @@ const { emailError, validateEmail } = validator();
 const phonenumber = ref("");
 const password = ref("");
 const { passwordError, validatePassword } = validator();
+const { phoneError, validatePhone } = validator();
 const passwordVisiable = ref(false);
 const passwordEyeIcon = ref("visibility");
 const repassword = ref("");
@@ -149,6 +144,47 @@ const isVerifyDialogShow = ref(false);
 const sendVerifyLoading = ref(false);
 const captchaTime = ref(0);
 const countryDailCode = ref({});
+
+function validate() {
+  if (registerMode.value === Email) {
+    if (!validateEmail(email.value)) {
+      $q.notify({
+        type: "warning",
+        message: emailError.value,
+        position: "top",
+      });
+      return false;
+    }
+  } else {
+    if (!validatePhone(phonenumber.value)) {
+      $q.notify({
+        type: "warning",
+        message: phoneError.value,
+        position: "top",
+      });
+    }
+  }
+
+  if (!validatePassword(password.value)) {
+    $q.notify({
+      type: "warning",
+      message: passwordError.value,
+      position: "top",
+    });
+    return false;
+  }
+
+  if (!validateRepassword(repassword.value)) {
+    $q.notify({
+      type: "warning",
+      message: repasswordError.value,
+      position: "top",
+    });
+    return false;
+  }
+
+  return true;
+}
 
 const validateRepassword = (val) => {
   if (val === "") {
@@ -188,6 +224,10 @@ function convertPasswordIcon(type) {
 }
 
 async function signup() {
+  if (!validate()) {
+    return;
+  }
+
   const body = { password: password.value };
   if (registerMode.value === Email) {
     body.email = email.value;
@@ -222,6 +262,9 @@ async function signup() {
 }
 
 async function sendVerifyCode() {
+  if (!validate()) {
+    return;
+  }
   if (sendVerifyLoading.value) {
     return;
   }
@@ -259,4 +302,12 @@ onMounted(async () => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.gradient-background {
+  background: linear-gradient(
+    to bottom,
+    #cb2a45,
+    #2a4a82
+  ); /* 从上到下的竖直渐变 */
+}
+</style>

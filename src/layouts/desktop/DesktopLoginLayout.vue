@@ -1,7 +1,7 @@
 <template>
-  <q-layout view="hhh Lpr fFf" style="background-color: #f6f6f6">
+  <q-layout view="hhh Lpr fFf">
     <q-page-container>
-      <q-page>
+      <q-page class="bg-grey-10">
         <div class="row justify-center items-center" style="height: 100vh">
           <q-card style="width: 60%">
             <q-card-section style="padding: 0px">

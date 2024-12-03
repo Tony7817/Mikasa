@@ -1,9 +1,7 @@
 <template>
   <q-input
     v-model="phoneNumber"
-    :rules="[validatePhone]"
-    :error="phoneError !== ''"
-    :error-message="phoneError"
+    color="white"
     type="text"
     placeholder="Phone number"
     @keydown="restrictKeyInput"
@@ -53,7 +51,6 @@ const props = defineProps({
 });
 
 const phoneNumber = ref("");
-const { phoneError, validatePhone } = validator();
 const countryCode = ref(props.countryCode);
 const countryDailCode = ref(props.countryDailCode);
 

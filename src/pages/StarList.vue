@@ -1,6 +1,6 @@
 <template>
-  <q-page>
-    <div class="row q-gutter-sm">
+  <q-page padding>
+    <div class="row q-gutter-sm" style="margin: auto">
       <!--Right star display area-->
       <div class="col">
         <div class="row q-gutter-lg">

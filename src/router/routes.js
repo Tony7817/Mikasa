@@ -14,7 +14,7 @@ const routes = [
       {
         path: "/",
         name: "home",
-        component: () => import("src/pages/desktop/DesktopHomePage.vue"),
+        component: () => import("src/pages/HomePage.vue"),
         meta: { tab: HomeTab },
       },
       {

@@ -43,6 +43,12 @@
           <span class="q-mt-xs q-ml-md text-primary text-bold"
             >{{ product.sold_num }} sold</span
           >
+          <q-space />
+          <q-icon
+            name="favorite_outlined"
+            class="text-primary"
+            style="font-size: 22px"
+          />
         </div>
         <q-separator class="q-my-md" />
         <div class="q-ml-sm">

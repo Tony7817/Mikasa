@@ -1,9 +1,6 @@
 <template>
-  <q-layout view="hhh Lpr fFf">
-    <div
-      class="header row items-center gradient-background-lr q-px-md"
-      style="height: 8vh"
-    >
+  <q-layout view="hhh Lpr fFf" class="bg-grey-10">
+    <div class="header row items-center q-px-md" style="height: 8vh">
       <div class="col-2">
         <q-btn
           flat
@@ -19,9 +16,10 @@
       </div>
       <div class="col-2"></div>
     </div>
+    <q-separator />
     <q-page-container>
-      <q-page class="bg-grey-10">
-        <div class="row justify-center items-center" style="height: 100vh">
+      <q-page>
+        <div class="row justify-center items-center" style="padding-top: 15vh">
           <q-card style="width: 60%">
             <q-card-section style="padding: 0px">
               <div class="row">

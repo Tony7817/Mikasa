@@ -97,7 +97,7 @@
           <div></div>
         </div>
       </div>
-      <div class="row justify-center">
+      <div v-if="products.length > 20" class="row justify-center">
         <q-pagination v-model="currentPage" :max="9" direction-links />
       </div>
     </div>

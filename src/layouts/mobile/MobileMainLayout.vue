@@ -1,11 +1,13 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header elevated class="bg-primary text-white">
+    <q-header class="bg-primary text-white q-py-xs">
       <q-toolbar>
-        <q-toolbar-title> Porn Store </q-toolbar-title>
-        <q-input outlined rounded dense />
-        <q-space />
-        <q-btn icon="shopping_cart" flat />
+        <q-toolbar-title class="col-3"> P </q-toolbar-title>
+        <q-input class="col-6" color="white" outlined rounded dense />
+        <div class="col-3 row">
+          <q-space />
+          <q-btn icon="shopping_cart" flat />
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -13,34 +15,34 @@
       <!-- drawer content -->
     </q-drawer>
 
-    <!-- <q-page-container>
+    <q-page-container>
       <router-view />
-    </q-page-container> -->
+    </q-page-container>
 
-    <q-footer elevated class="bg-grey-8 text-white">
-      <q-tabs>
-        <q-tab name="Home" icon="home" label="Home"></q-tab>
-        <q-tab name="Star" icon="diversity_1" label="Star"></q-tab>
-        <q-tab name="Product" icon="local_mall" label="Product"></q-tab>
-        <q-tab name="My" icon="account_circle" label="My"></q-tab>
+    <q-footer class="bg-primary text-white">
+      <q-tabs v-model="tabs">
+        <q-route-tab name="Star" icon="diversity_1" label="Star" to="/stars" />
+        <q-route-tab
+          name="Product"
+          icon="local_mall"
+          label="Product"
+          to="/product"
+        />
+        <q-route-tab name="My" icon="account_circle" label="My" to="/user" />
       </q-tabs>
     </q-footer>
   </q-layout>
 </template>
 
-<script>
-import { ref } from "vue";
+<script setup>
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
-export default {
-  setup() {
-    const leftDrawerOpen = ref(false);
+const leftDrawerOpen = ref(false);
+const tabs = ref("Star");
+const router = useRouter();
 
-    return {
-      leftDrawerOpen,
-      toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
-      },
-    };
-  },
-};
+onMounted(() => {
+  router.push("/stars");
+});
 </script>

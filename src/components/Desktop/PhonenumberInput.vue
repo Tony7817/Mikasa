@@ -35,7 +35,6 @@
 
 <script setup>
 import { countryCodeDialMap } from "src/uril/tool";
-import { validator } from "src/composables/user";
 import { ref } from "vue";
 
 const emit = defineEmits(["update:model-value"]);

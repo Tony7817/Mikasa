@@ -27,6 +27,7 @@ const routes = [
       {
         path: "/star/:id",
         component: () => import("pages/StarDetail.vue"),
+        props: true,
         meta: { tab: StarsTab },
       },
       {

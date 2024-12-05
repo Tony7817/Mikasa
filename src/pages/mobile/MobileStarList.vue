@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-infinite-scroll @load="onloadStars" :offset="150">
+    <q-infinite-scroll @load="onloadStars" :offset="200">
       <div v-for="s in stars" :key="s.id" @click="toStarHomePage(s.id)">
         <div style="position: relative">
           <q-img :src="s.image_url" />
@@ -24,6 +24,7 @@
 import { useQuasar } from "quasar";
 import { service } from "src/services/api";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
   keyword: {
@@ -41,6 +42,7 @@ const $q = useQuasar();
 const PageSize = 2;
 const loading = ref(false);
 const isLastStarLoaded = ref(false);
+const router = useRouter();
 
 function toStarHomePage(id) {
   router.push(`/star/${id}`);

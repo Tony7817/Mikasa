@@ -59,7 +59,7 @@
 
 <script setup>
 import ForgetPassword from "src/components/Desktop/ForgetPassword.vue";
-import SignIn from "src/components/Desktop/SignIn.vue";
+import SignIn from "src/components/Desktop/DesktopSignIn.vue";
 import SignUp from "src/components/Desktop/SignUp.vue";
 import {
   ForgetPasswordMode,

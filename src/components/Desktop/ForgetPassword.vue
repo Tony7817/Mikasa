@@ -93,8 +93,8 @@ import {
 } from "src/composables/consts";
 import { validator } from "src/composables/user";
 import { onMounted, ref } from "vue";
-import PhonenumberInput from "./PhonenumberInput.vue";
-import VerificationDialog from "./VerificationDialog.vue";
+import PhonenumberInput from "src/components/PhonenumberInput.vue";
+import VerificationDialog from "src/components/VerificationDialog.vue";
 import { useQuasar } from "quasar";
 import { service } from "src/services/api";
 import { tool } from "src/uril/tool";

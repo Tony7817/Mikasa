@@ -109,9 +109,9 @@ import { SigninMode, SignupMode, StatusOK } from "src/composables/consts";
 import { countryCodeDialMap, tool } from "src/uril/tool";
 import { getLocation } from "src/composables/user";
 import { service } from "src/services/api";
-import VerificationDialog from "./VerificationDialog.vue";
+import VerificationDialog from "src/components/VerificationDialog.vue";
 import { Email, Phone } from "src/composables/consts";
-import PhonenumberInput from "./PhonenumberInput.vue";
+import PhonenumberInput from "src/components/PhonenumberInput.vue";
 
 defineOptions({
   name: "SignUp",

@@ -4,9 +4,9 @@
 </template>
 
 <script setup>
-import DesktopLoginLayout from "./desktop/DesktopLoginLayout.vue";
+import DesktopLoginLayout from "src/layouts/desktop/DesktopLoginLayout.vue";
 import { Platform } from "quasar";
-import MobileLoginLayout from "./mobile/MobileLoginLayout.vue";
+import MobileLoginLayout from "src/layouts/mobile/MobileLoginLayout.vue";
 
 const isMobile = Platform.is.mobile;
 </script>

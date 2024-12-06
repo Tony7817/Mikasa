@@ -41,7 +41,6 @@ export const tool = {
       countryDialCode.countryDailCode = countryCodeDialMap[0].dailCode;
       console.log(error);
     }
-    console.log(countryDialCode);
 
     return countryDialCode;
   },

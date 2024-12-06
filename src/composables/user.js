@@ -1,5 +1,6 @@
 import { service } from "src/services/api";
 import { ref } from "vue";
+import { SignupMode } from "./consts";
 
 export async function getLocation(ip) {
   const key = "be62fa1ff16346b9f29fa6675e9668f5";
@@ -43,12 +44,12 @@ export function validator() {
   };
 
   const passwordError = ref("");
-  const validatePassword = (val) => {
+  const validatePassword = (val, mode) => {
     if (val === "") {
       passwordError.value = "Please enter your password";
       return false;
     }
-    if (!passwordStrengthRegex.test(val)) {
+    if (mode == SignupMode && !passwordStrengthRegex.test(val)) {
       passwordError.value =
         "Password must be at least 6 characters long and contain at least one letter and one number";
       return false;

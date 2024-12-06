@@ -8,3 +8,5 @@ export const HomeTab = "Home";
 export const StarsTab = "Stars";
 export const ContactTab = "Contact";
 export const ProductTab = "Products";
+export const AddToCart = "AddToCart";
+export const BuyNow = "BuyNow";

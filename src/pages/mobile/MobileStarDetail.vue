@@ -57,7 +57,7 @@
       <div class="text-center text-h5 text-bold q-my-sm">Products</div>
       <q-infinite-scroll>
         <div class="product-grid">
-          <div v-for="p in products" :key="p.id">
+          <div v-for="p in products" :key="p.id" @click="toProductPage(p.id)">
             <div class="">
               <q-img :src="p.cover_url" fit="cover" style="height: 30vh" />
             </div>
@@ -72,9 +72,10 @@
 import { useQuasar } from "quasar";
 import { service } from "src/services/api";
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
 const starId = ref(route.params.id);
 const $q = useQuasar();
 
@@ -89,6 +90,10 @@ const currentPage = ref(1);
 const products = ref([]);
 
 const size = 20;
+
+function toProductPage(pId) {
+  router.push(`/product/${pId}`);
+}
 
 async function onLoadStarDetail() {
   try {

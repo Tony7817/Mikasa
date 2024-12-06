@@ -40,9 +40,4 @@ import { useRouter } from "vue-router";
 
 const leftDrawerOpen = ref(false);
 const tabs = ref("Star");
-const router = useRouter();
-
-onMounted(() => {
-  router.push("/stars");
-});
 </script>

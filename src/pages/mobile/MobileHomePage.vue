@@ -1,13 +1,12 @@
 <template>
   <q-page>
-    <div>
-      <q-img :src="starDetail.poster_url" />
-    </div>
+    <MobileStarDetail />
   </q-page>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import MobileStarDetail from "./MobileStarDetail.vue";
 
 const props = defineProps({
   starId: {

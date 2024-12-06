@@ -51,7 +51,7 @@ const routes = [
         path: "/user",
         name: "user-detail",
         component: () => import("pages/UserDetail.vue"),
-        meta: { tab: null },
+        meta: { requiresAuth: true, tab: null },
       },
       {
         path: "/contact",

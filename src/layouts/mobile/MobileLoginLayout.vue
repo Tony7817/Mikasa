@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hhh Lpr fFf" class="gradient-background">
     <div class="header row q-pl-md q-pt-md">
-      <q-btn icon="arrow_back" label="back" flat />
+      <q-btn icon="arrow_back" label="back" flat @click="router.go(-1)" />
     </div>
 
     <q-page-container>

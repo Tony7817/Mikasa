@@ -21,12 +21,6 @@
         type="password"
         label="Password"
       />
-      <div
-        class="text-grey text-center forget-pass q-mt-md"
-        @click="$emit('update-mode', ForgetPasswordMode)"
-      >
-        Forget your password?
-      </div>
       <div class="row justify-center q-mb-sm q-gutter-lg q-mt-sm">
         <q-btn icon="fab fa-google" outline rounded dense />
         <q-btn icon="fab fa-facebook-f" outline rounded dense />
@@ -48,14 +42,13 @@
         />
       </div>
       <div class="row justify-center q-gutter-md q-mt-md">
-        <q-btn
-          label="Sign Up"
-          no-caps
-          rounded
-          color="primary"
-          @click="$emit('update-mode', SignupMode)"
-        />
         <q-btn no-caps label="Sign In" type="submit" rounded color="primary" />
+      </div>
+      <div
+        class="text-center forget-pass q-mt-lg"
+        @click="$emit('update-mode', ForgetPasswordMode)"
+      >
+        Forget your password?
       </div>
     </q-form>
   </div>
@@ -67,7 +60,7 @@ import PhonenumberInput from "src/components/PhonenumberInput.vue";
 import { setup } from "src/composables/signin";
 import { tool } from "src/uril/tool";
 
-const emit = defineEmits(["update-mode"])
+const emit = defineEmits(["update-mode"]);
 const {
   signinMode,
   email,
@@ -79,7 +72,6 @@ const {
   SignupMode,
   onSubmit,
 } = setup();
-
 
 onMounted(async () => {
   const ip = await tool.getIp();

@@ -1,24 +1,52 @@
 <template>
-  <q-layout view="hhh Lpr fFf" class="gradient-background">
-    <div class="header row q-pl-md q-pt-md">
+  <q-layout
+    view="hhh Lpr fFf"
+    class="gradient-background"
+    style="height: 100vh; overflow: hidden"
+  >
+    <div class="header row q-pl-md q-pt-md" style="height: 10vh">
       <q-btn icon="arrow_back" label="back" flat @click="router.go(-1)" />
     </div>
 
     <q-page-container>
       <q-page>
-        <div class="column" style="height: 100vh">
+        <div class="column" style="height: 90vh">
           <div class="col-3">
-            <div class="column justify-center items-center text-h4 text-bold" style="height: 100%;">
+            <div
+              class="column justify-center items-center text-h4 text-bold"
+              style="height: 100%"
+            >
               <span v-if="mode === SigninMode">SignIn</span>
               <span v-else>SignUp</span>
             </div>
           </div>
-          <MobileSignin
-            v-if="mode === SigninMode"
-            class="col"
-            @update-mode="mode = SignupMode"
-          />
-          <MobileSignup v-else class="col" @update-mode="mode = SigninMode" />
+          <div class="col">
+            <MobileSignin
+              v-if="mode === SigninMode"
+              class="col"
+              @update-mode="mode = SignupMode"
+            />
+            <MobileSignup v-else class="col" @update-mode="mode = SigninMode" />
+          </div>
+          <div v-if="mode === SigninMode" class="col-1">
+            <div
+              class="text-center"
+              style="font-size: 16px"
+              @click="mode = SignupMode"
+            >
+              No Account?
+              <span style="text-decoration: underline">Sign up</span>
+            </div>
+          </div>
+          <div
+            v-if="mode === SignupMode"
+            class="text-center col-1"
+            @click="mode = SigninMode"
+            style="font-size: 16px"
+          >
+            Already hava an account?
+            <span style="text-decoration: underline">Go to Sign in.</span>
+          </div>
         </div>
       </q-page>
     </q-page-container>

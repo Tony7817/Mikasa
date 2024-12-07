@@ -143,6 +143,7 @@ watch(
 );
 
 function close() {
+  verificationCode.value = "";
   emit("disable-dialog");
 }
 

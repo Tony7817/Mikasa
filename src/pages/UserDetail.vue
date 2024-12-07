@@ -1,20 +1,38 @@
 <template>
-  <q-page style="background-color: #f2f2f2; padding: 10px 10px 0px 10px">
+  <q-page padding>
     <div class="row q-gutter-sm">
       <div
-        class="column q-getter-sm col-2 q-pa-sm"
-        style="background-color: white; height: 100vh"
+        class="column q-getter-sm col-2 q-pa-sm bg-grey-10"
+        style="height: 100vh"
       >
         <q-list style="max-width: 350px">
           <q-item clickable>
-            <q-item-section avatar="">
-              <q-icon color="primary" name="person" />
+            <q-item-section>
+              <div class="row q-gutter-md items-center">
+                <q-icon color="primary" name="person" style="font-size: 20px" />
+                <div style="font-size: 16px">Account</div>
+              </div>
             </q-item-section>
-            <q-item-section> Basic </q-item-section>
+          </q-item>
+          <q-item clickable>
+            <div class="row q-gutter-md items-center">
+              <q-icon
+                color="primary"
+                name="shopping_bag"
+                style="font-size: 20px"
+              />
+              <div style="font-size: 16px">Orders</div>
+            </div>
+          </q-item>
+          <q-item clickable>
+            <div class="row q-gutter-md items-center">
+              <q-icon color="primary" name="chat" style="font-size: 20px" />
+              <div style="font-size: 16px">Feedback</div>
+            </div>
           </q-item>
         </q-list>
       </div>
-      <div class="col" style="background-color: white; height: 100vh">
+      <div class="col bg-grey-10">
         <component
           :is="currentComponent"
           :data="selectedData"

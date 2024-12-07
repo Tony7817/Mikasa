@@ -13,7 +13,6 @@ export const useUserStore = defineStore("user", {
     setUser(userData) {
       this.user = userData;
       this.isAuthenticated = true;
-      this.user.token = userData.token;
     },
     clearUser() {
       this.user = null;

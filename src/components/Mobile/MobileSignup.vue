@@ -76,13 +76,6 @@
           color="primary"
         />
       </div>
-      <div
-        class="text-center cursor-pointer q-mt-lg"
-        @click="$emit('update-mode', SigninMode)"
-      >
-        Already hava an account?
-        <span style="text-decoration: underline">Go to Sign in.</span>
-      </div>
     </q-form>
     <MobileVerificationDialog
       :show="isVerifyDialogShow"
@@ -108,6 +101,8 @@ import { service } from "src/services/api";
 import { Email, Phone } from "src/composables/consts";
 import PhonenumberInput from "src/components/PhonenumberInput.vue";
 import MobileVerificationDialog from "src/components/Mobile/MobileVerificationDialog.vue";
+import { useUserStore } from "src/stores/user";
+import { useRouter } from "vue-router";
 
 defineOptions({
   name: "SignUp",
@@ -140,6 +135,8 @@ const isVerifyDialogShow = ref(false);
 const sendVerifyLoading = ref(false);
 const captchaTime = ref(0);
 const countryDailCode = ref({});
+const userStore = useUserStore();
+const router = useRouter();
 
 function validate() {
   if (registerMode.value === Email) {
@@ -232,20 +229,26 @@ async function signup() {
   }
   try {
     const response = await service.register(body);
+    console.log(response);
 
-    const data = response.data;
-    if (!data.ok) {
+    const data = response.data.data;
+    if (response.data?.msg !== "OK") {
       $q.notify({
         type: "negative",
         message: response.data.data.msg,
       });
     } else {
+      userStore.setUser({
+        id: data.user_id,
+        name: data.username,
+        token: data.access_token,
+      });
       $q.dialog({
         title: "Welcome",
-        message: "You have successfully Signed in. Go to sign in.",
+        message: "You have successfully Signed up.",
         persistent: true,
       }).onOk(() => {
-        emit("update-mode", SigninMode);
+        router.go(-1);
       });
     }
   } catch (error) {

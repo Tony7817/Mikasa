@@ -44,7 +44,7 @@ export function setup() {
         userStore.setUser({
           id: data.user_id,
           name: data.name,
-          token: data.accessToken,
+          token: data.access_token,
         });
       }
       const redirectPath = route.query.next || "/";

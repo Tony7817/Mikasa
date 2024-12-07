@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div class="q-mb-sm text-h5 text-bold text-center">Sign in</div>
     <q-form class="q-mx-lg" @submit="onSubmit">
       <q-input
         class="cus-input"

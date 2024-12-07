@@ -66,6 +66,7 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  // value of email or phonenumber
   target: {
     type: String,
     require: true,

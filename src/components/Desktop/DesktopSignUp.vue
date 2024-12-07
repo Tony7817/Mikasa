@@ -88,7 +88,7 @@
         Already hava an account? Go to Sign in.
       </div>
     </q-form>
-    <VerificationDialog
+    <DesktopVerificationDialog
       :show="isVerifyDialogShow"
       :mode="registerMode"
       :target="registerMode === Email ? email : phonenumber"
@@ -109,7 +109,7 @@ import { SigninMode, SignupMode, StatusOK } from "src/composables/consts";
 import { countryCodeDialMap, tool } from "src/uril/tool";
 import { getLocation } from "src/composables/user";
 import { service } from "src/services/api";
-import VerificationDialog from "src/components/VerificationDialog.vue";
+import DesktopVerificationDialog from "src/components/Desktop/DesktopVerificationDialog.vue";
 import { Email, Phone } from "src/composables/consts";
 import PhonenumberInput from "src/components/PhonenumberInput.vue";
 

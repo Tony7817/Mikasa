@@ -72,7 +72,7 @@
         />
       </div>
     </q-form>
-    <VerificationDialog
+    <DesktopVerificationDialog
       :show="isVerifyDialogShow"
       :mode="resetMode"
       :target="resetMode === Email ? email : phoneNumber"
@@ -94,7 +94,7 @@ import {
 import { validator } from "src/composables/user";
 import { onMounted, ref } from "vue";
 import PhonenumberInput from "src/components/PhonenumberInput.vue";
-import VerificationDialog from "src/components/VerificationDialog.vue";
+import DesktopVerificationDialog from "src/components/Desktop/DesktopVerificationDialog.vue";
 import { useQuasar } from "quasar";
 import { service } from "src/services/api";
 import { tool } from "src/uril/tool";

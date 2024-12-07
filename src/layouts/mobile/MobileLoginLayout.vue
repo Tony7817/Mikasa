@@ -7,8 +7,18 @@
     <q-page-container>
       <q-page>
         <div class="column" style="height: 100vh">
-          <div class="col-3" v-if="mode === SigninMode"></div>
-          <MobileSignin class="col" />
+          <div class="col-3">
+            <div class="column justify-center items-center text-h4 text-bold" style="height: 100%;">
+              <span v-if="mode === SigninMode">SignIn</span>
+              <span v-else>SignUp</span>
+            </div>
+          </div>
+          <MobileSignin
+            v-if="mode === SigninMode"
+            class="col"
+            @update-mode="mode = SignupMode"
+          />
+          <MobileSignup v-else class="col" @update-mode="mode = SigninMode" />
         </div>
       </q-page>
     </q-page-container>
@@ -17,7 +27,8 @@
 
 <script setup>
 import MobileSignin from "src/components/Mobile/MobileSignin.vue";
-import { SigninMode } from "src/composables/consts";
+import MobileSignup from "src/components/Mobile/MobileSignup.vue";
+import { SigninMode, SignupMode } from "src/composables/consts";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 

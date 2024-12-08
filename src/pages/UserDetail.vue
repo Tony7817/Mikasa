@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page class="q-px-md">
     <div class="row q-gutter-sm">
       <div
         class="column q-getter-sm col-2 q-pa-sm bg-grey-10"
@@ -44,11 +44,11 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, shallowRef } from "vue";
 import UserBasic from "src/components/Desktop/UserBasic.vue";
 
 const selectedData = ref(null);
-const currentComponent = ref(null);
+const currentComponent = shallowRef(null);
 
 const handleClick = (component, data) => {
   currentComponent.value = component;

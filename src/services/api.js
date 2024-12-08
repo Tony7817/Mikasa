@@ -181,4 +181,13 @@ export const service = {
       },
     });
   },
+
+  getUserDetail(data) {
+    return api.post(`/api/user/detail`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userStore.user.token}`,
+      },
+    });
+  },
 };

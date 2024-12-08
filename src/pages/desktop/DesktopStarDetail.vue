@@ -164,7 +164,9 @@ async function onLoadProducts() {
       page: currentPage.value,
       size: size,
     });
-    products.value = response.data.data.products;
+    if (response.data.data.products !== null) {
+      products.value = response.data.data.products;
+    }
   } catch (error) {
     console.log(error);
     $q.notify({

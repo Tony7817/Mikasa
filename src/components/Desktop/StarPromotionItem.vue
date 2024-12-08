@@ -1,7 +1,7 @@
 <template>
   <div class="row items-center">
     <div class="col-2">
-      <q-avatar size="50px">
+      <q-avatar size="60px">
         <q-img :src="props.avatar" />
       </q-avatar>
     </div>

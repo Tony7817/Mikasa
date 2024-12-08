@@ -190,4 +190,13 @@ export const service = {
       },
     });
   },
+
+  getManageStarList(data) {
+    return api.post("/api/user/manage/star/list", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userStore.user.token}`,
+      },
+    });
+  },
 };

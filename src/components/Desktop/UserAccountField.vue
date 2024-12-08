@@ -5,7 +5,7 @@
         square
         color="primary"
         :icon="icon"
-        style="margin-bottom: -5px; width: 110px"
+        style="margin-bottom: -9px; width: 110px"
       >
         <span>{{ label }}</span>
       </q-chip>
@@ -29,7 +29,7 @@
             outline
             flat
             dense
-            style="margin-bottom: -11px; font-size: 10px"
+            style="margin-bottom: -23px; font-size: 10px"
             @click="toggleEditing"
           />
           <q-btn

@@ -6,38 +6,66 @@
         style="height: 100vh"
       >
         <q-list style="max-width: 350px">
-          <q-item clickable>
+          <q-item
+            clickable
+            :class="{ 'bg-primary': selectedItem === Account }"
+            @click="router.push({ name: 'UserManageAccount' })"
+          >
             <q-item-section>
               <div class="row q-gutter-md items-center">
-                <q-icon color="primary" name="person" style="font-size: 20px" />
-                <div style="font-size: 16px">Account</div>
+                <q-icon
+                  :color="selectedItem === Account ? 'white' : 'primary'"
+                  name="person"
+                  style="font-size: 20px"
+                />
+                <div style="font-size: 16px">{{ Account }}</div>
               </div>
             </q-item-section>
           </q-item>
-          <q-item clickable>
+          <q-item clickable :class="{ 'bg-primary': selectedItem === Orders }">
             <div class="row q-gutter-md items-center">
               <q-icon
-                color="primary"
+                :color="selectedItem === Orders ? 'white' : 'primary'"
                 name="shopping_bag"
                 style="font-size: 20px"
               />
-              <div style="font-size: 16px">Orders</div>
+              <div style="font-size: 16px">{{ Orders }}</div>
             </div>
           </q-item>
-          <q-item clickable>
+          <q-item
+            clickable
+            v-if="userStore.user.role > 0"
+            @click="router.push({ name: 'UserManageStar' })"
+            :class="{ 'bg-primary': selectedItem === StarStore }"
+          >
             <div class="row q-gutter-md items-center">
-              <q-icon color="primary" name="chat" style="font-size: 20px" />
-              <div style="font-size: 16px">Feedback</div>
+              <q-icon
+                :color="selectedItem === StarStore ? 'white' : 'primary'"
+                name="shopping_bag"
+                style="font-size: 20px"
+              />
+              <div style="font-size: 16px">{{ StarStore }}</div>
+            </div>
+          </q-item>
+          <q-item
+            clickable
+            :class="{ 'bg-primary': selectedItem === Feedback }"
+          >
+            <div class="row q-gutter-md items-center">
+              <q-icon
+                :color="selectedItem === Feedback ? 'white' : 'primary'"
+                name="chat"
+                style="font-size: 20px"
+              />
+              <div style="font-size: 16px">{{ Feedback }}</div>
             </div>
           </q-item>
         </q-list>
       </div>
       <div class="col bg-grey-10">
-        <component
-          :is="currentComponent"
-          :data="selectedData"
-          v-if="currentComponent"
-        />
+        <q-page-container>
+          <router-view></router-view>
+        </q-page-container>
       </div>
     </div>
   </q-page>
@@ -45,19 +73,24 @@
 
 <script setup>
 import { onMounted, ref, shallowRef } from "vue";
-import UserBasic from "src/components/Desktop/UserBasic.vue";
+import UserBasic from "src/pages/desktop/UserAccount.vue";
+import { useUserStore } from "src/stores/user";
+import DesktopStarStore from "src/pages/desktop/DesktopStarManage.vue";
+import { useRouter } from "vue-router";
 
-const selectedData = ref(null);
-const currentComponent = shallowRef(null);
+const router = useRouter();
+const userStore = useUserStore();
+const selectedItem = ref("Account");
+const Account = ref("Account");
+const Orders = ref("Orders");
+const StarStore = ref("Star Management");
+const Feedback = ref("Feedback");
 
-const handleClick = (component, data) => {
-  currentComponent.value = component;
-  selectedData.value = data;
+const handleClick = (item) => {
+  selectedItem.value = item;
 };
 
-onMounted(() => {
-  currentComponent.value = UserBasic;
-});
+onMounted(() => {});
 </script>
 
 <style scoped></style>

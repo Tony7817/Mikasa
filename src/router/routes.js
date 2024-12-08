@@ -48,10 +48,28 @@ const routes = [
         meta: { requiresAuth: true, tab: ProductTab },
       },
       {
-        path: "/user",
+        path: "/user/manage",
         name: "user-detail",
         component: () => import("pages/UserDetail.vue"),
         meta: { requiresAuth: true, tab: null },
+        redirect: "/user/manage/account",
+        children: [
+          {
+            path: "/user/manage/account",
+            name: "UserManageAccount",
+            component: () => import("src/pages/desktop/UserAccount.vue"),
+          },
+          {
+            path: "/user/manage/star",
+            name: "UserManageStar",
+            component: () => import("src/pages/desktop/DesktopStarManage.vue"),
+          },
+          {
+            path: "/user/manage/star/add",
+            name: "UserManageStarAdd",
+            component: () => import("src/pages/desktop/DesktopAddStar.vue"),
+          },
+        ],
       },
       {
         path: "/contact",

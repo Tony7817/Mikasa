@@ -237,11 +237,10 @@ async function signup() {
   try {
     const response = await service.register(body);
 
-    const data = response.data;
-    if (!data.ok) {
+    if (response.data.msg !== "OK") {
       $q.notify({
         type: "negative",
-        message: response.data.data.msg,
+        message: response?.data?.data?.msg,
       });
     } else {
       $q.dialog({
@@ -253,7 +252,6 @@ async function signup() {
       });
     }
   } catch (error) {
-    console.log(error);
     $q.notify({
       type: "negative",
       message: "Something went wrong",

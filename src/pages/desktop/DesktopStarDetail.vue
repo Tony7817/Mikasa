@@ -1,23 +1,28 @@
 <template>
   <q-page padding style="padding-top: 0px">
-    <div style="position: relative">
-      <q-img
-        :src="starDetail.poster_url"
-        style="height: 40vh; width: 100%"
-        fit="cover"
-      />
-      <q-img
-        :src="starDetail.avatar"
-        style="
-          position: absolute;
-          right: 3%;
-          bottom: 10%;
-          width: 80px;
-          height: 80px;
-        "
-        fit="contain"
-      />
-    </div>
+    <q-responsive :ratio="47 / 10">
+      <div
+        class="poster-container"
+        :style="{ '--background-url': `url(${starDetail.poster_url})` }"
+      >
+        <q-img
+          :src="starDetail.poster_url"
+          style="height: 40vh; width: 100%"
+          fit="cover"
+        />
+        <q-img
+          :src="starDetail.avatar"
+          style="
+            position: absolute;
+            right: 3%;
+            bottom: 10%;
+            width: 80px;
+            height: 80px;
+          "
+          fit="contain"
+        />
+      </div>
+    </q-responsive>
     <div class="row q-pa-md gradient-linear" style="height: 25vh">
       <div class="col-7">
         <div>
@@ -69,7 +74,7 @@
           icon="home"
           :to="`/star/${starIdFinal}`"
         />
-        <q-btn class="col-4" label="Follow" outline icon="add" />
+        <!-- <q-btn class="col-4" label="Follow" outline icon="add" /> -->
       </div>
     </div>
     <!--Product list-->
@@ -187,5 +192,20 @@ onMounted(() => {
   /* background-color: #9A3E56; */
   /* background-color: #f6f7fc; */
   background: linear-gradient(45deg, #424242, #000000);
+}
+.poster-container {
+  position: relative;
+}
+
+.poster-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--background-url) center center / cover no-repeat;
+  filter: blur(20px); /* 设置模糊程度 */
+  z-index: 0;
 }
 </style>

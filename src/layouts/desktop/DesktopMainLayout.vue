@@ -63,12 +63,25 @@
           <q-btn icon="shopping_cart" flat :to="`/cart`" />
           <q-btn icon="person" flat @click="signIn()">
             <q-menu v-if="userStore.isAuthenticated">
-              <q-list style="min-width: 100px">
-                <q-item clickable v-close-popup :to="`/user`">
-                  <q-item-section> Profile </q-item-section>
+              <q-list style="min-width: 300px">
+                <q-item
+                  clickable
+                  v-close-popup
+                  :to="{ name: 'UserManageAccount' }"
+                >
+                  <q-item-section>
+                    <div class="row justify-center">
+                      <q-avatar>
+                        <q-img :src="userStore.user.avatarUrl" />
+                      </q-avatar>
+                    </div>
+                    <div class="text-center">{{ userStore.user.name }}</div>
+                  </q-item-section>
                 </q-item>
-                <q-item clickable v-close-popup @click="userStore.clearUser()">
-                  <q-item-section> Log Out </q-item-section>
+                <q-item clickable v-close-popup @click="logout">
+                  <q-item-section>
+                    <div class="text-center">Log Out</div>
+                  </q-item-section>
                 </q-item>
               </q-list>
             </q-menu>
@@ -110,6 +123,11 @@ const {
   onload,
   signIn,
 } = setup();
+
+function logout() {
+  userStore.clearUser();
+  router.go(0);
+}
 
 watch(
   () => route.meta.tab,

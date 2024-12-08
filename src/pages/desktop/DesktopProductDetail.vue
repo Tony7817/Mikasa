@@ -20,7 +20,10 @@
         <div class="text-h5 q-mt-md" style="position: relative">
           {{ product.description }}
         </div>
-        <div class="row q-gutter-x-md items-center">
+        <!-- <div class="row">
+          <q-chip color="primary" class="q-mt-sm" label="vedio link" icon="live_tv" square />
+        </div> -->
+        <div class="row q-gutter-x-md q-mt-xs items-center">
           <q-rating
             v-model="rating"
             icon="star_border"
@@ -50,7 +53,7 @@
             style="font-size: 22px"
           />
         </div>
-        <q-separator class="q-my-md" />
+        <q-separator class="q-mb-md q-mt-sm" />
         <div class="q-ml-sm">
           <div class="row items-center">
             <span class="text-bold title">Price</span

@@ -35,7 +35,19 @@
           </q-item-section>
           <q-space />
           <q-item-section class="col-1">
-            <q-btn label="Detail" color="primary" />
+            <q-btn
+              label="Modify"
+              color="primary"
+              @click="
+                router.push({
+                  name: 'UserManageStarDetail',
+                  params: { starId: s.id },
+                })
+              "
+            />
+          </q-item-section>
+          <q-item-section class="col-2">
+            <q-btn label="Add Product" color="primary" />
           </q-item-section>
         </q-item>
       </q-list>
@@ -47,8 +59,10 @@
 import { useQuasar } from "quasar";
 import { service } from "src/services/api";
 import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
 const $q = useQuasar();
+const router = useRouter();
 
 const loading = ref(false);
 const currentPage = ref(1);

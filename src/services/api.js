@@ -60,8 +60,8 @@ export const service = {
     return api.post(`/api/product/${id}`, data);
   },
 
-  getStarDetail(id, data) {
-    return api.post(`/api/star/${id}`, data);
+  getStarDetail(id) {
+    return api.post(`/api/star/${id}`, {});
   },
 
   getCartList(data) {
@@ -193,6 +193,28 @@ export const service = {
 
   getManageStarList(data) {
     return api.post("/api/user/manage/star/list", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userStore.user.token}`,
+      },
+    });
+  },
+
+  getOssToken(data) {
+    const route = "/api/user/file/token";
+    const bodyStr = this.stableJSONStringify(data);
+    const xcs = this.sign(bodyStr, route);
+    return api.post(route, data, {
+      headers: {
+        "X-Content-Security": xcs,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userStore.user.token}`,
+      },
+    });
+  },
+
+  createStar(data) {
+    return api.post("/api/star/create", data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${userStore.user.token}`,

@@ -6,7 +6,7 @@
     <div>
       <div class="row justify-center" style="margin-top: -13px">
         <q-avatar>
-          <q-img :src="starDetail.avatar" />
+          <q-img :src="starDetail.avatar_url" />
         </q-avatar>
       </div>
       <div class="text-center text-h5">{{ starDetail.name }}</div>
@@ -71,7 +71,7 @@
 <script setup>
 import { useQuasar } from "quasar";
 import { service } from "src/services/api";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();

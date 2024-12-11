@@ -57,17 +57,26 @@ const routes = [
           {
             path: "/user/manage/account",
             name: "UserManageAccount",
-            component: () => import("src/pages/desktop/UserAccount.vue"),
+            component: () => import("src/pages/desktop/manage/UserAccount.vue"),
           },
           {
             path: "/user/manage/star",
             name: "UserManageStar",
-            component: () => import("src/pages/desktop/DesktopStarManage.vue"),
+            component: () =>
+              import("src/pages/desktop/manage/DesktopStarlist.vue"),
           },
           {
             path: "/user/manage/star/add",
             name: "UserManageStarAdd",
-            component: () => import("src/pages/desktop/DesktopAddStar.vue"),
+            component: () =>
+              import("src/pages/desktop/manage/DesktopAddStar.vue"),
+          },
+          {
+            path: "/user/manage/star/:starId",
+            name: "UserManageStarDetail",
+            props: true,
+            component: () =>
+              import("src/pages/desktop/manage/DesktopAddStar.vue"),
           },
         ],
       },

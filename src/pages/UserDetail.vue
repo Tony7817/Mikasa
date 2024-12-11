@@ -1,15 +1,12 @@
 <template>
   <q-page class="q-px-md">
     <div class="row q-gutter-sm">
-      <div
-        class="column q-getter-sm col-2 q-pa-sm bg-grey-10"
-        style="height: 100vh"
-      >
+      <div class="column q-getter-sm col-2 q-pa-sm bg-grey-10">
         <q-list style="max-width: 350px">
           <q-item
             clickable
             :class="{ 'bg-primary': selectedItem === Account }"
-            @click="router.push({ name: 'UserManageAccount' })"
+            @click="selectItem(Account, 'UserManageAccount')"
           >
             <q-item-section>
               <div class="row q-gutter-md items-center">
@@ -35,7 +32,7 @@
           <q-item
             clickable
             v-if="userStore.user.role > 0"
-            @click="router.push({ name: 'UserManageStar' })"
+            @click="selectItem(StarStore, 'UserManageStar')"
             :class="{ 'bg-primary': selectedItem === StarStore }"
           >
             <div class="row q-gutter-md items-center">
@@ -72,10 +69,8 @@
 </template>
 
 <script setup>
-import { onMounted, ref, shallowRef } from "vue";
-import UserBasic from "src/pages/desktop/UserAccount.vue";
+import { onMounted, ref } from "vue";
 import { useUserStore } from "src/stores/user";
-import DesktopStarStore from "src/pages/desktop/DesktopStarManage.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -86,9 +81,10 @@ const Orders = ref("Orders");
 const StarStore = ref("Star Management");
 const Feedback = ref("Feedback");
 
-const handleClick = (item) => {
+function selectItem(item, routerName) {
   selectedItem.value = item;
-};
+  router.push({ name: routerName });
+}
 
 onMounted(() => {});
 </script>

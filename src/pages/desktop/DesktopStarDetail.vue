@@ -11,7 +11,7 @@
           fit="cover"
         />
         <q-img
-          :src="starDetail.avatar"
+          :src="starDetail.avatar_url"
           style="
             position: absolute;
             right: 3%;

@@ -2,7 +2,7 @@ import { boot } from "quasar/wrappers";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.API_ROOT,
+  baseURL: process.env.API.ROOT,
   withCredentials: true,
 });
 

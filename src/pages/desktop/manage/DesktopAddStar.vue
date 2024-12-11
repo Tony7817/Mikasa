@@ -169,6 +169,32 @@ const loading = ref(false);
 const token = ref({});
 const ossClient = ref(null);
 
+function update() {
+  if (loading.value) {
+    return;
+  }
+
+  loading.value = true;
+
+  try {
+    const body = {
+      id: props.starId,
+      name: star.value.name || null,
+      poster_url: star.value.posterImg.url || null,
+    };
+  } catch (error) {}
+
+  loading.value = false;
+}
+
+function submit() {
+  if (props.starId) {
+    update();
+  } else {
+    add();
+  }
+}
+
 function validate() {
   if (
     star.value.posterImg === null ||

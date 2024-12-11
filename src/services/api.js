@@ -221,4 +221,13 @@ export const service = {
       },
     });
   },
+
+  updateStar(starId, data) {
+    return api.post(`/api/star/${starId}/update`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userStore.user.token}`,
+      },
+    });
+  },
 };

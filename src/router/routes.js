@@ -69,14 +69,28 @@ const routes = [
             path: "/user/manage/star/add",
             name: "UserManageStarAdd",
             component: () =>
-              import("src/pages/desktop/manage/DesktopAddStar.vue"),
+              import("src/pages/desktop/manage/DesktopAddUpdStar.vue"),
           },
           {
             path: "/user/manage/star/:starId",
             name: "UserManageStarDetail",
             props: true,
             component: () =>
-              import("src/pages/desktop/manage/DesktopAddStar.vue"),
+              import("src/pages/desktop/manage/DesktopAddUpdStar.vue"),
+          },
+          {
+            path: "/user/manage/star/:starId/products",
+            name: "UserManageProduct",
+            props: true,
+            component: () =>
+              import("src/pages/desktop/manage/DesktopProductList.vue"),
+          },
+          {
+            path: "/user/manage/star/:starId/product/add",
+            name: "UserManageProductAdd",
+            props: true,
+            component: () =>
+              import("src/pages/desktop/manage/DesktopAddUpdProduct.vue"),
           },
         ],
       },

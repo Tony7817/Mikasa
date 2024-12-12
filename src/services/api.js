@@ -230,4 +230,22 @@ export const service = {
       },
     });
   },
+
+  getProductsByOrg(starId, data) {
+    return api.post(`/api/star/${starId}/products`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userStore.user.token}`,
+      },
+    });
+  },
+
+  createProduct(starId, data) {
+    return api.post(`/api/star/${starId}/product/create`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userStore.user.token}`,
+      },
+    });
+  },
 };

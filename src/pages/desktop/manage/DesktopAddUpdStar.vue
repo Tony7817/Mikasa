@@ -3,12 +3,13 @@
     <div class="q-pa-md q-gutter-sm">
       <q-breadcrumbs>
         <q-breadcrumbs-el label="User" />
+        <q-breadcrumbs-el label="Management" />
         <q-breadcrumbs-el label="Star" />
         <q-breadcrumbs-el label="Add" />
       </q-breadcrumbs>
     </div>
     <div class="q-pa-md column items-center">
-      <q-form class="q-gutter-lg" @submit="add" style="width: 50%">
+      <q-form class="q-gutter-lg" @submit="submit" style="width: 50%">
         <div class="row items-center q-gutter-md">
           <div class="col-2">Star Name</div>
           <q-input class="col" v-model="star.name" outlined dense />
@@ -101,14 +102,11 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { service } from "src/services/api";
-import OSS from "ali-oss";
-import { DateTime } from "luxon";
 import { useQuasar } from "quasar";
-import Cookies from "js-cookie";
-import { v4 as uuidv4 } from "uuid";
 import { cloneDeep } from "lodash";
+import { uploadFiles } from "src/uril/tool";
 
 const $q = useQuasar();
 const props = defineProps({
@@ -137,52 +135,92 @@ const star = ref({
   description: "",
 });
 
-watch(star.value.posterImg, (newValue) => {
-  if (newValue.file) {
-    posterImgUrl.value = URL.createObjectURL(newValue.file);
-  } else if (newValue.url) {
-    posterImgUrl.value = newValue.url;
-  }
-}),
-  { deep: true };
-watch(star.value.avatarImg, (newValue) => {
-  if (newValue.file) {
-    avatarImgUrl.value = URL.createObjectURL(newValue.file);
-  } else if (newValue.url) {
-    avatarImgUrl.value = newValue.url;
-  }
-}),
-  { deep: true };
-watch(star.value.coverImg, (newValue) => {
-  if (newValue.file) {
-    coverImgUrl.value = URL.createObjectURL(newValue.file);
-  } else if (newValue.url) {
-    coverImgUrl.value = newValue.url;
-  }
-}),
-  { deep: true };
+watch(
+  star.value.posterImg,
+  (newValue) => {
+    if (newValue.file) {
+      posterImgUrl.value = URL.createObjectURL(newValue.file);
+    } else if (newValue.url) {
+      posterImgUrl.value = newValue.url;
+    }
+  },
+  { deep: true }
+);
+watch(
+  star.value.avatarImg,
+  (newValue) => {
+    if (newValue.file) {
+      avatarImgUrl.value = URL.createObjectURL(newValue.file);
+    } else if (newValue.url) {
+      avatarImgUrl.value = newValue.url;
+    }
+  },
+  { deep: true }
+);
+watch(
+  star.value.coverImg,
+  (newValue) => {
+    if (newValue.file) {
+      coverImgUrl.value = URL.createObjectURL(newValue.file);
+    } else if (newValue.url) {
+      coverImgUrl.value = newValue.url;
+    }
+  },
+  { deep: true }
+);
 
-// const isPosterImgUploaded = ref(false);
-// const isCoverImgUploaded = ref(false);
-// const isAvatarImgUploaded = ref(false);
 const loading = ref(false);
-const token = ref({});
-const ossClient = ref(null);
 
-function update() {
+const hasFileUpload = computed(() => {
+  return (
+    star.value.posterImg.file !== null ||
+    star.value.coverImg.file !== null ||
+    star.value.avatarImg.file !== null
+  );
+});
+
+async function update() {
   if (loading.value) {
     return;
   }
 
   loading.value = true;
 
+  // TODO: delete files if changed.
+
+  if (hasFileUpload.value) {
+    await uploadFiles([
+      star.value.posterImg,
+      star.value.coverImg,
+      star.value.avatarImg,
+    ]);
+  }
+
   try {
     const body = {
       id: props.starId,
       name: star.value.name || null,
       poster_url: star.value.posterImg.url || null,
+      cover_url: star.value.coverImg.url || null,
+      avatar_url: star.value.avatarImg.url || null,
+      description: star.value.description || null,
     };
-  } catch (error) {}
+    const response = await service.updateStar(props.starId, body);
+    const data = response.data.data;
+    if (data.status === "ok") {
+      $q.notify({
+        type: "positive",
+        message: "success",
+        position: "top",
+      });
+    }
+  } catch (error) {
+    $q.notify({
+      type: "negative",
+      message: error?.response?.data?.msg || "something went wrong",
+      position: "top",
+    });
+  }
 
   loading.value = false;
 }
@@ -224,8 +262,11 @@ async function add() {
   }
 
   try {
-    await checkToken();
-    await uploadFile();
+    await uploadFiles([
+      star.value.posterImg,
+      star.value.coverImg,
+      star.value.avatarImg,
+    ]);
     await service.createStar({
       name: star.value.name,
       description: star.value.description,
@@ -250,52 +291,20 @@ async function add() {
   loading.value = false;
 }
 
-async function uploadFile() {
-  const files = [
-    star.value.posterImg,
-    star.value.avatarImg,
-    star.value.coverImg,
-  ];
-  for (let i = 0; i < files.length; i++) {
-    const uuid = uuidv4();
-    const fileAppendex = files[i].file.name.split(".")[1];
-    const res = await ossClient.value.put(
-      `/files/img/${uuid}.${fileAppendex}`,
-      files[i].file,
-      { headers }
-    );
-    files[i].url = res.url;
+function getFiles() {
+  // add
+  const files = [];
+  if (star.value.posterImg.file !== null) {
+    files.push(star.value.posterImg.file);
   }
-}
-
-async function checkToken() {
-  const tokenRaw = Cookies.get("token");
-  if (tokenRaw === undefined) {
-    const data = await getToken();
-    token.value = data;
-    Cookies.set("token", JSON.stringify(data));
-  } else {
-    token.value = JSON.parse(tokenRaw);
-    console.log(token.value);
-
-    const tokenExpirationTime = DateTime.fromISO(
-      token.value.expiration
-    ).toUTC();
-    const timeNow = DateTime.now().toUTC();
-    const timeDiff = timeNow.diff(tokenExpirationTime, "minutes").minutes;
-
-    if (timeDiff > 0) {
-      token.value = await getToken();
-      Cookies.set("token", JSON.stringify(token.value));
-    }
+  if (star.value.coverImg.file !== null) {
+    files.push(star.value.coverImg.file);
   }
-  ossClient.value = new OSS({
-    bucket: "mikasa97",
-    region: "oss-us-east-1",
-    accessKeyId: token.value.access_key_id,
-    accessKeySecret: token.value.access_key_secret,
-    stsToken: token.value.security_token,
-  });
+  if (star.value.avatarImg.file !== null) {
+    files.push(star.value.avatarImg.file);
+  }
+
+  return files;
 }
 
 async function onLoadStar() {
@@ -327,31 +336,9 @@ async function onLoadStar() {
 }
 
 // 自定义请求头
-const headers = {
-  // 指定Object的存储类型。
-  "x-oss-storage-class": "Standard",
-  // 设置Object的标签，可同时设置多个标签。
-  // "x-oss-tagging": "Tag1=1&Tag2=2",
-  // 指定PutObject操作时是否覆盖同名目标Object。此处设置为true，表示禁止覆盖同名Object。
-  "x-oss-forbid-overwrite": "true",
-};
-
-async function getToken() {
-  try {
-    const response = await service.getOssToken({});
-    return response.data.data;
-  } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: error?.response?.data?.msg || "Get Token failed",
-    });
-  }
-}
 
 onMounted(() => {
   if (props.starId) {
-    console.log("onload");
-
     onLoadStar();
   }
 });

@@ -11,6 +11,7 @@
               :src="i"
               class="product-img-children"
               fit="contain"
+              height="85px"
               @click="selectedImage = i"
             />
           </div>
@@ -115,6 +116,12 @@
         </div>
       </div>
     </div>
+    <q-separator class="q-my-md" />
+
+    <div v-for="i in product.model_img" class="q-px-md" :key="i" style="width: 100%;">
+      <q-img :src="i" />
+    </div>
+
     <q-separator class="q-my-md" />
     <div>
       <div class="q-ml-md text-h6 text-bold">Customers frequently viewed</div>

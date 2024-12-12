@@ -46,8 +46,17 @@
               "
             />
           </q-item-section>
-          <q-item-section class="col-2">
-            <q-btn label="Add Product" color="primary" />
+          <q-item-section class="col-1">
+            <q-btn
+              label="Products"
+              color="primary"
+              @click="
+                router.push({
+                  name: 'UserManageProduct',
+                  params: { starId: s.id },
+                })
+              "
+            />
           </q-item-section>
         </q-item>
       </q-list>

@@ -49,7 +49,17 @@
             {{ s.sold }}
           </q-item-section>
           <q-item-section class="col-2">
-            <q-btn label="Modify" flat dense />
+            <q-btn
+              label="Modify"
+              color="primary"
+              dense
+              @click="
+                router.push({
+                  name: 'UserManageProductUpdate',
+                  params: { starId: props.starId, productId: s.id },
+                })
+              "
+            />
           </q-item-section>
         </q-item>
       </q-list>

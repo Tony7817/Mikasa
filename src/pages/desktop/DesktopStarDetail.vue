@@ -1,28 +1,22 @@
 <template>
   <q-page padding style="padding-top: 0px">
-    <q-responsive :ratio="47 / 10">
-      <div
-        class="poster-container"
-        :style="{ '--background-url': `url(${starDetail.poster_url})` }"
-      >
-        <q-img
-          :src="starDetail.poster_url"
-          style="height: 40vh; width: 100%"
-          fit="cover"
-        />
-        <q-img
-          :src="starDetail.avatar_url"
-          style="
-            position: absolute;
-            right: 3%;
-            bottom: 10%;
-            width: 80px;
-            height: 80px;
-          "
-          fit="contain"
-        />
-      </div>
-    </q-responsive>
+    <div
+      class="poster-container"
+      :style="{ '--background-url': `url(${starDetail.poster_url})` }"
+    >
+      <q-img :src="starDetail.poster_url" fit="cover" height="35vh" />
+      <q-img
+        :src="starDetail.avatar_url"
+        style="
+          position: absolute;
+          right: 3%;
+          bottom: 10%;
+          width: 80px;
+          height: 80px;
+        "
+        fit="contain"
+      />
+    </div>
     <div class="row q-pa-md gradient-linear" style="height: 25vh">
       <div class="col-7">
         <div>
@@ -82,11 +76,11 @@
       <div class="row">
         <div class="col">
           <div class="text-center text-h6 text-bold">Products</div>
-          <div class="row">
+          <div class="row q-pa-md">
             <div class="row q-mt-sm q-gutter-lg">
               <ProductItem
                 class="q-mt-sm"
-                v-for="p in products"
+                v-for="p in starDetail.products?.products"
                 :key="p.id"
                 :id="p.id"
                 :cover-url="p.cover_url"
@@ -98,11 +92,13 @@
           </div>
         </div>
         <div v-if="starId === null" class="col-2">
-          <div class="text-h6 text-bold">Photos</div>
-          <div></div>
+          <div class="text-h6 text-center text-bold">Photos</div>
+          <div class="q-px-md">
+            <q-img :src="starDetail.cover_url" fit="contain" height="150px" />
+          </div>
         </div>
       </div>
-      <div v-if="products.length > 20" class="row justify-center">
+      <div v-if="starDetail.products?.length > 20" class="row justify-center">
         <q-pagination v-model="currentPage" :max="9" direction-links />
       </div>
     </div>
@@ -115,6 +111,7 @@ import ProductItem from "src/components/Desktop/ProductItem.vue";
 import { service } from "src/services/api";
 import { useQuasar } from "quasar";
 import { useRoute } from "vue-router";
+import _ from "lodash";
 
 const props = defineProps({
   starId: {
@@ -127,10 +124,13 @@ const props = defineProps({
 const starDetail = ref({
   id: "",
   name: "",
-  avatar: "",
+  avatar_url: "",
   description: "",
+  cover_url: "",
+  poster_url: "",
+  products: [],
 });
-const products = ref([]);
+
 const size = 20;
 const currentPage = ref(1);
 const $q = useQuasar();
@@ -139,51 +139,33 @@ const starIdFinal = computed(() => {
   return props.starId !== null ? props.starId : route.params.id;
 });
 
-async function onLoadStarDetail() {
+async function onLoad() {
   try {
     const response = await service.getStarDetail(starIdFinal.value);
-    starDetail.value = response.data.data;
+    const data = response.data.data;
+    starDetail.value = data;
   } catch (error) {
     console.log(error);
     $q.notify({
       type: "nagetive",
-      message: "wrong",
+      message: error?.response?.data?.msg || "something went wrong",
       position: "top",
     });
   }
-}
-
-watch(starIdFinal, async () => {
-  await onload();
-});
-
-async function onload() {
-  onLoadStarDetail();
-  onLoadProducts();
 }
 
 async function onLoadProducts() {
   try {
-    const response = await service.getProductList({
-      star_id: starIdFinal.value,
-      page: currentPage.value,
-      size: size,
-    });
-    if (response.data.data.products !== null) {
-      products.value = response.data.data.products;
-    }
-  } catch (error) {
-    console.log(error);
-    $q.notify({
-      type: "negative",
-      message: "wrong",
-      position: "top",
-    });
-  }
+    const response = await service.getProductList({});
+  } catch (error) {}
 }
 
+watch(starIdFinal, async () => {
+  await onLoad();
+});
+
 onMounted(() => {
-  onload();
+  onLoad();
 });
 </script>
 

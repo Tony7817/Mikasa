@@ -57,18 +57,20 @@ async function onloadBrands() {
   try {
     const response = await service.getBrandList({});
     const data = response.data.data;
-    brands.value.push(...data.brands);
-    brands.value.forEach((b) => {
-      b._selected = false;
-    });
-    brands.value[0]._selected = true;
-    emit("update-star-id", data.default_star_id);
+    if (data.recommends.length > 0) {
+      brands.value.push(...data.recommends);
+      brands.value.forEach((b) => {
+        b._selected = false;
+      });
+      brands.value[0]._selected = true;
+    }
+    emit("update-star-id", brands.value[0].star_id);
   } catch (error) {
     console.log(error);
 
     $q.notify({
       type: "negative",
-      message: "something went wrong",
+      message: error?.response?.data?.msg || "something went wrong",
       position: "top",
     });
   }

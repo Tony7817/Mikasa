@@ -17,33 +17,38 @@ rwIDAQAB
 -----END PUBLIC KEY-----
 `;
 
+const desk_headers = {
+  "Content-Type": "application/json",
+  "X-Device-Type": "desktop",
+};
+
 export const service = {
-  register(data) {
-    return api.post("/api/user/register", data, {
+  signup(data) {
+    return api.post("/api/user/signup", data, {
       headers: {
-        "Content-Type": "application/json",
+        ...desk_headers,
       },
     });
   },
-  login(data) {
-    return api.post("/api/user/login", data, {
+  signin(data) {
+    return api.post("/api/user/sigin", data, {
       headers: {
-        "Content-Type": "application/json",
+        ...desk_headers,
       },
     });
   },
   getStarList(data) {
     return api.post("/api/star/list", data, {
       headers: {
-        "Content-Type": "application/json",
+        ...desk_headers,
       },
     });
   },
 
   getBrandList(data) {
-    return api.post("/api/brand/list", data, {
+    return api.post("/api/recommend/star/list", data, {
       header: {
-        "Content-Type:": "application/json",
+        ...desk_headers,
       },
     });
   },
@@ -51,24 +56,36 @@ export const service = {
   getProductList(data) {
     return api.post(`/api/product/list`, data, {
       headers: {
-        "Content-Type": "application/json",
+        ...desk_headers,
       },
     });
   },
 
   getProductDetail(id, data) {
-    return api.post(`/api/product/${id}`, data);
+    return api.post(`/api/product/${id}`, data, {
+      headers: {
+        ...desk_headers,
+      },
+    });
   },
 
   getStarDetail(id) {
-    return api.post(`/api/star/${id}`, {});
+    return api.post(
+      `/api/star/${id}`,
+      {},
+      {
+        headers: {
+          ...desk_headers,
+        },
+      }
+    );
   },
 
   getCartList(data) {
     return api.post("/api/cart/list", data, {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${userStore.user.token}`,
+        ...desk_headers,
       },
     });
   },
@@ -76,8 +93,8 @@ export const service = {
   addAmount(productCartId, data) {
     return api.post(`/api/cart/product/${productCartId}/add`, data, {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${userStore.user.token}`,
+        ...desk_headers,
       },
     });
   },
@@ -85,8 +102,8 @@ export const service = {
   decreaseAmount(productCartId, data) {
     return api.post(`/api/cart/product/${productCartId}/decrease`, data, {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${userStore.user.token}`,
+        ...desk_headers,
       },
     });
   },
@@ -94,8 +111,8 @@ export const service = {
   addProductToCart(productId, data) {
     return api.post(`/api/cart/add/${productId}`, data, {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${userStore.user.token}`,
+        ...desk_headers,
       },
     });
   },
@@ -103,8 +120,8 @@ export const service = {
   removeProductFromCart(productCartId, data) {
     return api.post(`/api/cart/remove/${productCartId}`, data, {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${userStore.user.token}`,
+        ...desk_headers,
       },
     });
   },
@@ -247,5 +264,18 @@ export const service = {
         Authorization: `Bearer ${userStore.user.token}`,
       },
     });
+  },
+
+  getProductDetailByOrg(starId, productId) {
+    return api.post(
+      `/api/star/${starId}/product/${productId}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userStore.user.token}`,
+        },
+      }
+    );
   },
 };

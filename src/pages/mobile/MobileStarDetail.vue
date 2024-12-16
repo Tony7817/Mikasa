@@ -114,7 +114,7 @@ async function onLoadProducts() {
     const response = await service.getProductList({
       star_id: starId.value,
       page: currentPage.value,
-      size: size,
+      page_size: size,
     });
     products.value = response.data.data.products;
   } catch (error) {

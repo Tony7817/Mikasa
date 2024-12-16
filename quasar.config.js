@@ -40,7 +40,7 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
       target: {
-        browser: ["es2019", "edge88", "firefox78", "chrome87", "safari13.1"],
+        browser: ["es2022", "firefox115", "chrome115", "safari14"],
         node: "node20",
       },
 
@@ -59,7 +59,7 @@ module.exports = configure(function (ctx) {
               ROOT: "http://127.0.0.1",
             }
           : {
-              ROOT: "http://39.105.153.22",
+              ROOT: "https://lureros.shop",
             },
       },
 
@@ -100,7 +100,7 @@ module.exports = configure(function (ctx) {
           primary: "#da4f7a",
           secondary: "#CB2A45",
           accent: "#2a4a82",
-          dark: "#000000",
+          dark: "#121826",
         },
       },
 

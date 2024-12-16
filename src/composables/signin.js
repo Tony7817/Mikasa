@@ -37,7 +37,7 @@ export function setup() {
       } else {
         body.phone_number = phoneNumber.value;
       }
-      const response = await service.login(body);
+      const response = await service.signin(body);
       const data = response.data.data;
 
       if (data.user_id) {

@@ -1,12 +1,15 @@
 <template>
-  <div class="row items-center">
+  <div class="row items-center q-py-xs">
     <div class="col-2">
-      <q-avatar size="60px">
+      <q-avatar size="55px">
         <q-img :src="props.avatar" />
       </q-avatar>
     </div>
     <div class="col q-ml-sm text-center">
-      <div class="text-white" style="font-size: 14px; text-decoration: none">
+      <div
+        class="text-white text-h6"
+        style="text-decoration: none"
+      >
         {{ props.content }}
       </div>
     </div>

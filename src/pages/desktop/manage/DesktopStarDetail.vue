@@ -25,7 +25,7 @@ async function onLoad() {
   loading.value = true;
 
   try {
-    const response = await service.getStarDetail(props.starId);
+    const response = await service.getProductDeta(props.starId);
     const data = response.data.data;
     star.value = data;
   } catch (error) {}

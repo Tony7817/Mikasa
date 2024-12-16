@@ -92,6 +92,13 @@ const routes = [
             component: () =>
               import("src/pages/desktop/manage/DesktopAddUpdProduct.vue"),
           },
+          {
+            path: "/user/manage/star/:starId/product/:productId",
+            name: "UserManageProductUpdate",
+            props: true,
+            component: () =>
+              import("src/pages/desktop/manage/DesktopAddUpdProduct.vue"),
+          },
         ],
       },
       {

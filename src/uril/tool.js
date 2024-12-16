@@ -96,11 +96,15 @@ const headers = {
   "x-oss-forbid-overwrite": "true",
 };
 
+// files is an array of obj {
+//    file: File,
+// .  name: string,
+//    url: string,
+//}
 export async function uploadFiles(files) {
   var ossClient = null;
   try {
     ossClient = await checkToken();
-    console.log(ossClient);
   } catch (error) {
     throw error;
   }

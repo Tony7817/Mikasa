@@ -235,7 +235,7 @@ async function signup() {
     body.phone_number = phonenumber.value;
   }
   try {
-    const response = await service.register(body);
+    const response = await service.signup(body);
 
     if (response.data.msg !== "OK") {
       $q.notify({

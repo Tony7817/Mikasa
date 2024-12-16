@@ -9,7 +9,7 @@
             v-for="s in stars"
             :key="s.id"
             :id="s.id"
-            :link="s.image_url"
+            :link="s.cover_url"
             :name="s.name"
             style="width: 256px"
           />
@@ -63,7 +63,7 @@ watch(
 async function onloadStars() {
   const data = {
     page: currentPage.value,
-    size: PageSize,
+    page_size: PageSize,
   };
   if (props.keyword !== "") {
     data.keyword = props.keyword;

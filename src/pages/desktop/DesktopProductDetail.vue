@@ -3,21 +3,21 @@
     <div class="row">
       <div class="col-4 q-pa-md">
         <div>
-          <q-img :src="selectedImage" class="product-img" fit="contain" />
+          <q-img :src="selectedImage.url" class="product-img" fit="cover" />
         </div>
         <div class="row q-mt-sm q-gutter-x-sm">
-          <div class="col-2" v-for="i in selectedColor.images" :key="i">
+          <div v-for="i in product.images" :key="i">
             <q-img
-              :src="i"
+              :src="i.url"
               class="product-img-children"
-              fit="contain"
+              fit="cover"
               height="85px"
               @click="selectedImage = i"
             />
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-6 gradient-linear column">
         <div class="text-h5 q-mt-md" style="position: relative">
           {{ product.description }}
         </div>
@@ -69,20 +69,7 @@
           <div class="q-ml-sm text-bold text-h7 title">Size</div>
           <SizePicker v-model="selectedSize" :size="product.size" />
         </div>
-        <div class="q-mt-sm q-ml-sm">
-          <div class="text-h7 text-bold title">Color</div>
-          <div class="row q-gutter-md">
-            <div class="col-1" v-for="i in product.colors" :key="i">
-              <q-img
-                :src="i.images[0]"
-                class="product-img-children"
-                @click="selectedColor = i"
-                fit="contain"
-              />
-            </div>
-          </div>
-        </div>
-        <div>
+        <div class="q-ml-sm">
           <div class="text-h7 text-bold q-mt-md title">Product Details</div>
           <div style="font-size: 18px">{{ product.detail }}</div>
         </div>
@@ -95,6 +82,7 @@
           />
           <q-btn label="Buy" color="primary" style="width: 150px" />
         </div>
+        <div class="col-1"></div>
       </div>
       <div class="col-2 q-mt-md">
         <div>
@@ -116,10 +104,16 @@
         </div>
       </div>
     </div>
-    <q-separator class="q-my-md" />
+    <q-separator class="q-my-md q-mx-md" />
 
-    <div v-for="i in product.model_img" class="q-px-md" :key="i" style="width: 100%;">
-      <q-img :src="i" />
+    <div class="text-h5 text-bold q-ml-md q-mb-md">Product Description</div>
+    <div
+      v-for="i in product.detail_images"
+      :key="i"
+      class="q-px-md"
+      style="width: 100%"
+    >
+      <q-img :src="i.url" />
     </div>
 
     <q-separator class="q-my-md" />
@@ -130,20 +124,98 @@
 </template>
 
 <script setup>
-import { setup } from "src/composables/ProductDetail";
-import { onMounted } from "vue";
+import { useQuasar } from "quasar";
+import { computed, onMounted, ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { service } from "src/services/api";
+import { useUserStore } from "src/stores/user";
 import { tool } from "src/uril/tool";
 import SizePicker from "src/components/Desktop/SizePicker.vue";
 
-const {
-  selectedSize,
-  selectedImage,
-  product,
-  rating,
-  selectedColor,
-  onLoadProduct,
-  addToCart,
-} = setup();
+const $q = useQuasar();
+const route = useRoute();
+const router = useRouter();
+
+const selectedSize = ref("");
+const productId = route.params.productId;
+const selectedColor = ref({});
+const selectedImage = ref("");
+const loadingAddCart = ref(false);
+const userStore = useUserStore();
+const product = ref({
+  id: "",
+  price: 0,
+  unit: "",
+  colors_url: [],
+  description: "",
+  size: [],
+  colors: [],
+  rating: 0,
+  default_color: {
+    color: "",
+    images: [],
+  },
+  rate_count: 0,
+  sold_num: 0,
+});
+
+const rating = computed(() => {
+  return product.value.rate ? product.value.rate : 0;
+});
+
+async function onLoadProduct() {
+  try {
+    const response = await service.getProductDetail(productId, {});
+    product.value = response.data.data;
+    selectedImage.value = product.value.images[0];
+  } catch (error) {
+    console.log(error);
+    $q.notify({
+      type: "negative",
+      message: "Something went wrong",
+      position: "top",
+    });
+  }
+}
+
+async function addToCart() {
+  if (loadingAddCart.value) {
+    return;
+  }
+  if (!selectedSize.value) {
+    $q.notify({
+      type: "negative",
+      message: "Please select your size",
+      position: "top",
+    });
+    return;
+  }
+
+  loadingAddCart.value = true;
+
+  try {
+    const response = await service.addProductToCart(product.value.id, {
+      size: selectedSize.value,
+    });
+    const status = response.data.code;
+    if (status === 200) {
+      $q.notify({
+        type: "positive",
+        message: "success",
+        position: "top",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    $q.notify({
+      type: "negative",
+      message: "Something went wrong",
+      position: "top",
+    });
+  }
+
+  loadingAddCart.value = false;
+}
 
 onMounted(() => {
   onLoadProduct();

@@ -12,7 +12,7 @@
     <q-form @submit="submit">
       <div class="row q-pa-md q-gutter-lg">
         <div class="col-5">
-          <div v-for="f in Imgfiles" :key="f.url">
+          <div v-for="f in imgfiles" :key="f.url">
             <q-file
               class="q-mt-md"
               v-model="f.file"
@@ -26,10 +26,10 @@
             </q-file>
           </div>
           <div class="row q-gutter-md">
-            <div v-for="f in Imgfiles" :key="f.url">
+            <div v-for="f in imgfiles" :key="f.url">
               <q-img
-                v-if="f.file"
-                :src="getLocalFileUrl(f)"
+                v-if="f.url"
+                :src="f.url"
                 fit="cover"
                 style="width: 404px; height: 524px"
               />
@@ -39,7 +39,7 @@
         <div class="col column q-gutter-md">
           <q-input label="name" v-model="product.name" dense />
           <q-input label="description" v-model="product.description" dense />
-          <q-input label="color" v-model="product.color" dense />
+          <q-input label="color" v-model="selectedColor.color" dense />
           <q-input label="size" v-model="product.size" dense />
           <div class="row">
             <q-input
@@ -86,8 +86,8 @@
             </template>
           </q-file>
           <q-img
-            v-if="file.file !== null"
-            :src="getLocalFileUrl(file)"
+            v-if="file.url !== ''"
+            :src="file.url"
             fit="contain"
             height="500px"
           />
@@ -110,7 +110,7 @@
 import { cloneDeep } from "lodash";
 import { useQuasar } from "quasar";
 import { uploadFiles } from "src/uril/tool";
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import _ from "lodash";
 import { service } from "src/services/api";
 
@@ -133,7 +133,9 @@ const imgObj = {
   name: "",
 };
 
+const selectedColor = ref({});
 const product = ref({
+  id: "",
   name: "",
   description: "",
   color: "",
@@ -144,7 +146,7 @@ const product = ref({
   detail: "",
 });
 
-const Imgfiles = ref([
+const imgfiles = ref([
   cloneDeep(imgObj),
   cloneDeep(imgObj),
   cloneDeep(imgObj),
@@ -152,9 +154,24 @@ const Imgfiles = ref([
   cloneDeep(imgObj),
 ]);
 
-function getLocalFileUrl(f) {
-  return URL.createObjectURL(f.file);
-}
+// new
+const oldImgFiles = ref([
+  cloneDeep(imgObj),
+  cloneDeep(imgObj),
+  cloneDeep(imgObj),
+  cloneDeep(imgObj),
+  cloneDeep(imgObj),
+]);
+
+imgfiles.value.forEach((file, index) => {
+  watch(
+    () => file.file,
+    (newVal) => {
+      imgfiles.value[index].url = URL.createObjectURL(newVal);
+    },
+    { deep: true }
+  );
+});
 
 function cancelFle(f) {
   f.file = null;
@@ -162,6 +179,13 @@ function cancelFle(f) {
 }
 
 const PictureFiles = ref([
+  cloneDeep(imgObj),
+  cloneDeep(imgObj),
+  cloneDeep(imgObj),
+  cloneDeep(imgObj),
+]);
+
+const OldPictureFiles = ref([
   cloneDeep(imgObj),
   cloneDeep(imgObj),
   cloneDeep(imgObj),
@@ -191,10 +215,45 @@ function validate() {
 
 async function submit() {
   if (props.productId !== "") {
+    await update();
   } else {
     // upload file
     await create();
   }
+}
+
+async function onLoad() {
+  if (loading.value) {
+    return;
+  }
+
+  loading.value = true;
+
+  try {
+    const response = await service.getProductDetailByOrg(
+      props.productId,
+      props.productId
+    );
+    const data = response.data.data;
+    _.assign(product.value, data);
+    selectedColor.value = product.value.color[0];
+    product.value.color[0].images.forEach((c, index) => {
+      imgfiles.value[index].url = c.url;
+      oldImgFiles.value[index].url = c.url;
+    });
+    product.value.color[0].model_images.forEach((c, index) => {
+      PictureFiles.value[index].url = c.url;
+      OldPictureFiles.value[index].url = c.url;
+    });
+  } catch (error) {
+    $q.notify({
+      type: "negative",
+      message: error?.response?.data?.msg || "Something went wrong",
+      position: "top",
+    });
+  }
+
+  loading.value = false;
 }
 
 async function create() {
@@ -210,14 +269,14 @@ async function create() {
   }
 
   try {
-    await uploadFiles(Imgfiles.value);
+    await uploadFiles(imgfiles.value);
     await uploadFiles(PictureFiles.value);
 
     const body = {};
     _.assign(body, product.value);
     body.price = parseFloat(body.price);
     body.images = [];
-    Imgfiles.value.forEach((i) => {
+    imgfiles.value.forEach((i) => {
       if (i.url !== "") {
         body.images.push(i.url);
       }
@@ -254,4 +313,67 @@ async function create() {
 
   loading.value = false;
 }
+
+async function update() {
+  if (loading.value) {
+    return;
+  }
+
+  loading.value = true;
+  if (!validate()) {
+    loading.value = false;
+    return;
+  }
+
+  var imgMap = {};
+  var picMap = {};
+  oldImgFiles.value.forEach((i, index) => {
+    imgMap[i.url] = i;
+  });
+  OldPictureFiles.value.forEach((i) => {
+    picMap[i.url] = i;
+  });
+
+  imgfiles.value.forEach((i, index) => {
+    if (imgMap[i.url] !== undefined) {
+      imgfiles.value[index].file = null;
+    }
+  });
+  PictureFiles.value.forEach((i, index) => {
+    if (picMap[i.url] !== undefined) {
+      PictureFiles.value[index].file = null;
+    }
+  });
+
+  var uploadImgFiles = [];
+  imgfiles.value.forEach((i) => {
+    if (i.file !== null) {
+      uploadFiles.push(i);
+    }
+  });
+  var uploadPicFiles = [];
+  PictureFiles.value.forEach((i) => {
+    if (i.file !== null) {
+      uploadPicFiles.push(i);
+    }
+  });
+
+  try {
+    if (uploadImgFiles.length > 0) {
+      await uploadFiles(uploadImgFiles);
+    }
+    if (uploadPicFiles.length > 0) {
+      await uploadFiles(uploadPicFiles);
+    }
+    const body = {};
+  } catch (error) {}
+
+  loading.value = false;
+}
+
+onMounted(() => {
+  if (props.productId !== "") {
+    onLoad();
+  }
+});
 </script>

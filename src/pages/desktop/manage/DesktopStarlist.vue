@@ -87,7 +87,7 @@ async function onLoad() {
   loading.value = true;
   const body = {
     page: currentPage.value,
-    size: pageSize,
+    page_size: pageSize,
   };
 
   try {

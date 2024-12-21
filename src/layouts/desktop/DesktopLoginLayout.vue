@@ -11,15 +11,14 @@
         >
         </q-btn>
       </div>
-      <div class="col text-center text-h6 text-bold">
-        A Wonderful Sexy Lingerie Store With Stars
-      </div>
       <div class="col-2"></div>
     </div>
-    <q-separator />
+    <div class="col text-center text-h5 text-bold text-primary q-mt-lg">
+      A Wonderful Sexy Lingerie Store With Stars
+    </div>
     <q-page-container>
       <q-page>
-        <div class="row justify-center items-center" style="padding-top: 15vh">
+        <div class="row justify-center items-center" style="padding-top: 10vh">
           <q-card style="width: 60%">
             <q-card-section style="padding: 0px">
               <div class="row">

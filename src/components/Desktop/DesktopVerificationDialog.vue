@@ -45,6 +45,9 @@
           >
           </q-btn>
         </div>
+        <div class="row justify-center">
+          <q-spinner v-if="verifyLoading" size="3em" color="primary" />
+        </div>
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -54,7 +57,7 @@
 import { useQuasar } from "quasar";
 import { Email, ForgetPasswordMode, SignupMode } from "src/composables/consts";
 import { service } from "src/services/api";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, createApp, onMounted, ref, watch } from "vue";
 import { DateTime } from "luxon";
 const props = defineProps({
   show: {
@@ -86,6 +89,7 @@ const remainingTime = ref(0);
 const isButtonDisabled = ref(false);
 const countdownInterval = ref(null);
 const resendLoading = ref(false);
+const captchaTimeLeft = computed(() => props.captchaTime);
 
 const resetPrompt = computed(() => {
   return remainingTime.value > 0
@@ -95,18 +99,28 @@ const resetPrompt = computed(() => {
 
 function startCountdown(createdAt) {
   const cooldownPeriod = 60; // 冷却时间（秒）
+  console.log("createdAt:", createdAt);
 
   // 计算剩余时间
-  const createdTime = DateTime.fromMillis(createdAt * 1000);
-  const now = DateTime.now();
-  const diffInSeconds = Math.max(
-    0,
-    Math.floor(cooldownPeriod - now.diff(createdTime, "seconds").seconds)
-  );
+  // const createdTime = DateTime.fromSeconds(createdAt).toUTC();
+  // const now = DateTime.utc();
+  // console.log("now", now);
+  // console.log("createdAt", createdTime);
+
+  // const diffInSeconds = Math.max(
+  //   0,
+  //   Math.floor(cooldownPeriod - now.diff(createdTime, "seconds").seconds)
+  // );
+  // console.log("diff" + diffInSeconds);
+  const currentUtcTimestamp = Math.floor(Date.now() / 1000);
+  console.log("cur", currentUtcTimestamp);
+
+  const differenceInSeconds = Math.abs(currentUtcTimestamp - createdAt);
+  const leftSeconds = Math.floor(cooldownPeriod - differenceInSeconds);
 
   // 设置剩余时间和禁用按钮
-  remainingTime.value = diffInSeconds;
-  isButtonDisabled.value = diffInSeconds > 0;
+  remainingTime.value = leftSeconds;
+  isButtonDisabled.value = leftSeconds > 0;
 
   // 清除现有定时器（如果存在）
   if (countdownInterval.value) clearInterval(countdownInterval.value);
@@ -125,7 +139,7 @@ function startCountdown(createdAt) {
 }
 
 function close() {
-  verifyCode.value = ["", "", "", "", "", ""];
+  verifyCode.value = [...["", "", "", "", "", ""]];
   emit("disable-dialog");
 }
 
@@ -147,16 +161,6 @@ watch(
     }
   },
   { deep: true }
-);
-
-watch(
-  () => props.captchaTime,
-  (newValue) => {
-    if (newValue > 0) {
-      startCountdown(newValue);
-    }
-  },
-  { immediate: true }
 );
 
 async function verfiyCode() {
@@ -187,7 +191,6 @@ async function verfiyCode() {
       isIncorrectShown.value = true;
     }
   } catch (error) {
-    console.log(error);
     $q.notify({
       type: "negative",
       message: error?.response?.data?.msg || "something went wrong",
@@ -204,6 +207,12 @@ function setInputRef(index) {
     inputRefs.value[index] = el;
   };
 }
+
+watch(captchaTimeLeft, (newValue) => {
+  if (newValue !== 0) {
+    startCountdown(captchaTimeLeft.value);
+  }
+});
 
 // 限制输入的逻辑
 function handleKeydown(index, event) {
@@ -242,22 +251,24 @@ async function resend() {
   resendLoading.value = true;
 
   try {
-    const body = {};
+    var body = {
+      now_time: DateTime.utc().toSeconds(),
+    };
     if (props.mode === Email) {
       body.email = props.target;
     } else {
       body.phone_number = props.target;
     }
-    const response = {};
+    var response = {};
     if (props.usage === ForgetPasswordMode) {
       response = await service.sendForgetPasswordCaptcha(body);
     } else if (props.usage === SignupMode) {
       response = await service.sendSignupCaptcha(body);
     } else {
-      console.log("invalid");
+      throw "invalid props usage";
     }
     const data = response.data.data;
-    startCountdown(data.createdAt);
+    startCountdown(data.created_at);
   } catch (error) {
     $q.notify({
       type: "negative",

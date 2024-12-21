@@ -19,7 +19,6 @@ rwIDAQAB
 
 const desk_headers = {
   "Content-Type": "application/json",
-  "X-Device-Type": "desktop",
 };
 
 export const service = {
@@ -31,7 +30,7 @@ export const service = {
     });
   },
   signin(data) {
-    return api.post("/api/user/sigin", data, {
+    return api.post("/api/user/signin", data, {
       headers: {
         ...desk_headers,
       },

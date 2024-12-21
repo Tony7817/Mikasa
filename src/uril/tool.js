@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import OSS from "ali-oss";
 import { DateTime } from "luxon";
 import Cookies from "js-cookie";
+import { getLocation } from "src/composables/user";
 
 export const tool = {
   getUnit(unit) {
@@ -29,16 +30,16 @@ export const tool = {
   async getCode(ip) {
     const countryDialCode = {};
     try {
-      // const data = await getLocation(ip);
+      const data = await getLocation(ip);
       countryDialCode.countryCode = data.country_code;
-      countryDialCode.countryDialCode = data.country_dial_code;
-      const idx = countryCodeDialMap.find((item) => {
-        item.countryCode === countryDialCode.value.countryCode;
-        item.dailCode === countryDialCode.value.countryDialCode;
+      const target = countryCodeDialMap.find((item) => {
+        item.countryCode === countryDialCode.countryCode;
       });
-      if (idx === -1) {
+      if (target === undefined) {
         countryDialCode.countryCode = countryCodeDialMap[0].countryCode;
         countryDialCode.countryDailCode = countryCodeDialMap[0].dailCode;
+      } else {
+        countryDialCode.countryDailCode = target.dailCode;
       }
     } catch (error) {
       countryDialCode.countryCode = countryCodeDialMap[0].countryCode;

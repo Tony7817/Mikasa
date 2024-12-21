@@ -10,11 +10,9 @@ export async function getLocation(ip) {
     const response = await fetch(api, {
       method: "GET",
     });
-    const data = response.json();
-    console.log(data);
-    return data.country_code;
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.log(error);
     return "";
   }
 }

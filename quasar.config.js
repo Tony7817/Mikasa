@@ -59,7 +59,7 @@ module.exports = configure(function (ctx) {
               ROOT: "http://127.0.0.1",
             }
           : {
-              ROOT: "https://lureros.shop",
+              ROOT: "https://api.lureros.com",
             },
       },
 

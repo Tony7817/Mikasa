@@ -95,7 +95,7 @@
       :loading="sendVerifyLoading"
       :usage="SignupMode"
       :captcha-time="captchaTime"
-      @disable-dialog="isVerifyDialogShow = false"
+      @disable-dialog="disableDialog"
       @callback="signup"
     />
   </div>
@@ -104,10 +104,9 @@
 <script setup>
 import { useQuasar } from "quasar";
 import { validator } from "src/composables/user";
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { SigninMode, SignupMode, StatusOK } from "src/composables/consts";
-import { countryCodeDialMap, tool } from "src/uril/tool";
-import { getLocation } from "src/composables/user";
+import { tool } from "src/uril/tool";
 import { service } from "src/services/api";
 import DesktopVerificationDialog from "src/components/Desktop/DesktopVerificationDialog.vue";
 import { Email, Phone } from "src/composables/consts";
@@ -223,6 +222,11 @@ function convertPasswordIcon(type) {
   }
 }
 
+function disableDialog() {
+  isVerifyDialogShow.value = false;
+  captchaTime.value = 0;
+}
+
 async function signup() {
   if (!validate()) {
     return;
@@ -278,17 +282,14 @@ async function sendVerifyCode() {
     const response = await service.sendSignupCaptcha(body);
     const data = response.data.data;
     captchaTime.value = data.created_at;
-    isVerifyDialogShow.value = true;
   } catch (error) {
-    console.log(error);
-
     $q.notify({
       type: "negative",
       message: "Something went wrong",
       position: "top",
     });
-    console.log(error);
   }
+  isVerifyDialogShow.value = true;
   sendVerifyLoading.value = false;
 }
 

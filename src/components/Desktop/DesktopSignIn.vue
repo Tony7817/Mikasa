@@ -41,6 +41,7 @@
         v-model="password"
         color="white"
         type="password"
+        autocomplete="on"
         label="Password"
       />
       <div
@@ -74,7 +75,7 @@ import { tool } from "src/uril/tool";
 import { setup } from "src/composables/signin";
 import PhonenumberInput from "src/components/PhonenumberInput.vue";
 
-const emit = defineEmits(["update:mode"]);
+const emit = defineEmits(["update-mode"]);
 const {
   signinMode,
   Email,

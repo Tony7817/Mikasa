@@ -13,7 +13,7 @@
           "
           @click="toHome"
         >
-          Miss Lover
+          Lureros
         </span>
         <span
           class="menu-font"

@@ -32,7 +32,7 @@ export function validator() {
 
   const phoneError = ref("");
   const validatePhone = (val) => {
-    const phonePattern = /^\+?[1-9]\d{1,14}$/;
+    const phonePattern = /^\(\+\d{1,4}\)\d{4,15}$/;
     if (!phonePattern.test(val)) {
       phoneError.value = "Please enter a valid phone number";
       return false;

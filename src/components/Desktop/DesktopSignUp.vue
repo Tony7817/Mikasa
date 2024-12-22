@@ -106,7 +106,7 @@ import { useQuasar } from "quasar";
 import { validator } from "src/composables/user";
 import { onMounted, ref } from "vue";
 import { SigninMode, SignupMode, StatusOK } from "src/composables/consts";
-import { tool } from "src/uril/tool";
+import { countryCodeDialMap, tool } from "src/uril/tool";
 import { service } from "src/services/api";
 import DesktopVerificationDialog from "src/components/Desktop/DesktopVerificationDialog.vue";
 import { Email, Phone } from "src/composables/consts";
@@ -294,10 +294,14 @@ async function sendVerifyCode() {
 }
 
 onMounted(async () => {
-  const ip = await tool.getIp();
-  if (ip) {
-    countryDailCode.value = await tool.getCode(ip);
-  }
+  // const ip = await tool.getIp();
+  // if (ip) {
+  //   countryDailCode.value = await tool.getCode(ip);
+  // }
+  countryDailCode.value = {
+    countryCode: countryCodeDialMap[0].countryCode,
+    countryDailCode: countryCodeDialMap[0].dailCode,
+  };
 });
 </script>
 

@@ -64,6 +64,7 @@
           color="primary"
           @click="$emit('update-mode', SignupMode)"
         />
+        <q-spinner v-if="loading" size="3em" color="primary" />
       </div>
     </q-form>
   </div>
@@ -87,6 +88,7 @@ const {
   SignupMode,
   countryDialCode,
   getPhoneNumber,
+  loading,
 } = setup();
 
 onMounted(async () => {

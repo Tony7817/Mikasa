@@ -45,7 +45,7 @@
           >
           </q-btn>
         </div>
-        <div class="row justify-center">
+        <div class="row justify-center q-mt-md">
           <q-spinner v-if="verifyLoading" size="3em" color="primary" />
         </div>
       </q-card-section>

@@ -26,7 +26,14 @@ export function setup() {
   const signinMode = ref(Email);
   const phoneNumber = ref("");
   const countryDialCode = ref({});
+  const loading = ref(false);
   async function onSubmit() {
+    if (loading.value) {
+      return;
+    }
+
+    loading.value = true;
+
     if (!validate()) {
       return;
     }
@@ -59,6 +66,8 @@ export function setup() {
         position: "top",
       });
     }
+
+    loading.value = false;
   }
 
   function validate() {
@@ -119,5 +128,6 @@ export function setup() {
     onSubmit,
     getPhoneNumber,
     countryDialCode,
+    loading,
   };
 }

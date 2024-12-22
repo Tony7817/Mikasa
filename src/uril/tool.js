@@ -31,6 +31,8 @@ export const tool = {
     const countryDialCode = {};
     try {
       const data = await getLocation(ip);
+      console.log(data);
+
       countryDialCode.countryCode = data.country_code;
       const target = countryCodeDialMap.find((item) => {
         item.countryCode === countryDialCode.countryCode;

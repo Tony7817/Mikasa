@@ -74,58 +74,94 @@
 </template>
 
 <script setup>
+import { useQuasar } from "quasar";
 import SizePicker from "src/components/Desktop/SizePicker.vue";
-import { BuyNow } from "src/composables/consts";
-import { setup } from "src/composables/ProductDetail";
+import { computed, onMounted, ref } from "vue";
 import { tool } from "src/uril/tool";
-import { onMounted, ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { service } from "src/services/api";
+import { useUserStore } from "src/stores/user";
+import _ from "lodash";
 
-const {
-  selectedSize,
-  selectedImage,
-  selectedColor,
-  loadingAddCart,
-  product,
-  rating,
-  userStore,
-  router,
-  $q,
-  onLoadProduct,
-  addToCart,
-} = setup();
-const isDialogShow = ref(false);
-const selectedSizeTmp = ref("");
+const $q = useQuasar();
+const route = useRoute();
+const router = useRouter();
 
-function cancelDialog() {
-  selectedSize.value = "";
-  isDialogShow.value = false;
-}
+const selectedSize = ref("");
+const productId = route.params.productId;
+const selectedColor = ref({});
+const selectedImage = ref("");
+const loadingAddCart = ref(false);
+const userStore = useUserStore();
+const product = ref({
+  id: "",
+  price: 0,
+  unit: "",
+  description: "",
+  color: {},
+  rating: 0,
+  color_list: [],
+  rate_count: 0,
+  sold_num: 0,
+});
 
-async function selectOK(mode) {
-  selectedSize.value = selectedSizeTmp.value;
-  if (mode === BuyNow) {
-  } else {
-    await addToCart();
+const rating = computed(() => {
+  return product.value.rate ? product.value.rate : 0;
+});
+
+async function onLoadProduct() {
+  try {
+    const response = await service.getProductDetail(productId, {});
+    const data = response.data.data;
+    _.assign(product.value, data);
+    console.log(product.value.color);
+  } catch (error) {
+    console.log(error);
+    $q.notify({
+      type: "negative",
+      message: "Something went wrong",
+      position: "top",
+    });
   }
 }
 
-async function AddProduct() {
-  if (!userStore.isAuthenticated) {
-    router.push(`/login`);
+async function addToCart() {
+  if (loadingAddCart.value) {
+    return;
   }
-  if (selectedSize.value !== "") {
-    await addToCart();
-  } else {
-    isDialogShow.value = true;
-  }
-}
-
-async function Buy() {
-  if (!userStore.isAuthenticated) {
-    router.push(`/login`);
+  if (!selectedSize.value) {
+    $q.notify({
+      type: "negative",
+      message: "Please select your size",
+      position: "top",
+    });
+    return;
   }
 
-  isDialogShow.value = true;
+  loadingAddCart.value = true;
+
+  try {
+    const response = await service.addProductToCart(product.value.id, {
+      size: selectedSize.value,
+    });
+    const status = response.data.code;
+    if (status === 200) {
+      $q.notify({
+        type: "positive",
+        message: "success",
+        position: "top",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    $q.notify({
+      type: "negative",
+      message: "Something went wrong",
+      position: "top",
+    });
+  }
+
+  loadingAddCart.value = false;
 }
 
 onMounted(() => {

@@ -99,22 +99,8 @@ const resetPrompt = computed(() => {
 
 function startCountdown(createdAt) {
   const cooldownPeriod = 60; // 冷却时间（秒）
-  console.log("createdAt:", createdAt);
 
-  // 计算剩余时间
-  // const createdTime = DateTime.fromSeconds(createdAt).toUTC();
-  // const now = DateTime.utc();
-  // console.log("now", now);
-  // console.log("createdAt", createdTime);
-
-  // const diffInSeconds = Math.max(
-  //   0,
-  //   Math.floor(cooldownPeriod - now.diff(createdTime, "seconds").seconds)
-  // );
-  // console.log("diff" + diffInSeconds);
   const currentUtcTimestamp = Math.floor(Date.now() / 1000);
-  console.log("cur", currentUtcTimestamp);
-
   const differenceInSeconds = Math.abs(currentUtcTimestamp - createdAt);
   const leftSeconds = Math.floor(cooldownPeriod - differenceInSeconds);
 

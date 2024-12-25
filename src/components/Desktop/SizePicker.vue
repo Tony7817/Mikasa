@@ -2,8 +2,8 @@
   <div class="row q-gutter-sm q-ml-none">
     <q-btn
       v-for="s in props.size"
-      :key="s"
-      :label="s"
+      :key="s.size_name"
+      :label="s.size_name"
       flat
       outline
       dense

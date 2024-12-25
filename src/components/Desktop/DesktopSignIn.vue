@@ -1,9 +1,8 @@
 <template>
   <div class="column q-pa-md gradient-background">
-    <div class="q-mb-sm text-h5 text-bold text-center">Sign in</div>
-    <div class="row justify-center q-mb-sm q-gutter-md">
+    <div class="q-mb-sm text-h5 text-bold text-center q-mb-md">Sign in</div>
+    <div class="row justify-center q-mb-sm q-gutter-md q-mb-md">
       <q-btn icon="fab fa-google" outline rounded dense />
-      <q-btn icon="fab fa-facebook-f" outline rounded dense />
       <q-btn
         v-if="signinMode === Email"
         icon="phone_iphone"
@@ -72,9 +71,10 @@
 
 <script setup>
 import { onMounted } from "vue";
-import { tool } from "src/uril/tool";
+import { countryCodeDialMap, tool } from "src/uril/tool";
 import { setup } from "src/composables/signin";
 import PhonenumberInput from "src/components/PhonenumberInput.vue";
+import { ForgetPasswordMode } from "src/composables/consts";
 
 const emit = defineEmits(["update-mode"]);
 const {
@@ -92,10 +92,14 @@ const {
 } = setup();
 
 onMounted(async () => {
-  const ip = await tool.getIp();
-  if (ip) {
-    countryDialCode.value = await tool.getCode(ip);
-  }
+  // const ip = await tool.getIp();
+  // if (ip) {
+  //   countryDialCode.value = await tool.getCode(ip);
+  // }
+  countryDialCode.value = {
+    countryCode: countryCodeDialMap[0].countryCode,
+    countryDailCode: countryCodeDialMap[0].dailCode,
+  };
 });
 </script>
 

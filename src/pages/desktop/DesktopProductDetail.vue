@@ -3,12 +3,12 @@
     <div class="row">
       <div class="col-4 q-pa-md">
         <div>
-          <q-img :src="selectedImage.url" class="product-img" fit="cover" />
+          <q-img :src="selectedImage" class="product-img" fit="cover" />
         </div>
         <div class="row q-mt-sm q-gutter-x-sm">
-          <div v-for="i in product.images" :key="i">
+          <div v-for="i in selectedColor.images" :key="i">
             <q-img
-              :src="i.url"
+              :src="i"
               class="product-img-children"
               fit="cover"
               height="85px"
@@ -56,18 +56,32 @@
         </div>
         <q-separator class="q-mb-md q-mt-sm" />
         <div class="q-ml-sm">
+          <div class="row q-gutter-md">
+            <div v-for="color in product.color_list" :key="color.color_id">
+              <div
+                class="q-mb-md"
+                style="width: 80px; height: 80px; border-radius: 50%"
+                :style="{ backgroundColor: color.color }"
+                @click="selectedColor = color"
+              >
+                <q-img :src="color.cover_url" />
+              </div>
+            </div>
+            <qimg />
+          </div>
           <div class="row items-center">
             <span class="text-bold title">Price</span
             ><span
               class="q-ml-sm text-h6 text-bold text-primary"
               style="font-size: 25px"
-              >{{ product.price }}{{ tool.getUnit(product.unit) }}</span
+              >{{ selectedColor.price
+              }}{{ tool.getUnit(selectedColor.unit) }}</span
             >
           </div>
         </div>
         <div class="row q-mt-sm items-center">
           <div class="q-ml-sm text-bold text-h7 title">Size</div>
-          <SizePicker v-model="selectedSize" :size="product.size" />
+          <SizePicker v-model="selectedSize" :size="selectedColor.size" />
         </div>
         <div class="q-ml-sm">
           <div class="text-h7 text-bold q-mt-md title">Product Details</div>
@@ -108,12 +122,12 @@
 
     <div class="text-h5 text-bold q-ml-md q-mb-md">Product Description</div>
     <div
-      v-for="i in product.detail_images"
+      v-for="i in selectedColor.detail_images"
       :key="i"
       class="q-px-md"
       style="width: 100%"
     >
-      <q-img :src="i.url" />
+      <q-img :src="i" />
     </div>
 
     <q-separator class="q-my-md" />
@@ -131,6 +145,7 @@ import { service } from "src/services/api";
 import { useUserStore } from "src/stores/user";
 import { tool } from "src/uril/tool";
 import SizePicker from "src/components/Desktop/SizePicker.vue";
+import _ from "lodash";
 
 const $q = useQuasar();
 const route = useRoute();
@@ -144,17 +159,10 @@ const loadingAddCart = ref(false);
 const userStore = useUserStore();
 const product = ref({
   id: "",
-  price: 0,
-  unit: "",
-  colors_url: [],
   description: "",
-  size: [],
-  colors: [],
+  detail: "",
+  colors: {},
   rating: 0,
-  default_color: {
-    color: "",
-    images: [],
-  },
   rate_count: 0,
   sold_num: 0,
 });
@@ -166,8 +174,10 @@ const rating = computed(() => {
 async function onLoadProduct() {
   try {
     const response = await service.getProductDetail(productId, {});
-    product.value = response.data.data;
-    selectedImage.value = product.value.images[0];
+    const data = response.data.data;
+    _.assign(product.value, data);
+    selectedColor.value = product.value.color;
+    selectedImage.value = selectedColor.value.images[0];
   } catch (error) {
     console.log(error);
     $q.notify({

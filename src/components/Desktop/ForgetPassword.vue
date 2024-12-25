@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md gradient-background">
     <div class="row">
       <q-btn
         class="col-1"
@@ -68,8 +68,14 @@
           label="send verification code"
           rounded
           :loading="resetLoading || sendVerifyLoading"
-          color="secondary"
+          color="primary"
         />
+      </div>
+      <div
+        class="row justify-center q-mt-md"
+        v-if="sendVerifyLoading || resetLoading"
+      >
+        <q-spinner size="3em" color="primary" />
       </div>
     </q-form>
     <DesktopVerificationDialog
@@ -97,7 +103,7 @@ import PhonenumberInput from "src/components/PhonenumberInput.vue";
 import DesktopVerificationDialog from "src/components/Desktop/DesktopVerificationDialog.vue";
 import { useQuasar } from "quasar";
 import { service } from "src/services/api";
-import { tool } from "src/uril/tool";
+import { countryCodeDialMap } from "src/uril/tool";
 
 const $q = useQuasar();
 const emit = defineEmits(["update:mode"]);
@@ -143,7 +149,8 @@ async function sendVerifyCode() {
     return;
   }
   sendVerifyLoading.value = true;
-  const body = {};
+
+  var body = {};
   if (resetMode.value === Email) {
     body.email = email.value;
   } else {
@@ -174,7 +181,7 @@ async function reset() {
   resetLoading.value = true;
 
   try {
-    const body = { password: password.value };
+    var body = { password: password.value };
     if (resetMode.value === Email) {
       body.email = email.value;
     } else {
@@ -207,12 +214,20 @@ async function reset() {
   resetLoading.value = false;
 }
 
-onMounted(async () => {
-  const ip = await tool.getIp();
-  if (ip) {
-    countryDialCode.value = await tool.getCode(ip);
-  }
+onMounted(() => {
+  countryDialCode.value = {
+    countryCode: countryCodeDialMap[0].countryCode,
+    countryDailCode: countryCodeDialMap[0].dailCode,
+  };
 });
 </script>
 
-<style></style>
+<style>
+.gradient-background {
+  background: linear-gradient(
+    to bottom,
+    #cb2a45,
+    #2a4a82
+  ); /* 从上到下的竖直渐变 */
+}
+</style>

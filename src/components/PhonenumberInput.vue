@@ -60,7 +60,7 @@ function changeCountryCode(c) {
 }
 
 function updatePhoneNumber() {
-  emit("update:model-value", `(${countryDailCode.value})${phoneNumber.value}`);
+  emit("update:model-value", `${countryDailCode.value}${phoneNumber.value}`);
 }
 
 function restrictKeyInput(event) {

@@ -153,7 +153,15 @@ const router = useRouter();
 
 const selectedSize = ref("");
 const productId = route.params.productId;
-const selectedColor = ref({});
+const selectedColor = ref({
+  id: "",
+  name: "",
+  price: 0,
+  unit: "",
+  size: [],
+  images: [],
+  detail_imgaes: [],
+});
 const selectedImage = ref("");
 const loadingAddCart = ref(false);
 const userStore = useUserStore();
@@ -176,7 +184,7 @@ async function onLoadProduct() {
     const response = await service.getProductDetail(productId, {});
     const data = response.data.data;
     _.assign(product.value, data);
-    selectedColor.value = product.value.color;
+    _.assign(selectedColor.value, data.color);
     selectedImage.value = selectedColor.value.images[0];
   } catch (error) {
     console.log(error);
@@ -204,8 +212,10 @@ async function addToCart() {
   loadingAddCart.value = true;
 
   try {
-    const response = await service.addProductToCart(product.value.id, {
-      size: selectedSize.value,
+    const response = await service.addProductToCart({
+      product_id: product.value.id,
+      color_id: selectedColor.value.id,
+      size: selectedSize.value.size_name,
     });
     const status = response.data.code;
     if (status === 200) {

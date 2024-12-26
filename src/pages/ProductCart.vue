@@ -2,54 +2,54 @@
   <q-page padding>
     <div>
       <div class="self-center text-h5 text-bold q-mb-lg">Your Cart</div>
-      <div class="text-h6 row items-center" style="padding: 8px 16px">
-        <div class="col-6">Item</div>
-        <div class="col">Price</div>
-        <div class="col">Quantity</div>
-        <div class="col">Total</div>
-        <div class="col-1"></div>
-      </div>
-      <q-separator />
-      <q-list v-for="c in cartList" :key="c.id">
+      <q-list v-for="c in cartList" :key="c.id" separator>
+        <q-item class="text-h6">
+          <q-item-section class="col-1" style="width: 40px"></q-item-section>
+          <q-item-section class="col-4">Item</q-item-section>
+          <q-item-section class="col-1"></q-item-section>
+          <q-item-section class="col-2">Price</q-item-section>
+          <q-item-section class="col-2">Quantity</q-item-section>
+          <q-item-section class="col-1">Total</q-item-section>
+          <q-item-section class="col-1"></q-item-section>
+        </q-item>
         <q-item class="row items-center">
-          <q-item-section class="col-6">
-            <div class="row q-gutter-sm">
+          <q-item-section class="col-1 row items-center" style="width: 40px">
+            <div>
+              <q-checkbox v-model="c._selected" dense />
+            </div>
+          </q-item-section>
+          <q-item-section class="col-4">
+            <div class="row q-gutter-sm no-wrap">
               <q-img
-                :src="c.image_url"
-                style="width: 50px"
+                class="col-6"
+                :src="c.cover_url"
+                style="width: 100px"
                 fit="contain"
                 @click="ToProductDetailPage(c.star_id, c.product_id)"
               />
-              <div>
-                <div style="font-size: 16px; cursor: pointer">
-                  {{ c.name }}
+              <div class="col">
+                <div class="column" style="height: 100px">
+                  <div style="font-size: 16px; cursor: pointer">
+                    {{ c.description }}
+                  </div>
+                  <q-space />
+                  <div class="row q-gutter-sm">
+                    <span>Size:</span>
+                    <q-badge class="size-picker" color="primary">
+                      {{ c.size }}
+                    </q-badge>
+                  </div>
                 </div>
-                <q-badge class="size-picker" color="primary">
-                  {{ c.size }}
-                  <q-menu>
-                    <q-list
-                      v-for="s in c._all_size"
-                      :key="s"
-                      dense
-                      style="min-width: 100px"
-                    >
-                      <q-item clickable v-close-popup>
-                        <q-item-section @click="c.size = s">{{
-                          s
-                        }}</q-item-section>
-                      </q-item>
-                    </q-list>
-                  </q-menu>
-                </q-badge>
               </div>
             </div>
           </q-item-section>
-          <q-item-section>
+          <q-item-section class="col-1"></q-item-section>
+          <q-item-section class="col-2">
             <div class="text-h6" style="margin-left: -5px">
               {{ tool.getUnit(c.unit) }}{{ c.price }}
             </div>
           </q-item-section>
-          <q-item-section>
+          <q-item-section class="col-2">
             <div
               class="row q-gutter-sm items-center"
               style="margin-left: -16px"
@@ -60,9 +60,9 @@
               <q-btn icon="add" flat dense @click="addAmount(c)" />
             </div>
           </q-item-section>
-          <q-item-section>
+          <q-item-section class="col-1">
             <div class="text-h6" style="margin-left: -3px">
-              {{ tool.getUnit(c.unit) }}{{ (c.amount * c.price).toFixed(2) }}
+              {{ tool.getUnit(c.unit) }}{{ c.total_price }}
             </div>
           </q-item-section>
           <q-item-section class="col-1">
@@ -80,30 +80,22 @@
       </q-list>
       <div class="row justify-end q-mt-sm">
         <div class="col-2">
-          <q-list dense>
-            <q-item class="row">
-              <q-item-section> Amount </q-item-section>
-              <q-item-section side> 23</q-item-section>
-            </q-item>
-            <q-separator />
-            <q-item class="row">
-              <q-item-section> Total </q-item-section>
-              <q-item-section side class="text-h6 text-black text-bold">
-                ${{ totalMoney }}</q-item-section
-              >
-            </q-item>
-            <q-item>
-              <q-item-section>
-                <q-btn
-                  label="Checkout"
-                  color="primary"
-                  icon="shopping_cart"
-                  icon-right
-                  class="q-mt-md"
-                />
-              </q-item-section>
-            </q-item>
-          </q-list>
+          <q-item class="row text-h5">
+            <q-item-section> Amount </q-item-section>
+            <q-item-section side class="text-bold"> 23</q-item-section>
+          </q-item>
+          <q-separator />
+          <q-item class="row text-h5">
+            <q-item-section> Total </q-item-section>
+            <q-item-section side class="text-bold">
+              ${{ TotalPrice }}</q-item-section
+            >
+          </q-item>
+          <q-item>
+            <q-item-section>
+              <q-btn label="Checkout" color="primary" class="q-mt-md" />
+            </q-item-section>
+          </q-item>
         </div>
         <div class="col-1"></div>
       </div>
@@ -133,14 +125,18 @@ const router = useRouter();
 function InitFilter(products) {
   products.forEach((p) => {
     p._amountLoading = false;
-    p._all_size = p.all_size.split(",");
+    p._selected = false;
   });
 }
 
-const totalMoney = computed(() => {
-  return cartList.value
-    .reduce((acc, p) => acc + p.amount * p.price, 0)
-    .toFixed(2);
+const TotalPrice = computed(() => {
+  var price = 0;
+  cartList.value.forEach((c) => {
+    if (c._selected) {
+      price += c.total_price;
+    }
+  });
+  return price;
 });
 
 async function addAmount(productCart) {
@@ -193,7 +189,7 @@ async function onLoad() {
     const response = await service.getCartList({
       user_id: userStore.user.id,
       page: currentPage.value,
-      size: 20,
+      page_size: 20,
     });
     const data = response.data.data;
     cartList.value = data.products;

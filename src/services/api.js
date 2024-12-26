@@ -107,8 +107,8 @@ export const service = {
     });
   },
 
-  addProductToCart(productId, data) {
-    return api.post(`/api/cart/add/${productId}`, data, {
+  addProductToCart(data) {
+    return api.post(`/api/cart/add/product`, data, {
       headers: {
         Authorization: `Bearer ${userStore.user.token}`,
         ...desk_headers,

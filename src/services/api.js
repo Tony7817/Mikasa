@@ -116,8 +116,8 @@ export const service = {
     });
   },
 
-  removeProductFromCart(productCartId, data) {
-    return api.post(`/api/cart/remove/${productCartId}`, data, {
+  removeProductFromCart(data) {
+    return api.post(`/api/cart/remove`, data, {
       headers: {
         Authorization: `Bearer ${userStore.user.token}`,
         ...desk_headers,

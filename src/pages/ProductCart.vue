@@ -1,7 +1,9 @@
 <template>
   <q-page padding>
     <div>
-      <div class="self-center text-h5 text-bold q-mb-lg">Your Cart</div>
+      <div class="self-center text-h5 text-bold q-mb-lg">
+        Your Cart({{ totalNum }})
+      </div>
       <q-list v-for="c in cartList" :key="c.id" separator>
         <q-item class="text-h6">
           <q-item-section class="col-1" style="width: 40px"></q-item-section>
@@ -72,7 +74,7 @@
               dense
               color="secondary"
               :disable="removeProductLoading"
-              @click="ShowRemoveProductDialog(c.id)"
+              @click="ShowRemoveProductDialog(c.product_id, c.color_id)"
             />
           </q-item-section>
         </q-item>
@@ -82,7 +84,9 @@
         <div class="col-2">
           <q-item class="row text-h5">
             <q-item-section> Amount </q-item-section>
-            <q-item-section side class="text-bold"> 23</q-item-section>
+            <q-item-section side class="text-bold">
+              {{ selectedAmount }}</q-item-section
+            >
           </q-item>
           <q-separator />
           <q-item class="row text-h5">
@@ -121,6 +125,7 @@ const $q = useQuasar();
 const amountLoading = ref(false);
 const removeProductLoading = ref(false);
 const router = useRouter();
+const totalNum = ref(0);
 
 function InitFilter(products) {
   products.forEach((p) => {
@@ -128,6 +133,16 @@ function InitFilter(products) {
     p._selected = false;
   });
 }
+
+const selectedAmount = computed(() => {
+  var amount = 0;
+  cartList.value.forEach((c) => {
+    if (c._selected) {
+      amount++;
+    }
+  });
+  return amount;
+});
 
 const TotalPrice = computed(() => {
   var price = 0;
@@ -193,6 +208,7 @@ async function onLoad() {
     });
     const data = response.data.data;
     cartList.value = data.products;
+    totalNum.value = data.total;
     InitFilter(cartList.value);
   } catch (error) {
     if (error.response?.status == 401) {
@@ -207,7 +223,7 @@ async function onLoad() {
   }
 }
 
-async function removeProduct(productCartId) {
+async function removeProduct(productId, colorId) {
   if (removeProductLoading.value) {
     return;
   }
@@ -215,12 +231,16 @@ async function removeProduct(productCartId) {
   removeProductLoading.value = true;
 
   try {
-    const response = await service.removeProductFromCart(productCartId, {});
+    const response = await service.removeProductFromCart({
+      product_id: productId,
+      color_id: colorId,
+    });
     const data = response.data.data;
     const idx = cartList.value.findIndex((c) => c.id === data.id);
     if (idx !== -1) {
       cartList.value.splice(idx, 1);
     }
+    totalNum.value--;
     $q.notify({
       type: "positive",
       message: "success",
@@ -241,12 +261,12 @@ function ToProductDetailPage(starId, productId) {
   router.push(`/star/${starId}/product/${productId}`);
 }
 
-function ShowRemoveProductDialog(productCartId) {
+function ShowRemoveProductDialog(productId, colorId) {
   $q.dialog({
     title: "Confirm",
     message: "Are you sure you want to remove this product?",
   }).onOk(async () => {
-    await removeProduct(productCartId);
+    await removeProduct(productId, colorId);
   });
 }
 

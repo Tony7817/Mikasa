@@ -36,6 +36,13 @@ export const service = {
       },
     });
   },
+  signinWithGoogle(data) {
+    return api.post("/api/user/signin/google", data, {
+      headers: {
+        ...desk_headers,
+      },
+    });
+  },
   getStarList(data) {
     return api.post("/api/star/list", data, {
       headers: {

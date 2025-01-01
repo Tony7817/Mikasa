@@ -13,9 +13,6 @@
       </div>
       <div class="col-2"></div>
     </div>
-    <div class="col text-center text-h5 text-bold text-primary q-mt-lg">
-      A Wonderful Sexy Lingerie Store With Stars
-    </div>
     <q-page-container>
       <q-page>
         <div class="row justify-center items-center" style="padding-top: 10vh">
@@ -26,7 +23,7 @@
                 <div
                   class="col-4 column justify-center items-center gradient-background"
                 >
-                  <div class="text-h4 text-white text-bold">Welcome</div>
+                  <div class="text-h4 text-white text-bold">Lureros</div>
                 </div>
                 <!--Right Side-->
                 <SignIn

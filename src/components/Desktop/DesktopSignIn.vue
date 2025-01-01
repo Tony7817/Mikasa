@@ -1,8 +1,7 @@
 <template>
   <div class="column q-pa-md gradient-background">
     <div class="q-mb-sm text-h5 text-bold text-center q-mb-md">Sign in</div>
-    <div class="row justify-center q-mb-sm q-gutter-md q-mb-md">
-      <q-btn icon="fab fa-google" outline rounded dense />
+    <div class="row justify-center q-gutter-md">
       <q-btn
         v-if="signinMode === Email"
         icon="phone_iphone"
@@ -20,8 +19,7 @@
         @click="signinMode = Email"
       />
     </div>
-    <div class="text-center q-mb-sm">or use your account</div>
-    <q-form class="q-gutter-md q-px-lg" @submit="onSubmit">
+    <q-form class="q-px-lg" @submit="onSubmit">
       <q-input
         class="cus-input"
         v-if="signinMode === Email"
@@ -43,27 +41,23 @@
         autocomplete="on"
         label="Password"
       />
-      <div
-        class="text-grey text-center forget-pass"
-        @click="$emit('update-mode', ForgetPasswordMode)"
-      >
-        Forget your password?
-      </div>
-      <div class="column items-center">
-        <q-btn
-          class="q-mb-md"
-          label="SIGN IN"
-          type="submit"
-          rounded
-          color="primary"
-        />
+      <div class="row justify-center items-center q-gutter-lg q-mt-xs">
         <q-btn
           label="SIGN UP"
           rounded
           color="primary"
           @click="$emit('update-mode', SignupMode)"
         />
-        <q-spinner v-if="loading" size="3em" color="primary" />
+        <q-btn label="SIGN IN" type="submit" rounded color="primary" :loading="loading" />
+      </div>
+      <div class="row justify-center q-mt-lg">
+        <google-signin :mode="SigninMode"></google-signin>
+      </div>
+      <div
+        class="text-grey text-center q-mb-md q-mt-md"
+        @click="$emit('update-mode', ForgetPasswordMode)"
+      >
+        Forget your password?
       </div>
     </q-form>
   </div>
@@ -74,7 +68,8 @@ import { onMounted } from "vue";
 import { countryCodeDialMap, tool } from "src/uril/tool";
 import { setup } from "src/composables/signin";
 import PhonenumberInput from "src/components/PhonenumberInput.vue";
-import { ForgetPasswordMode } from "src/composables/consts";
+import GoogleSignin from "src/components/GoogleSignin.vue";
+import { ForgetPasswordMode, SigninMode } from "src/composables/consts";
 
 const emit = defineEmits(["update-mode"]);
 const {

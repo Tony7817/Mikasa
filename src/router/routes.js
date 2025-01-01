@@ -5,6 +5,7 @@ import {
   StarsTab,
 } from "src/composables/consts";
 import { useUserStore } from "src/stores/user";
+import { component } from "v-viewer";
 
 const routes = [
   {
@@ -108,6 +109,11 @@ const routes = [
         meta: { tab: ContactTab },
       },
     ],
+  },
+  {
+    path: "/policy",
+    name: "policy",
+    component: () => import("layouts/PolicyLayout.vue"),
   },
   {
     path: "/login",

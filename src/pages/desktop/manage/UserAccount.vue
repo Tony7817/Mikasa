@@ -6,8 +6,37 @@
         <q-breadcrumbs-el label="Account" />
       </q-breadcrumbs>
     </div>
+    <div class="q-pa-md row">
+      <div class="cursor-pointer col-6">
+        <div class="row q-gutter-sm items-center">
+          <div>
+            <q-icon name="email" size="25px" />
+          </div>
+          <div class="text-body1">
+            {{ user.email }}
+          </div>
+          <div>
+            <q-icon name="edit" size="20px" />
+          </div>
+        </div>
+        <q-popup-edit
+          v-if="user.email !== ''"
+          v-model="user.email"
+          auto-save
+          v-slot="scope"
+        >
+          <q-input
+            v-model="user.email"
+            dense
+            autofocus
+            counter
+            @keyup.enter="scope.set"
+          />
+        </q-popup-edit>
+      </div>
+    </div>
     <!--Email-->
-    <UserBasicItem
+    <!-- <UserBasicItem
       v-if="user.email !== null"
       v-model="user.email"
       label="Email"
@@ -18,7 +47,7 @@
       v-model="user.phonenumber"
       label="phonenumber"
       icon="phone_iphone"
-    />
+    /> -->
 
     <!-- Username -->
     <UserBasicItem v-model="user.username" label="username" icon="person" />

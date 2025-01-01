@@ -52,7 +52,6 @@ export function setup() {
           id: data.user_id,
           name: data.name,
           token: data.access_token,
-          role: data.role,
           avatarUrl: data.avatar_url,
         });
       }

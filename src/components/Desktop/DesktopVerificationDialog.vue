@@ -57,7 +57,7 @@
 import { useQuasar } from "quasar";
 import { Email, ForgetPasswordMode, SignupMode } from "src/composables/consts";
 import { service } from "src/services/api";
-import { computed, createApp, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { DateTime } from "luxon";
 const props = defineProps({
   show: {

@@ -18,7 +18,7 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ["axios", "router-check", "platform"],
+    boot: ["axios", "router-check", "platform", "google"],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ["app.scss"],
@@ -94,13 +94,14 @@ module.exports = configure(function (ctx) {
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
       cssAddon: true,
+      lang: "en-US",
       config: {
         dark: true,
         brand: {
           primary: "#da4f7a",
           secondary: "#CB2A45",
           accent: "#2a4a82",
-          dark: "#121826",
+          dark: "#222222",
         },
       },
 

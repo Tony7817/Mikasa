@@ -63,19 +63,21 @@
           <q-btn icon="shopping_cart" flat :to="`/cart`" />
           <q-btn icon="person" flat @click="signIn()">
             <q-menu v-if="userStore.isAuthenticated">
-              <q-list style="min-width: 300px">
+              <q-list style="min-width: 200px" separator>
                 <q-item
                   clickable
                   v-close-popup
                   :to="{ name: 'UserManageAccount' }"
                 >
                   <q-item-section>
-                    <div class="row justify-center">
-                      <q-avatar>
-                        <q-img :src="userStore.user.avatarUrl" />
-                      </q-avatar>
+                    <div class="row justify-center items-center q-gutter-md">
+                      <q-avatar color="primary" textColor="white" size="40px">{{
+                        userStore.user.name[0]
+                      }}</q-avatar>
+                      <div class="text-center">
+                        {{ userStore.user.name }}
+                      </div>
                     </div>
-                    <div class="text-center">{{ userStore.user.name }}</div>
                   </q-item-section>
                 </q-item>
                 <q-item clickable v-close-popup @click="logout">

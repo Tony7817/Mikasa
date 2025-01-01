@@ -71,7 +71,7 @@
           />
         </template>
       </q-input>
-      <div class="row justify-center">
+      <div class="row justify-center q-mt-md">
         <q-btn
           class="q-mt-sm"
           type="submit"
@@ -81,8 +81,11 @@
           color="primary"
         />
       </div>
+      <div class="row justify-center q-mt-lg">
+        <google-signin :mode="SignupMode"></google-signin>
+      </div>
       <div
-        class="text-center text-grey cursor-pointer"
+        class="text-center text-grey cursor-pointer q-mt-md"
         @click="$emit('update-mode', SigninMode)"
       >
         Already hava an account? Go to Sign in.
@@ -111,6 +114,7 @@ import { service } from "src/services/api";
 import DesktopVerificationDialog from "src/components/Desktop/DesktopVerificationDialog.vue";
 import { Email, Phone } from "src/composables/consts";
 import PhonenumberInput from "src/components/PhonenumberInput.vue";
+import GoogleSignin from "../GoogleSignin.vue";
 
 defineOptions({
   name: "SignUp",

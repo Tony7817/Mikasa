@@ -25,7 +25,12 @@ export default route(function (store) {
     : createWebHashHistory;
 
   const Router = createRouter({
-    scrollBehavior: () => ({ left: 0, top: 0 }),
+    scrollBehavior(to, from, savedPosition) {
+      if (to.hash) {
+        return { selector: to.hash };
+      }
+      return { left: 0, top: 0 };
+    },
     routes,
 
     // Leave this as is and make changes in quasar.conf.js instead!
@@ -33,8 +38,6 @@ export default route(function (store) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
-
-
 
   return Router;
 });

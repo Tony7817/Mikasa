@@ -97,13 +97,32 @@
     </q-page-container>
   </q-layout>
 
-  <div class="q-pa-md bg-dark" style="border-top: 1px solid #283237;">
-    <div class="text-h6 q-mb-sm q-px-lg">Company</div>
+  <div class="q-pa-md bg-dark" style="border-top: 1px solid #283237">
+    <div class="row items-center">
+      <div class="text-h6 q-mb-sm q-px-lg">Company</div>
+    </div>
     <div class="row q-gutter-md q-px-lg">
-      <a href="/policy" class="text-white">Terms Of Service</a>
-      <a href="/policy" class="text-white">Private Policy</a>
-      <a href="/policy" class="text-white">Refund Policy</a>
-      <a href="/policy" class="text-white">Shopping Policy</a>
+      <router-link to="/policy" class="text-body2 q-ml-md text-white"
+        >About Us</router-link
+      >
+      <router-link to="/policy" class="text-white"
+        >Terms Of Service</router-link
+      >
+      <router-link
+        :to="{ name: 'policy', params: { id: 'policy-customer-service' } }"
+        class="text-white"
+        >Private Policy</router-link
+      >
+      <router-link
+        :to="{ name: 'policy', params: { id: 'policy-customer-service' } }"
+        class="text-white"
+        >Refund Policy</router-link
+      >
+      <router-link
+        :to="{ name: 'policy', params: { id: 'policy-customer-service' } }"
+        class="text-white"
+        >Shopping Policy</router-link
+      >
     </div>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div class="q-mx-lg q-mt-lg column q-gutter-md" style="color: white">
     <div class="text-h4">INFORMATION</div>
-    <ul class="text-h5">
+    <ul class="text-h5" id="policy-about-us">
       <li>About Us</li>
       <li>Contact Us</li>
       <li>Privacy And Security</li>
@@ -225,7 +225,9 @@
       website that we have made changes to this policy. Contact Us Email:
       lureros@lureros.com
     </div>
-    <div class="text-h5 text-bold">Customer Service</div>
+    <div class="text-h5 text-bold" id="policy-customer-service">
+      Customer Service
+    </div>
     <div class="text-h5">Customer Service</div>
     <div class="text-body1">After Sale Service</div>
     <div class="text-body1">
@@ -620,5 +622,28 @@
     </div>
   </div>
 </template>
+
+<script setup>
+// const props = defineProps({
+//   id: {
+//     type: String,
+//     required: false,
+//     default: null,
+//   },
+// });
+
+// onMounted(() => {
+//   nextTick(() => {
+//     console.log(props.id);
+//     if (props.id) {
+//       const element = document.getElementById(props.id);
+//       console.log(element);
+//       if (element) {
+//         element.scrollIntoView({ behavior: "smooth" });
+//       }
+//     }
+//   });
+// });
+</script>
 
 <style scoped></style>

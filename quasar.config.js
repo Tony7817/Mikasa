@@ -101,7 +101,7 @@ module.exports = configure(function (ctx) {
           primary: "#da4f7a",
           secondary: "#CB2A45",
           accent: "#2a4a82",
-          dark: "#222222",
+          dark: "#1e1a23",
         },
       },
 

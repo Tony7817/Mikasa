@@ -96,6 +96,16 @@
       <router-view :keyword="keyword" :triggerSearch="triggerSearch" />
     </q-page-container>
   </q-layout>
+
+  <div class="q-pa-md bg-dark" style="border-top: 1px solid #283237;">
+    <div class="text-h6 q-mb-sm q-px-lg">Company</div>
+    <div class="row q-gutter-md q-px-lg">
+      <a href="/policy" class="text-white">Terms Of Service</a>
+      <a href="/policy" class="text-white">Private Policy</a>
+      <a href="/policy" class="text-white">Refund Policy</a>
+      <a href="/policy" class="text-white">Shopping Policy</a>
+    </div>
+  </div>
 </template>
 
 <script setup>

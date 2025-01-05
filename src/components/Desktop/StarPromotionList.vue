@@ -3,6 +3,21 @@
     <q-list dense id="list">
       <div class="text-center" style="font-size: 16px">Hot Stars</div>
       <q-separator class="q-my-sm" />
+      <template v-if="loading">
+        <q-item v-for="i in 5" :key="i">
+          <q-item-section avatar>
+            <q-skeleton type="QAvatar" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>
+              <q-skeleton type="text" />
+            </q-item-label>
+            <q-item-label caption>
+              <q-skeleton type="text" width="65%" />
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+      </template>
       <q-item
         :class="{ active: b._selected === true }"
         v-for="b in brands"

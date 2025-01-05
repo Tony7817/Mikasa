@@ -7,7 +7,7 @@
     </div>
     <div class="col q-ml-sm text-center">
       <div
-        class="text-white text-h6"
+        class="text-white text-body1 text-bold"
         style="text-decoration: none"
       >
         {{ props.content }}

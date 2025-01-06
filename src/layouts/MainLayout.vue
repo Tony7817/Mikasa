@@ -7,8 +7,14 @@
 import DesktopMainLayout from "src/layouts/desktop/DesktopMainLayout.vue";
 import MobileMainLayout from "src/layouts/mobile/MobileMainLayout.vue";
 import { Platform } from "quasar";
+import { useMeta } from "quasar";
 
 const isMobile = Platform.is.mobile;
+useMeta(() => {
+  return {
+    title: "Lureros",
+  };
+});
 </script>
 
 <style scoped>

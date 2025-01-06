@@ -24,11 +24,6 @@ import StarDetail from "src/pages/StarDetail.vue";
 import { useMeta } from "quasar";
 
 const selectedStarId = ref(null);
-useMeta(() => {
-  return {
-    title: "Lureros"
-  }
-})
 </script>
 
 <style scoped></style>

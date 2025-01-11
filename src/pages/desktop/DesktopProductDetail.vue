@@ -92,19 +92,18 @@
           <q-separator class="q-mb-md q-mt-sm" />
           <div class="q-ml-sm">
             <div class="row q-gutter-md">
-              <div v-for="color in product.color_list" :key="color.color_id">
+              <div v-for="color in product.colors" :key="color.color_id">
                 <div
                   class="q-mb-md"
                   style="width: 80px; height: 80px; border-radius: 50%"
-                  :style="{ backgroundColor: color.color }"
+                  :style="{ backgroundColor: color.color_name }"
                   @click="selectedColor = color"
                 >
                   <q-img :src="color.cover_url" />
                 </div>
               </div>
-              <qimg />
             </div>
-            <div class="row items-center">
+            <div class="row items-center q-mt-lg">
               <span class="text-bold title">Price</span
               ><span
                 class="q-ml-sm text-h6 text-bold text-primary"
@@ -114,7 +113,7 @@
               >
             </div>
           </div>
-          <div class="row q-mt-sm items-center">
+          <div class="row q-mt-md items-center">
             <div class="q-ml-sm text-bold text-h7 title">Size</div>
             <SizePicker v-model="selectedSize" :size="selectedColor.size" />
           </div>
@@ -322,10 +321,9 @@ async function onLoadProduct() {
     const response = await service.getProductDetail(productId, {});
     const data = response.data.data;
     _.assign(product.value, data);
-    _.assign(selectedColor.value, data.color);
+    _.assign(selectedColor.value, data.default_color);
     selectedImage.value = selectedColor.value.images[0];
   } catch (error) {
-    console.log(error);
     $q.notify({
       type: "negative",
       message: "Something went wrong",

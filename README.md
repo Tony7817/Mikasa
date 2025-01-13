@@ -49,3 +49,8 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - 前端声明变量是时要定义接口，然后使用lodash的_.assign方法进行赋值
 - 开发需求前要写好全流程的设计文档和逻辑文档，有流程图输出
 - 变量连接均使用下划线表示
+
+### Deploy
+sudo yarn quasar build
+sudo rm -r /var/www/lureros/*
+sudo cp -r dist/spa/* /var/www/lureros/

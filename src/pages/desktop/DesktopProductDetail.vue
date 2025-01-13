@@ -11,8 +11,8 @@
             <q-img :src="product.star_avatar" />
           </q-avatar>
         </div>
-        <div class="text-bold text-center text-h6">
-          {{ product.star_name }}'s Store
+        <div class="text-bold text-h6">
+          <span class="text-center"> {{ product.star_name }}'s Store </span>
           <div>
             <q-rating
               class="star_rate"
@@ -34,7 +34,7 @@
             <q-img :src="selectedImage" class="product-img" fit="cover" />
           </div>
           <div class="row q-mt-sm q-gutter-x-sm">
-            <div v-for="i in selectedColor.images" :key="i">
+            <div v-for="i in displayImages" :key="i">
               <q-img
                 :src="i"
                 class="product-img-children"
@@ -244,6 +244,13 @@ const router = useRouter();
 const isLightboxOpen = ref(false);
 const imageDialogUrls = ref([]);
 const imageDialogIndex = ref(0);
+const displayImages = computed(() => {
+  var res = [selectedColor.value.cover_url];
+  for (let i = 0; i < selectedColor.value.images.length; i++) {
+    res.push(selectedColor.value.images[i]);
+  }
+  return res;
+});
 
 const selectedSize = ref("");
 const productId = route.params.productId;
@@ -322,8 +329,9 @@ async function onLoadProduct() {
     const data = response.data.data;
     _.assign(product.value, data);
     _.assign(selectedColor.value, data.default_color);
-    selectedImage.value = selectedColor.value.images[0];
+    selectedImage.value = selectedColor.value.cover_url;
   } catch (error) {
+    console.log(error);
     $q.notify({
       type: "negative",
       message: "Something went wrong",

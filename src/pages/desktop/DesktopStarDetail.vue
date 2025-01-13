@@ -22,7 +22,7 @@
         <div>
           <div class="row q-gutter-md">
             <div class="text-h6">{{ starDetail.name }}</div>
-            <q-btn
+            <!-- <q-btn
               icon="fab fa-facebook-f"
               color="pink-5"
               flat
@@ -53,7 +53,7 @@
               rounded
               dense
               style="font-size: 13px"
-            />
+            /> -->
           </div>
           <div class="q-mt-md">{{ starDetail.description }}</div>
         </div>
@@ -109,7 +109,7 @@
 import { computed, onMounted, ref, watch } from "vue";
 import ProductItem from "src/components/Desktop/ProductItem.vue";
 import { service } from "src/services/api";
-import { useQuasar } from "quasar";
+import { useQuasar, Loading } from "quasar";
 import { useRoute } from "vue-router";
 import _ from "lodash";
 
@@ -138,8 +138,17 @@ const route = useRoute();
 const starIdFinal = computed(() => {
   return props.starId !== null ? props.starId : route.params.id;
 });
+const loading = ref(false);
 
 async function onLoad() {
+  if (loading.value) {
+    return;
+  }
+
+  Loading.show({
+    message: "Loading",
+  });
+
   try {
     const response = await service.getStarDetail(starIdFinal.value);
     const data = response.data.data;
@@ -152,12 +161,9 @@ async function onLoad() {
       position: "top",
     });
   }
-}
 
-async function onLoadProducts() {
-  try {
-    const response = await service.getProductList({});
-  } catch (error) {}
+  loading.value = false;
+  Loading.hide();
 }
 
 watch(starIdFinal, async () => {

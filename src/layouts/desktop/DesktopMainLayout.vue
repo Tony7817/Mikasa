@@ -2,7 +2,7 @@
   <q-layout class="q-pb-lg" view="hHh Lpr fFf">
     <!-- <div class="row q-py-sm justify-center bg-primary"> -->
     <!-- <div class="row q-py-sm justify-center gradient-linear"> -->
-    <div class="row q-py-lg justify-center q-pb-sm">
+    <div class="row q-py-lg justify-center">
       <div class="col-4 row items-center q-pl-md q-gutter-md">
         <span
           class="text-h6 q-mb-xs"

@@ -102,26 +102,22 @@
       <div class="text-h6 q-mb-sm q-px-lg">Company</div>
     </div>
     <div class="row q-gutter-md q-px-lg">
-      <router-link to="/policy" class="text-body2 q-ml-md text-white"
+      <router-link
+        to="/policy?position=aboutus"
+        class="text-body2 q-ml-md text-white"
         >About Us</router-link
       >
       <router-link to="/policy" class="text-white"
         >Terms Of Service</router-link
       >
-      <router-link
-        :to="{ name: 'policy', params: { id: 'policy-customer-service' } }"
-        class="text-white"
+      <router-link to="/policy?position=privatepolicy" class="text-white"
         >Private Policy</router-link
       >
-      <router-link
-        :to="{ name: 'policy', params: { id: 'policy-customer-service' } }"
-        class="text-white"
-        >Refund Policy</router-link
+      <router-link to="/policy?position=returnpolicy" class="text-white"
+        >Return Policy</router-link
       >
-      <router-link
-        :to="{ name: 'policy', params: { id: 'policy-customer-service' } }"
-        class="text-white"
-        >Shopping Policy</router-link
+      <router-link to="/policy?position=shoppingpolicy" class="text-white"
+        >Shipping Policy</router-link
       >
     </div>
   </div>

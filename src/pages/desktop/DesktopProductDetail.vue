@@ -1,17 +1,13 @@
 <template>
   <q-page padding>
     <div style="margin-left: 30px; margin-right: 30px">
-      <div
-        class="row items-center q-gutter-lg q-pl-md"
-        style="cursor: pointer"
-        @click="toStarHomePage"
-      >
+      <div class="row items-center q-gutter-lg q-pl-md" style="cursor: pointer">
         <div>
           <q-avatar square>
             <q-img :src="product.star_avatar" />
           </q-avatar>
         </div>
-        <div class="text-bold text-h6">
+        <div class="text-bold text-h6" @click="toStarHomePage">
           <span class="text-center"> {{ product.star_name }}'s Store </span>
           <div>
             <q-rating

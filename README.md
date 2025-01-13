@@ -51,6 +51,7 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - 变量连接均使用下划线表示
 
 ### Deploy
+sudo git pull
 sudo yarn quasar build
 sudo rm -r /var/www/lureros/*
 sudo cp -r dist/spa/* /var/www/lureros/

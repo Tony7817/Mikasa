@@ -25,7 +25,7 @@
           class="menu-font"
           :class="{ active: selectedTab === StarsTab }"
           @click="toStars"
-          >Stars</span
+          >Endorser</span
         >
         <span
           class="menu-font"

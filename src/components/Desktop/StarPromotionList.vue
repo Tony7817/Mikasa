@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <q-list dense id="list">
-      <div class="text-center" style="font-size: 16px">Hot Stars</div>
+      <div class="text-center" style="font-size: 16px">Endorser</div>
       <q-separator class="q-my-sm" />
       <template v-if="loading">
         <q-item v-for="i in 5" :key="i">

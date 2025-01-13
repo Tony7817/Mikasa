@@ -1,10 +1,14 @@
 import { boot } from "quasar/wrappers";
 import { useUserStore } from "src/stores/user";
+import { Loading } from "quasar";
 
 // "async" is optional;
 // more info on params: https://v2.quasar.dev/quasar-cli/boot-files
 export default boot(async ({ app, router }) => {
   router.beforeEach((to, from, next) => {
+    Loading.show({
+      message: "Loading...",
+    });
     const userStore = useUserStore();
     if (
       to.matched.some((record) => record.meta.requiresAuth) &&
@@ -14,5 +18,9 @@ export default boot(async ({ app, router }) => {
     } else {
       next();
     }
+  });
+
+  router.afterEach(() => {
+    Loading.hide();
   });
 });

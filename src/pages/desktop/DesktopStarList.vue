@@ -1,8 +1,19 @@
 <template>
   <q-page padding>
-    <div class="row q-gutter-sm" style="margin: auto">
+    <div class="" style="margin: auto">
       <!--Right star display area-->
-      <div class="col">
+      <div class="col" v-if="loading">
+        <div class="row q-gutter-lg">
+          <q-skeleton
+            class="q-pa-sm col-2"
+            v-for="i in 10"
+            :key="i"
+            width="256px"
+            height="300px"
+          />
+        </div>
+      </div>
+      <div class="col" v-if="!loading">
         <div class="row q-gutter-lg">
           <StarItem
             class="q-pa-sm col-2"
@@ -43,6 +54,7 @@ const stars = ref([]);
 const currentPage = ref(1);
 const $q = useQuasar();
 const PageSize = 20;
+const loading = ref(false);
 
 watch(
   () => props.triggerSearch,
@@ -61,6 +73,12 @@ watch(
 );
 
 async function onloadStars() {
+  if (loading.value) {
+    return;
+  }
+
+  loading.value = true;
+
   const data = {
     page: currentPage.value,
     page_size: PageSize,
@@ -79,6 +97,8 @@ async function onloadStars() {
       position: "top",
     });
   }
+
+  loading.value = false;
 }
 
 onMounted(() => {

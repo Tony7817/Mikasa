@@ -1,16 +1,27 @@
 <template>
   <q-page padding>
-    <div class="row q-gutter-lg" style="margin: auto">
-      <ProductItem
-        class="q-mt-sm"
-        v-for="p in products.products"
-        :key="p.id"
-        :id="p.id"
-        :cover-url="p.cover_url"
-        :description="p.description"
-        :price="p.price"
-        :unit="p.unit"
-      />
+    <div class="" style="margin: auto">
+      <div v-if="!loading" class="row q-gutter-lg">
+        <ProductItem
+          class="q-pa-md"
+          v-for="p in products.products"
+          :key="p.id"
+          :id="p.id"
+          :cover-url="p.cover_url"
+          :description="p.description"
+          :price="p.price"
+          :unit="p.unit"
+        />
+      </div>
+      <div class="row q-gutter-lg" v-else >
+        <q-skeleton
+          class="q-pa-md"
+          v-for="i in 10"
+          :key="i"
+          width="256px"
+          height="300px"
+        />
+      </div>
     </div>
   </q-page>
 </template>

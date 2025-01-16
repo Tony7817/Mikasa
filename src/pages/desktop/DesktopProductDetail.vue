@@ -221,7 +221,7 @@
 </template>
 
 <script setup>
-import { useQuasar } from "quasar";
+import { useMeta, useQuasar } from "quasar";
 import { computed, onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { service } from "src/services/api";
@@ -246,6 +246,15 @@ const displayImages = computed(() => {
     res.push(selectedColor.value.images[i]);
   }
   return res;
+});
+
+const title = ref("Lureros");
+const description = ref("A Sexy Lingerie Store");
+useMeta(() => {
+  return {
+    title: title.value,
+    description: description.value,
+  };
 });
 
 const selectedSize = ref("");
@@ -324,8 +333,12 @@ async function onLoadProduct() {
     const response = await service.getProductDetail(productId, {});
     const data = response.data.data;
     _.assign(product.value, data);
-    _.assign(selectedColor.value, data.default_color);
+    selectedColor.value = product.value.colors.find(
+      (c) => c.is_default === true
+    );
     selectedImage.value = selectedColor.value.cover_url;
+    title.value = product.value.description;
+    description.value = product.value.detail;
   } catch (error) {
     console.log(error);
     $q.notify({

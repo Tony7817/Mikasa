@@ -7,10 +7,10 @@
           v-for="p in products.products"
           :key="p.id"
           :id="p.id"
-          :cover-url="p.cover_url"
+          :cover-url="p.default_color.cover_url"
           :description="p.description"
-          :price="p.price"
-          :unit="p.unit"
+          :price="p.default_color.price"
+          :unit="p.default_color.unit"
         />
       </div>
       <div class="row q-gutter-lg" v-else >
@@ -28,7 +28,6 @@
 
 <script setup>
 import ProductItem from "src/components/Desktop/ProductItem.vue";
-import { setup } from "src/composables/ProductList";
 import { onMounted } from "vue";
 
 import { ref } from "vue";

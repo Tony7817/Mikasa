@@ -19,7 +19,7 @@
               </div>
             </q-item-section>
           </q-item>
-          <q-item clickable :class="{ 'bg-primary': selectedItem === Orders }">
+          <q-item clickable :class="{ 'bg-primary': selectedItem === Orders }" @click="selectItem(Orders, 'UserOrder')">
             <div class="row q-gutter-md items-center">
               <q-icon
                 :color="selectedItem === Orders ? 'white' : 'primary'"

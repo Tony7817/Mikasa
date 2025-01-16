@@ -13,6 +13,7 @@ const isMobile = Platform.is.mobile;
 useMeta(() => {
   return {
     title: "Lureros",
+    description: "A Sexy Lingerie Store"
   };
 });
 </script>

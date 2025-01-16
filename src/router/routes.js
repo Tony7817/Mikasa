@@ -5,7 +5,6 @@ import {
   StarsTab,
 } from "src/composables/consts";
 import { useUserStore } from "src/stores/user";
-import { component } from "v-viewer";
 
 const routes = [
   {
@@ -61,44 +60,10 @@ const routes = [
             component: () => import("src/pages/desktop/manage/UserAccount.vue"),
           },
           {
-            path: "/user/manage/star",
-            name: "UserManageStar",
+            path: "/user/order",
+            name: "UserOrder",
             component: () =>
-              import("src/pages/desktop/manage/DesktopStarlist.vue"),
-          },
-          {
-            path: "/user/manage/star/add",
-            name: "UserManageStarAdd",
-            component: () =>
-              import("src/pages/desktop/manage/DesktopAddUpdStar.vue"),
-          },
-          {
-            path: "/user/manage/star/:starId",
-            name: "UserManageStarDetail",
-            props: true,
-            component: () =>
-              import("src/pages/desktop/manage/DesktopAddUpdStar.vue"),
-          },
-          {
-            path: "/user/manage/star/:starId/products",
-            name: "UserManageProduct",
-            props: true,
-            component: () =>
-              import("src/pages/desktop/manage/DesktopProductList.vue"),
-          },
-          {
-            path: "/user/manage/star/:starId/product/add",
-            name: "UserManageProductAdd",
-            props: true,
-            component: () =>
-              import("src/pages/desktop/manage/DesktopAddUpdProduct.vue"),
-          },
-          {
-            path: "/user/manage/star/:starId/product/:productId",
-            name: "UserManageProductUpdate",
-            props: true,
-            component: () =>
-              import("src/pages/desktop/manage/DesktopAddUpdProduct.vue"),
+              import("src/pages/desktop/manage/ProductOrder.vue"),
           },
         ],
       },

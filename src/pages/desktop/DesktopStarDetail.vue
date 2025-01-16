@@ -109,7 +109,7 @@
 import { computed, onMounted, ref, watch } from "vue";
 import ProductItem from "src/components/Desktop/ProductItem.vue";
 import { service } from "src/services/api";
-import { useQuasar, Loading } from "quasar";
+import { useQuasar, Loading, useMeta } from "quasar";
 import { useRoute } from "vue-router";
 import _ from "lodash";
 
@@ -140,6 +140,16 @@ const starIdFinal = computed(() => {
 });
 const loading = ref(false);
 
+const title = ref("Lureros");
+const description = ref("A Sexy Lingerie Store");
+
+useMeta(() => {
+  return {
+    title: title.value,
+    description: description.value,
+  };
+});
+
 async function onLoad() {
   if (loading.value) {
     return;
@@ -153,6 +163,8 @@ async function onLoad() {
     const response = await service.getStarDetail(starIdFinal.value);
     const data = response.data.data;
     starDetail.value = data;
+    title.value = starDetail.value.name;
+    description.value = starDetail.value.description;
   } catch (error) {
     console.log(error);
     $q.notify({

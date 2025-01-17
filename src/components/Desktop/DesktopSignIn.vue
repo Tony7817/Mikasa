@@ -45,7 +45,7 @@
         <q-btn
           label="SIGN UP"
           rounded
-          color="primary"
+          color="secondary"
           @click="$emit('update-mode', SignupMode)"
         />
         <q-btn label="SIGN IN" type="submit" rounded color="primary" :loading="loading" />

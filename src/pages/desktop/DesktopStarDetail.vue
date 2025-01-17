@@ -83,10 +83,10 @@
                 v-for="p in starDetail.products?.products"
                 :key="p.id"
                 :id="p.id"
-                :cover-url="p.cover_url"
+                :cover-url="p.default_color.cover_url"
                 :description="p.description"
-                :price="p.price"
-                :unit="p.unit"
+                :price="p.default_color.price"
+                :unit="p.default_color.unit"
               />
             </div>
           </div>

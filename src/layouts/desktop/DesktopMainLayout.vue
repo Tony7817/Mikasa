@@ -67,7 +67,7 @@
                 <q-item
                   clickable
                   v-close-popup
-                  :to="{ name: 'UserManageAccount' }"
+                  :to="{ name: 'UserManageAccount', query: { w: 'Account' } }"
                 >
                   <q-item-section>
                     <div class="row justify-center items-center q-gutter-md">

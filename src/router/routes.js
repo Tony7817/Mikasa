@@ -1,3 +1,5 @@
+import { jwtDecode } from "jwt-decode";
+import { useQuasar } from "quasar";
 import {
   ContactTab,
   HomeTab,
@@ -5,7 +7,9 @@ import {
   StarsTab,
 } from "src/composables/consts";
 import { useUserStore } from "src/stores/user";
+import { component } from "v-viewer";
 
+const $q = useQuasar();
 const routes = [
   {
     path: "/",
@@ -42,6 +46,12 @@ const routes = [
         meta: { tab: ProductTab },
       },
       {
+        path: "/product/order/:orderId",
+        name: "product-order",
+        component: () => import("pages/desktop/DesktopProductOrder.vue"),
+        meta: { tab: ProductTab },
+      },
+      {
         path: "/cart",
         name: "product-cart",
         component: () => import("pages/ProductCart.vue"),
@@ -63,9 +73,27 @@ const routes = [
             path: "/user/order",
             name: "UserOrder",
             component: () =>
-              import("src/pages/desktop/manage/ProductOrder.vue"),
+              import("src/pages/desktop/manage/DesktopProductOrder.vue"),
+          },
+          {
+            path: "/user/order/:orderId",
+            name: "UserOrderDetail",
+            props: true,
+            component: () =>
+              import("src/pages/desktop/manage/DesktopOrderDetail.vue"),
           },
         ],
+        beforeEnter(to, from, next) {
+          const userStore = useUserStore();
+          const token = jwtDecode(userStore.user.token);
+          const currentTime = Date.now() / 1000;
+          if (token.exp < currentTime) {
+            userStore.clearUser();
+          } else {
+            console.log("Token is valid");
+          }
+          next();
+        },
       },
       {
         path: "/contact",

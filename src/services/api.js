@@ -96,8 +96,8 @@ export const service = {
     });
   },
 
-  addAmount(productCartId, data) {
-    return api.post(`/api/cart/product/${productCartId}/add`, data, {
+  addAmount(data) {
+    return api.post(`/api/cart/increase/amount`, data, {
       headers: {
         Authorization: `Bearer ${userStore.user.token}`,
         ...desk_headers,
@@ -105,8 +105,8 @@ export const service = {
     });
   },
 
-  decreaseAmount(productCartId, data) {
-    return api.post(`/api/cart/product/${productCartId}/decrease`, data, {
+  decreaseAmount(data) {
+    return api.post(`/api/cart/decrease/amount`, data, {
       headers: {
         Authorization: `Bearer ${userStore.user.token}`,
         ...desk_headers,
@@ -271,7 +271,6 @@ export const service = {
       },
     });
   },
-
   getProductDetailByOrg(starId, productId) {
     return api.post(
       `/api/star/${starId}/product/${productId}`,
@@ -283,5 +282,34 @@ export const service = {
         },
       }
     );
+  },
+  getOrderList(data) {
+    return api.post(`/api/order/list`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userStore.user.token}`,
+      },
+    });
+  },
+
+  getOrderItems(orderId) {
+    return api.post(
+      `/api/order/${orderId}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userStore.user.token}`,
+        },
+      }
+    );
+  },
+  createOrder(data) {
+    return api.post(`/api/order/create`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userStore.user.token}`,
+      },
+    });
   },
 };

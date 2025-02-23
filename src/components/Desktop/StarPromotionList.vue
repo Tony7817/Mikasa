@@ -45,6 +45,13 @@ import { onMounted, ref } from "vue";
 import StarBrand from "src/components/Desktop/StarPromotionItem.vue";
 import { useQuasar } from "quasar";
 
+const props = defineProps({
+  selectedItem: {
+    type: Number,
+    required: false,
+  },
+});
+
 const emit = defineEmits(["update-star-id"]);
 
 const $q = useQuasar();

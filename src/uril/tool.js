@@ -51,6 +51,9 @@ export const tool = {
 
     return countryDialCode;
   },
+  formatPrice(priceInt) {
+    return (priceInt / 100).toFixed(2);
+  },
 };
 
 export const countryCodeDialMap = [

@@ -19,7 +19,11 @@
               </div>
             </q-item-section>
           </q-item>
-          <q-item clickable :class="{ 'bg-primary': selectedItem === Orders }" @click="selectItem(Orders, 'UserOrder')">
+          <q-item
+            clickable
+            :class="{ 'bg-primary': selectedItem === Orders }"
+            @click="selectItem(Orders, 'UserOrder')"
+          >
             <div class="row q-gutter-md items-center">
               <q-icon
                 :color="selectedItem === Orders ? 'white' : 'primary'"
@@ -71,11 +75,12 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useUserStore } from "src/stores/user";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
 const userStore = useUserStore();
-const selectedItem = ref("Account");
+const selectedItem = ref("");
 const Account = ref("Account");
 const Orders = ref("Orders");
 const StarStore = ref("Star Management");
@@ -83,10 +88,24 @@ const Feedback = ref("Feedback");
 
 function selectItem(item, routerName) {
   selectedItem.value = item;
-  router.push({ name: routerName });
+  router.push({ name: routerName, query: { w: item } });
 }
 
-onMounted(() => {});
+onMounted(() => {
+  var routerName = route.query.w;
+  switch (routerName) {
+    case "Account":
+      selectedItem.value = Account.value;
+      break;
+    case "Orders":
+      selectedItem.value = Orders.value;
+      break;
+    // case "Feedback":
+    //   selectedItem.value = Feedback;
+    //   router.push({ name: "Feedback" });
+    //   break;
+  }
+});
 </script>
 
 <style scoped></style>

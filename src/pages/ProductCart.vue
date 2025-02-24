@@ -114,7 +114,10 @@
                   :disable="c._isOutOfStock"
                 />
               </div>
-              <div v-if="c.stock < c.amount" class="text-warning text-bold">
+              <div
+                v-if="c.stock < c.amount && c.stock > 0"
+                class="text-warning text-bold"
+              >
                 EXCEED IN STOCK
               </div>
             </q-item-section>
@@ -174,7 +177,7 @@
 </template>
 
 <script setup>
-import { useQuasar } from "quasar";
+import { useQuasar, Loading } from "quasar";
 import { service } from "src/services/api";
 import { useUserStore } from "src/stores/user";
 import { tool } from "src/uril/tool";
@@ -308,12 +311,11 @@ async function onLoad(index, done) {
     // check stock
     var isStockExceed = false;
     cartList.value.forEach((c) => {
-      if (c.stock < c.amount) {
-        c._exceedStock = true;
-        isStockExceed = true;
-      }
       if (c.stock <= 0) {
         c._isOutOfStock = true;
+      } else if (c.stock < c.amount) {
+        c._exceedStock = true;
+        isStockExceed = true;
       }
     });
     if (isStockExceed) {
@@ -393,6 +395,9 @@ async function checkout() {
   }
 
   isCheckingout.value = true;
+  Loading.show({
+    message: "Checking out",
+  });
 
   var isProductSelected = false;
   cartList.value.forEach((c) => {
@@ -427,7 +432,9 @@ async function checkout() {
       orders: selectedProducts,
     });
     const data = response.data.data;
-    console.log(data);
+    router.push(`/product/order/${data.order_id}`);
+    Loading.hide();
+    return;
   } catch (error) {
     console.log(error);
     $q.notify({
@@ -436,6 +443,7 @@ async function checkout() {
   }
 
   isCheckingout.value = false;
+  Loading.hide();
 }
 
 onMounted(() => {

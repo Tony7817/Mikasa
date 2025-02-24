@@ -7,7 +7,6 @@ import {
   StarsTab,
 } from "src/composables/consts";
 import { useUserStore } from "src/stores/user";
-import { component } from "v-viewer";
 
 const $q = useQuasar();
 const routes = [
@@ -47,9 +46,10 @@ const routes = [
       },
       {
         path: "/product/order/:orderId",
+        props: true,
         name: "product-order",
         component: () => import("pages/desktop/DesktopProductOrder.vue"),
-        meta: { tab: ProductTab },
+        meta: { tab: ProductTab, requiresAuth: true },
       },
       {
         path: "/cart",

@@ -312,4 +312,12 @@ export const service = {
       },
     });
   },
+  createPaypalOrder(data) {
+    return api.post(`/api/order/paypal/create`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userStore.user.token}`,
+      },
+    });
+  },
 };

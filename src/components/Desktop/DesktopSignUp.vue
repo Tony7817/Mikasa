@@ -25,7 +25,7 @@
     <div v-if="registerMode === Email" class="text-center text-grey">
       or use email
     </div>
-    <q-form class="q-gutter-sm q-px-lg" @submit="sendVerifyCode">
+    <q-form class="q-gutter-sm q-px-lg" @submit="submit">
       <q-input
         v-if="registerMode == Email"
         v-model="email"
@@ -267,14 +267,56 @@ async function signup() {
   }
 }
 
+async function submit() {
+  if (sendVerifyLoading.value) {
+    return;
+  }
+
+  sendVerifyLoading.value = true;
+
+  const isSignedup = await checkIfUserSignedUp();
+  if (isSignedup) {
+    $q.notify({
+      type: "warning",
+      message: "This email or phone number has been registered",
+      position: "top",
+    });
+    sendVerifyLoading.value = false;
+    return;
+  }
+  await sendVerifyCode();
+
+  sendVerifyLoading.value = false;
+}
+
+async function checkIfUserSignedUp() {
+  try {
+    var body = {};
+    if (registerMode.value === Email) {
+      body.email = email.value;
+    } else {
+      body.phone_number = phonenumber.value;
+    }
+    const response = await service.checkIfUserSignedUp(body);
+    const data = response.data;
+    if (data.ok) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    $q.notify({
+      type: "negative",
+      message: "Something went wrong",
+      position: "top",
+    });
+  }
+}
+
 async function sendVerifyCode() {
   if (!validate()) {
     return;
   }
-  if (sendVerifyLoading.value) {
-    return;
-  }
-  sendVerifyLoading.value = true;
   const body = {};
   if (registerMode.value === Email) {
     body.email = email.value;
@@ -294,7 +336,6 @@ async function sendVerifyCode() {
     });
   }
   isVerifyDialogShow.value = true;
-  sendVerifyLoading.value = false;
 }
 
 onMounted(async () => {

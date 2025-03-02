@@ -16,7 +16,11 @@
             <q-item-section class="col-1">Total</q-item-section>
             <q-item-section class="col-1"></q-item-section>
           </q-item>
-          <q-item v-for="c in cartList" :key="c.id" class="row items-center">
+          <q-item
+            v-for="c in cartList"
+            :key="c.product_cart_id"
+            class="row items-center"
+          >
             <q-item-section class="col-1 row items-center">
               <div v-if="!c._isOutOfStock">
                 <q-checkbox v-model="c._selected" dense />
@@ -216,7 +220,7 @@ const selectedAmount = computed(() => {
   var amount = 0;
   cartList.value.forEach((c) => {
     if (c._selected) {
-      amount++;
+      amount += c.amount;
     }
   });
   return amount;
@@ -245,7 +249,9 @@ async function addAmount(productCart) {
       expected_amount: productCart.amount + 1,
     });
     const data = response.data.data;
-    const p = cartList.value.find((c) => c.id === data.cart_id);
+    const p = cartList.value.find(
+      (c) => c.product_cart_id === data.product_cart_id
+    );
     if (p) {
       p.amount = data.amount;
       p.total_price = data.total_price;
@@ -273,7 +279,9 @@ async function decreaseAmount(productCart) {
       size: productCart.size,
     });
     const data = response.data.data;
-    const p = cartList.value.find((p) => p.id === data.product_id);
+    const p = cartList.value.find(
+      (p) => p.product_cart_id === data.product_cart_id
+    );
     if (p) {
       p.amount = data.amount;
       p.total_price = data.total_price;

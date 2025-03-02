@@ -320,4 +320,43 @@ export const service = {
       },
     });
   },
+  checkIfUserSignedUp(data) {
+    return api.post(`/api/user/check`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  },
+  captureOrder(data) {
+    return api.post(`/api//order/paypal/capture`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userStore.user.token}`,
+      },
+    });
+  },
+  getOrderDetail(orderId) {
+    return api.post(
+      `/api/order/${orderId}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userStore.user.token}`,
+        },
+      }
+    );
+  },
+  getOrderAddress(orderId) {
+    return api.post(
+      `/api/order/address/${orderId}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userStore.user.token}`,
+        },
+      }
+    );
+  },
 };

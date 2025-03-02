@@ -104,7 +104,7 @@
               ><span
                 class="q-ml-sm text-h6 text-bold text-primary"
                 style="font-size: 25px"
-                >{{ selectedColor.price
+                >{{ tool.formatPrice(selectedColor.price)
                 }}{{ tool.getUnit(selectedColor.unit) }}</span
               >
             </div>

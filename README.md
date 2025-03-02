@@ -54,4 +54,3 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 sudo git pull
 sudo yarn quasar build
 sudo rm -r /var/www/lureros/* && sudo cp -r dist/spa/* /var/www/lureros/
-

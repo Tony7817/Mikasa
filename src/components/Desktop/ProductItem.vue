@@ -53,7 +53,7 @@ const props = defineProps({
 });
 
 const price = computed(() => {
-  return props.price + tool.getUnit(props.unit);
+  return tool.formatPrice(props.price) + tool.getUnit(props.unit);
 });
 
 function toProductPage() {

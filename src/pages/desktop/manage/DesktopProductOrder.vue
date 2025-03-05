@@ -9,13 +9,17 @@
     <div>
       <q-list separator padding class="q-px-md">
         <q-item>
+          <q-item-section class="col-1"></q-item-section>
           <q-item-section class="col-3">Order Id</q-item-section>
           <q-item-section class="col-2">Total Price</q-item-section>
           <q-item-section class="col-2">Status</q-item-section>
           <q-item-section class="col"></q-item-section>
           <q-item-section class="col-1">Action</q-item-section>
         </q-item>
-        <q-item v-for="o in orders" :key="o.id">
+        <q-item v-for="(o, index) in orders" :key="o.id">
+          <q-item-section class="col-1">
+            {{ index + 1 }}
+          </q-item-section>
           <q-item-section class="col-3" style="font-family: monospace">
             {{ o.order_id }}
           </q-item-section>

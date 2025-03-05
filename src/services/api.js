@@ -284,7 +284,10 @@ export const service = {
     );
   },
   getOrderList(data) {
-    return api.post(`/api/order/list`, data, {
+    return api.get(`/api/order/list`, {
+      params: {
+        ...data,
+      },
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${userStore.user.token}`,

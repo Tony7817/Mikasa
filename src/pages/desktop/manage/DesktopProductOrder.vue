@@ -8,39 +8,56 @@
     </div>
     <div>
       <q-list separator padding class="q-px-md">
-        <q-item>
+        <q-item class="text-subtitle1 text-bold">
           <q-item-section class="col-1"></q-item-section>
-          <q-item-section class="col-3">Order Id</q-item-section>
-          <q-item-section class="col-2">Total Price</q-item-section>
-          <q-item-section class="col-2">Status</q-item-section>
-          <q-item-section class="col"></q-item-section>
-          <q-item-section class="col-1">Action</q-item-section>
+          <q-item-section class="col">Products</q-item-section>
+          <q-item-section class="col-1 text-center">Created At</q-item-section>
+          <q-item-section class="col-2 text-center">Total Price</q-item-section>
+          <q-item-section class="col-2 text-center">Status</q-item-section>
+          <q-item-section class="col-2"></q-item-section>
         </q-item>
-        <q-item v-for="(o, index) in orders" :key="o.id">
+        <q-item v-for="(o, index) in orders" :key="o.id" class="text-body1">
           <q-item-section class="col-1">
-            {{ index + 1 }}
+            {{ index + idx }}
           </q-item-section>
-          <q-item-section class="col-3" style="font-family: monospace">
-            {{ o.order_id }}
+          <q-item-section class="col">
+            <div class="row items-center q-gutter-sm">
+              <div v-for="i in o.cover_urls" :key="i">
+                <q-img :src="i" fit="cover" style="height: 80px; width: 60px" />
+              </div>
+              <q-btn
+                v-if="o.order_item_total > 3"
+                class="self-end text-body2"
+                dense
+                flat
+                color="primary"
+                >AND {{ o.order_item_total - 3 }} MORE</q-btn
+              >
+            </div>
           </q-item-section>
-          <q-item-section class="col-2">
+          <q-item-section class="col-1 text-center">
+            {{ tool.formatTime(o.created_at) }}
+          </q-item-section>
+          <q-item-section class="col-2 text-center" style="padding-right: 10px">
             {{ Number(o.price) / 100 }} {{ tool.getUnit(o.unit) }}
           </q-item-section>
-          <q-item-section class="col-2">
+          <q-item-section class="col-2 text-center">
             {{ o.status }}
           </q-item-section>
           <q-space />
-          <q-item-section class="col-1">
-            <q-btn
-              label="Detail"
-              color="primary"
-              @click="
-                router.push({
-                  name: 'UserOrderDetail',
-                  params: { orderId: o.order_id },
-                })
-              "
-            />
+          <q-item-section class="col-2">
+            <div>
+              <q-btn
+                label="Detail"
+                color="primary"
+                @click="
+                  router.push({
+                    name: 'UserOrderDetail',
+                    params: { orderId: o.order_id },
+                  })
+                "
+              />
+            </div>
           </q-item-section>
         </q-item>
       </q-list>
@@ -63,8 +80,9 @@ import { useQuasar } from "quasar";
 import { service } from "src/services/api";
 import { tool } from "src/uril/tool";
 import { onMounted } from "vue";
+import { watch } from "vue";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const orders = ref([]);
 const total = ref(0);
@@ -73,16 +91,24 @@ const loading = ref(false);
 const page = ref(1);
 const $q = useQuasar();
 const router = useRouter();
+const route = useRoute();
+const idx = ref(1);
 
-async function onLoad() {
+watch(page, (newPage) => {
+  router.push({ query: { page: newPage } });
+  idx.value = (newPage - 1) * 20 + 1;
+  onLoad(newPage);
+});
+
+async function onLoad(reqPage) {
   if (loading.value) return;
 
   loading.value = true;
 
   try {
     const response = await service.getOrderList({
-      page: page.value,
-      page_size: 20,
+      page: reqPage,
+      page_size: 10,
     });
     const data = response.data.data;
     orders.value = data.orders;
@@ -99,7 +125,7 @@ async function onLoad() {
 }
 
 onMounted(() => {
-  onLoad();
+  onLoad(route.query.page || 1);
 });
 </script>
 

@@ -11,7 +11,7 @@
                   <q-badge class="text-subtitle1 text-bold">Order ID</q-badge>
                 </div>
                 <q-separator vertical />
-                <div class="text-subtitle1 text-bold">
+                <div class="text-body1 text-bold">
                   {{ order.request_id }}
                 </div>
               </div>
@@ -20,14 +20,14 @@
                   <q-badge class="text-subtitle1 text-bold">Status</q-badge>
                 </div>
                 <q-separator vertical />
-                <div class="text-body text-bold">{{ order.status }}</div>
+                <div class="text-body1 text-bold">{{ order.status }}</div>
               </div>
               <div class="row q-gutter-md items-center">
                 <div class="col-2">
                   <q-badge class="text-bold text-subtitle1">Price</q-badge>
                 </div>
                 <q-separator vertical />
-                <div class="text-body text-bold">
+                <div class="text-body1 text-bold">
                   {{ tool.formatPrice(order.price) }}
                   {{ tool.getUnit(order.unit) }}
                 </div>
@@ -38,20 +38,25 @@
               <div class="row">
                 <q-img
                   class="col-2"
-                  :src="o.product_cover_img"
+                  :src="o.product_cover_url"
                   fit="contain"
                   height="100%"
                   style="height: 100px"
                 />
                 <div class="col">
-                  <div>
+                  <div class="text-body2 text-bold">
                     {{ o.product_description }}
                   </div>
-                  <div>
-                    {{ tool.formatPrice(o.price) }}
-                    {{ tool.getUnit(order.unit) }}
+                  <div class="row q-gutter-md items-center q-mt-sm">
+                    <q-badge class="text-bold">{{ o.size }}</q-badge>
+                    <q-badge class="text-bold">{{ o.color }}</q-badge>
                   </div>
-                  <div>{{ o.size }}</div>
+                  <div class="row q-gutter-md items-center q-mt-sm">
+                    <div class="text-bold text-body1">
+                      {{ tool.formatPrice(o.price) }}
+                      {{ tool.getUnit(order.unit) }}
+                    </div>
+                  </div>
                 </div>
               </div>
             </q-card-section>

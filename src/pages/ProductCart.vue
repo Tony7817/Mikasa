@@ -7,7 +7,11 @@
       <q-infinite-scroll @load="onLoad" :offset="250" :disable="!hasMore">
         <q-list separator>
           <q-item class="text-h6">
-            <q-item-section class="col-1"></q-item-section>
+            <q-item-section class="col-1">
+              <div class="row justify-center">
+                <q-checkbox v-model="isAllSelected" dense />
+              </div>
+            </q-item-section>
             <q-item-section class="col-3">Item</q-item-section>
             <q-item-section class="col-1"></q-item-section>
             <q-item-section class="col-1">Size</q-item-section>
@@ -41,7 +45,14 @@
                       style="font-size: 16px; cursor: pointer"
                       :class="{ delete: c._isOutOfStock }"
                     >
-                      {{ c.description }}
+                      <div>
+                        {{ c.description }}
+                      </div>
+                      <div>
+                        <q-badge class="text-bold text-body2">
+                          {{ c.color }}
+                        </q-badge>
+                      </div>
                     </div>
                     <div class="row q-gutter-sm q-mt-xs">
                       <q-badge
@@ -69,7 +80,7 @@
             <q-item-section class="col-1">
               <div>
                 <q-badge
-                  class="size-picker text-body text-bold"
+                  class="size-picker text-body2 text-bold"
                   color="primary"
                   :class="{ delete: c._isOutOfStock }"
                 >
@@ -188,6 +199,7 @@ import { tool } from "src/uril/tool";
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { v4 as uuidv4 } from "uuid";
+import { watch } from "vue";
 
 const userStore = useUserStore();
 const currentPage = ref(1);
@@ -200,6 +212,19 @@ const totalNum = ref(0);
 const loading = ref(false);
 const hasMore = ref(true);
 const requestId = uuidv4();
+const isAllSelected = ref(false);
+
+watch(isAllSelected, (newVal) => {
+  if (newVal) {
+    cartList.value.forEach((c) => {
+      c._selected = true;
+    });
+  } else {
+    cartList.value.forEach((c) => {
+      c._selected = false;
+    });
+  }
+});
 
 function InitFilter(products) {
   products.forEach((p) => {
@@ -420,6 +445,7 @@ async function checkout() {
       position: "top",
     });
     isCheckingout.value = false;
+    Loading.hide();
     return;
   }
 
@@ -428,7 +454,10 @@ async function checkout() {
     if (c._selected) {
       selectedProducts.push({
         product_id: c.product_id,
-        color_id: c.color_id,
+        product_description: c.description,
+        product_cover_url: c.cover_url,
+        product_color_id: c.color_id,
+        color: c.color,
         size: c.size,
         quantity: c.amount,
       });
@@ -446,7 +475,9 @@ async function checkout() {
   } catch (error) {
     console.log(error);
     $q.notify({
-      message: "create order failed",
+      type: "negative",
+      message: error?.response?.data?.msg || "create order failed",
+      position: "top",
     });
   }
 

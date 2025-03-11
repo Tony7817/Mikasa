@@ -88,7 +88,7 @@ async function signin(token) {
     console.log(error);
     $q.notify({
       type: "negative",
-      message: error?.response?.data?.message || "Something went wrong",
+      message: error?.response?.data?.msg || "Something went wrong",
       position: "top",
     });
   }

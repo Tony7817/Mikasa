@@ -60,7 +60,10 @@ export const service = {
   },
 
   getProductList(data) {
-    return api.post(`/api/product/list`, data, {
+    return api.get(`/api/product/list`, {
+      params: {
+        ...data,
+      },
       headers: {
         ...desk_headers,
       },

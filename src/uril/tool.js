@@ -16,6 +16,15 @@ export const tool = {
     }
   },
 
+  formatTime(time) {
+    const utcDateTime = DateTime.fromSeconds(time, {
+      zone: "utc",
+    });
+    const localDateTime = utcDateTime.setZone("local");
+    const formattedDate = localDateTime.toFormat("MM/dd/yyyy");
+    return formattedDate;
+  },
+
   async getIp() {
     try {
       const response = await service.getIp();

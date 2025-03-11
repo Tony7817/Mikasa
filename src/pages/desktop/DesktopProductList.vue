@@ -13,7 +13,7 @@
           :unit="p.default_color.unit"
         />
       </div>
-      <div class="row q-gutter-lg" v-else >
+      <div class="row q-gutter-lg" v-else>
         <q-skeleton
           class="q-pa-md"
           v-for="i in 10"
@@ -22,6 +22,16 @@
           height="300px"
         />
       </div>
+    </div>
+    <div class="row justify-center" v-if="products.total > 20">
+      <q-pagination
+        v-model="currentPage"
+        :max="Math.ceil(products.total / 20)"
+        direction-links
+        flat
+        color="grey"
+        active-color="primary"
+      />
     </div>
   </q-page>
 </template>
@@ -34,6 +44,8 @@ import { ref } from "vue";
 import { service } from "src/services/api";
 import { merge } from "src/uril/tool";
 import { useQuasar } from "quasar";
+import { useRoute, useRouter } from "vue-router";
+import { watch } from "vue";
 
 const products = ref({
   total: 0,
@@ -42,8 +54,15 @@ const products = ref({
 const loading = ref(false);
 const currentPage = ref(1);
 const $q = useQuasar();
+const route = useRoute();
+const router = useRouter();
 
-async function onLoad() {
+watch(currentPage, (newPage) => {
+  router.push({ query: { page: newPage } });
+  onLoad(newPage);
+});
+
+async function onLoad(reqPage) {
   if (loading.value) {
     return true;
   }
@@ -52,7 +71,7 @@ async function onLoad() {
 
   try {
     const response = await service.getProductList({
-      page: currentPage.value,
+      page: reqPage,
       page_size: 20,
     });
     const data = response.data.data;
@@ -69,7 +88,7 @@ async function onLoad() {
 }
 
 onMounted(() => {
-  onLoad();
+  onLoad(route.query.page || 1);
 });
 </script>
 

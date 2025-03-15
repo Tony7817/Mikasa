@@ -11,10 +11,10 @@
         <q-item class="text-subtitle1 text-bold">
           <q-item-section class="col-1"></q-item-section>
           <q-item-section class="col">Products</q-item-section>
-          <q-item-section class="col-1 text-center">Created At</q-item-section>
+          <q-item-section class="col-2 text-center">Created At</q-item-section>
           <q-item-section class="col-2 text-center">Total Price</q-item-section>
           <q-item-section class="col-2 text-center">Status</q-item-section>
-          <q-item-section class="col-2"></q-item-section>
+          <q-item-section class="col-1"></q-item-section>
         </q-item>
         <q-item v-for="(o, index) in orders" :key="o.id" class="text-body1">
           <q-item-section class="col-1">
@@ -27,32 +27,40 @@
               </div>
               <q-btn
                 v-if="o.order_item_total > 3"
-                class="self-end text-body2"
+                class="text-body2"
                 dense
                 flat
                 color="primary"
+                @click="
+                  router.push({
+                    name: 'product-order',
+                    params: { orderId: o.order_id },
+                  })
+                "
                 >AND {{ o.order_item_total - 3 }} MORE</q-btn
               >
             </div>
           </q-item-section>
-          <q-item-section class="col-1 text-center">
+          <q-item-section class="col-2 text-center">
             {{ tool.formatTime(o.created_at) }}
           </q-item-section>
           <q-item-section class="col-2 text-center" style="padding-right: 10px">
             {{ Number(o.price) / 100 }} {{ tool.getUnit(o.unit) }}
           </q-item-section>
           <q-item-section class="col-2 text-center">
-            {{ o.status }}
+            <span :class="{'text-positive': o.status === OrderStatusPaid, 'text-warning': o.status !== OrderStatusPaid}">
+              {{ o.status }}
+            </span>
           </q-item-section>
           <q-space />
-          <q-item-section class="col-2">
-            <div>
+          <q-item-section class="col-1">
+            <div class="row q-gutter-sm">
               <q-btn
-                label="Detail"
                 color="primary"
+                icon="arrow_forward"
                 @click="
                   router.push({
-                    name: 'UserOrderDetail',
+                    name: 'product-order',
                     params: { orderId: o.order_id },
                   })
                 "
@@ -61,6 +69,12 @@
           </q-item-section>
         </q-item>
       </q-list>
+      <div
+        v-if="orders.length === 0"
+        class="text-center text-h3 q-my-lg text-bold"
+      >
+        NO ORDERS
+      </div>
       <div class="q-pa-md row justify-center" v-if="totalPage > 0">
         <q-pagination
           v-model="page"
@@ -77,6 +91,7 @@
 
 <script setup>
 import { useQuasar } from "quasar";
+import { OrderStatusPaid } from "src/composables/consts";
 import { service } from "src/services/api";
 import { tool } from "src/uril/tool";
 import { onMounted } from "vue";

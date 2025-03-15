@@ -10,3 +10,5 @@ export const ContactTab = "Contact";
 export const ProductTab = "Products";
 export const AddToCart = "AddToCart";
 export const BuyNow = "BuyNow";
+export const OrderStatusPaid = "paid";
+export const OrderStatusPending = "pending";

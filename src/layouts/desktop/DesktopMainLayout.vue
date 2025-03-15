@@ -60,6 +60,7 @@
       <div class="col-4 row q-pr-md">
         <q-space />
         <div>
+          <q-btn label="Your Order" :to="`/user/order`" />
           <q-btn icon="shopping_cart" flat :to="`/cart`" />
           <q-btn icon="person" flat @click="signIn()">
             <q-menu v-if="userStore.isAuthenticated">

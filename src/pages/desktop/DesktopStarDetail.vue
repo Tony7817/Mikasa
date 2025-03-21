@@ -140,16 +140,6 @@ const starIdFinal = computed(() => {
 });
 const loading = ref(false);
 
-const title = ref("Lureros");
-const description = ref("A Sexy Lingerie Store");
-
-useMeta(() => {
-  return {
-    title: title.value,
-    description: description.value,
-  };
-});
-
 async function onLoad() {
   if (loading.value) {
     return;

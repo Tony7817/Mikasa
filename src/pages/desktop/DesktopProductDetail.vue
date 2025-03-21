@@ -248,14 +248,6 @@ const displayImages = computed(() => {
   return res;
 });
 
-const title = ref("Lureros");
-const description = ref("A Sexy Lingerie Store");
-useMeta(() => {
-  return {
-    title: title.value,
-    description: description.value,
-  };
-});
 
 const selectedSize = ref("");
 const productId = route.params.productId;

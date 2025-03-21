@@ -43,7 +43,6 @@ module.exports = configure(function (ctx) {
         browser: ["es2022", "firefox115", "chrome115", "safari14", "edge88"],
         node: "node20",
       },
-
       vueRouterMode: "history", // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
@@ -116,7 +115,14 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ["Notify", "Dialog", "LocalStorage", "Loading", "Scroll", "Meta"],
+      plugins: [
+        "Notify",
+        "Dialog",
+        "LocalStorage",
+        "Loading",
+        "Scroll",
+        "Meta",
+      ],
     },
 
     // animations: 'all', // --- includes all animations

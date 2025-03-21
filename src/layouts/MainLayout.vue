@@ -9,13 +9,19 @@ import MobileMainLayout from "src/layouts/mobile/MobileMainLayout.vue";
 import { Platform } from "quasar";
 import { useMeta } from "quasar";
 
+const metaData = {
+  title: "Lureros",
+  meta: {
+    description: {
+      name: "description",
+      content: "A shop with sexy lingerie loved by creators",
+    },
+    keywords: { name: "keywords", content: "Lureros" },
+  },
+};
+
 const isMobile = Platform.is.mobile;
-useMeta(() => {
-  return {
-    title: "Lureros",
-    description: "A Sexy Lingerie Store"
-  };
-});
+useMeta(metaData);
 </script>
 
 <style scoped>

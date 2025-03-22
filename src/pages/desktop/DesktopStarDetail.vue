@@ -153,7 +153,6 @@ async function onLoad() {
     const response = await service.getStarDetail(starIdFinal.value);
     const data = response.data.data;
     starDetail.value = data;
-    description.value = starDetail.value.description;
   } catch (error) {
     console.log(error);
     $q.notify({

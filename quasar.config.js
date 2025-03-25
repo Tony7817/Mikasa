@@ -60,6 +60,7 @@ module.exports = configure(function (ctx) {
           : {
               ROOT: "https://api.lureros.com",
             },
+        PAYPAL_CLIENT_ID: ctx.dev ? "ATPwrmvOxlXlvqhTMXz-N9AlEBR2yiZ3HlA2VlDj405OIfioMmGVa4dDICoON-s-aRtvAEt7otUKt7oj" : "AYGq3-6H7DOUo7sgPiuAacGMlYICkzajZ609w-ck7pzknlIqm-xIKjyuesyvEBoak7VJGkW8OsZqrNBk"
       },
 
       // rawDefine: {}

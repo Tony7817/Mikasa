@@ -88,9 +88,9 @@
       </div>
       <q-separator vertical />
       <div class="col q-pr-md" v-if="order.status === 'pending'">
-        <q-spinner v-if="paypalloading" />
         <div>
           <div class="text-bold text-h6 q-mb-md">Pay Your Order</div>
+          <q-spinner v-if="paypalloading" />
           <div id="paypal-button-container"></div>
         </div>
       </div>
@@ -252,8 +252,7 @@ async function loadPaypalScript(maxRetries = 3, retryDelay = 2000) {
     const loadScript = async () => {
       try {
         const script = document.createElement("script");
-        script.src =
-          "https://www.paypal.com/sdk/js?client-id=ATPwrmvOxlXlvqhTMXz-N9AlEBR2yiZ3HlA2VlDj405OIfioMmGVa4dDICoON-s-aRtvAEt7otUKt7oj&components=buttons";
+        script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.PAYPAL_CLIENT_ID}&components=buttons`;
         script.async = true;
 
         // 使用Promise包装script加载

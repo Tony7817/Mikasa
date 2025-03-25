@@ -224,7 +224,7 @@
 import { useMeta, useQuasar } from "quasar";
 import { computed, onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { service } from "src/services/api";
+import { service, UnAuthorizerd } from "src/services/api";
 import { tool } from "src/uril/tool";
 import SizePicker from "src/components/Desktop/SizePicker.vue";
 import _ from "lodash";
@@ -247,7 +247,6 @@ const displayImages = computed(() => {
   }
   return res;
 });
-
 
 const selectedSize = ref("");
 const productId = route.params.productId;
@@ -329,8 +328,6 @@ async function onLoadProduct() {
       (c) => c.is_default === true
     );
     selectedImage.value = selectedColor.value.cover_url;
-    title.value = product.value.description;
-    description.value = product.value.detail;
   } catch (error) {
     console.log(error);
     $q.notify({
@@ -366,6 +363,10 @@ async function addToCart() {
       color_id: selectedColor.value.id,
       size: selectedSize.value.size_name,
     });
+    if (response === UnAuthorizerd) {
+      router.push({ name: "login", query: { next: route.fullPath } });
+      return;
+    }
     const status = response.data.code;
     if (status === 200) {
       $q.notify({

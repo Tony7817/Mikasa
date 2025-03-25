@@ -1,8 +1,9 @@
-import axios, { api } from "boot/axios";
+import { api } from "boot/axios";
 import JSEncrypt from "jsencrypt";
 import { getLocation } from "src/composables/user";
 import { useUserStore } from "src/stores/user";
 import CryptoJS from "crypto-js";
+import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
 const key = "aaaasdf";
@@ -21,6 +22,16 @@ const desk_headers = {
   "Content-Type": "application/json",
 };
 
+function CheckSigninStatus() {
+  const router = useRouter();
+  if (userStore.user?.token) {
+    return true;
+  }
+
+  return false;
+}
+
+export const UnAuthorizerd = 401;
 export const service = {
   signup(data) {
     return api.post("/api/user/signup", data, {
@@ -118,6 +129,9 @@ export const service = {
   },
 
   addProductToCart(data) {
+    if (!CheckSigninStatus()) {
+      return UnAuthorizerd
+    }
     return api.post(`/api/cart/add/product`, data, {
       headers: {
         Authorization: `Bearer ${userStore.user.token}`,

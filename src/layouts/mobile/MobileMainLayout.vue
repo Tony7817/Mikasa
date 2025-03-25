@@ -2,7 +2,7 @@
   <q-layout view="hHh lpR fFf">
     <q-header class="bg-primary text-white q-py-xs">
       <q-toolbar>
-        <q-toolbar-title class="col-3"> P </q-toolbar-title>
+        <q-toolbar-title class="col-3"> Lureros </q-toolbar-title>
         <q-input class="col-6" color="white" outlined rounded dense />
         <div class="col-3 row">
           <q-space />
@@ -16,10 +16,15 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <q-card>
+        <q-card-section class="text-h4">
+          Please check the website on your pc. Mobile version is not available
+          yet.
+        </q-card-section>
+      </q-card>
     </q-page-container>
 
-    <q-footer class="bg-primary text-white">
+    <!-- <q-footer class="bg-primary text-white">
       <q-tabs v-model="tabs">
         <q-route-tab name="Star" icon="diversity_1" label="Star" to="/stars" />
         <q-route-tab
@@ -30,7 +35,7 @@
         />
         <q-route-tab name="My" icon="account_circle" label="My" to="/user" />
       </q-tabs>
-    </q-footer>
+    </q-footer> -->
   </q-layout>
 </template>
 

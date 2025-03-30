@@ -1,6 +1,7 @@
 import { boot } from "quasar/wrappers";
 import { useUserStore } from "src/stores/user";
 import { Loading } from "quasar";
+import { jwtDecode } from "jwt-decode";
 
 // "async" is optional;
 // more info on params: https://v2.quasar.dev/quasar-cli/boot-files

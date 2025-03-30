@@ -16,15 +16,10 @@
     </q-drawer>
 
     <q-page-container>
-      <q-card>
-        <q-card-section class="text-h4">
-          Please check the website on your pc. Mobile version is not available
-          yet.
-        </q-card-section>
-      </q-card>
+      <router-view />
     </q-page-container>
 
-    <!-- <q-footer class="bg-primary text-white">
+    <q-footer class="bg-primary text-white">
       <q-tabs v-model="tabs">
         <q-route-tab name="Star" icon="diversity_1" label="Star" to="/stars" />
         <q-route-tab
@@ -33,13 +28,14 @@
           label="Product"
           to="/product"
         />
-        <q-route-tab name="My" icon="account_circle" label="My" to="/user" />
+        <q-route-tab name="My" icon="account_circle" label="My" to="/user/manage" />
       </q-tabs>
-    </q-footer> -->
+    </q-footer>
   </q-layout>
 </template>
 
 <script setup>
+import { route } from "quasar/wrappers";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 

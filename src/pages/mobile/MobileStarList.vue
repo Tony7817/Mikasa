@@ -1,9 +1,13 @@
 <template>
   <q-page>
-    <q-infinite-scroll @load="onloadStars" :offset="200">
+    <q-infinite-scroll
+      @load="onloadStars"
+      :offset="200"
+      :disable="isLastStarLoaded"
+    >
       <div v-for="s in stars" :key="s.id" @click="toStarHomePage(s.id)">
         <div style="position: relative">
-          <q-img :src="s.image_url" />
+          <q-img :src="s.cover_url" />
           <span
             class="text-h5 text-bold"
             style="position: absolute; left: 5%; bottom: 2%"
@@ -64,13 +68,16 @@ async function onloadStars(index, done) {
   loading.value = true;
   const body = {
     page: index,
-    size: PageSize,
+    page_size: PageSize,
   };
   try {
     const response = await service.getStarList(body);
     const data = response.data.data;
     if (data.stars !== null) {
       stars.value.push(...response.data.data.stars);
+      if (data.stars.length < PageSize) {
+        isLastStarLoaded.value = true;
+      }
     } else {
       done();
       isLastStarLoaded.value = true;

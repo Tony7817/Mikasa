@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 250px">
+  <div :style="{ width: isMobile ? '100%' : '250px' }">
     <div>
       <router-link :to="`/product/${props.id}`">
         <q-img class="star-product-img" :src="props.coverUrl" fit="cover" />
@@ -22,11 +22,13 @@
 import { tool } from "src/uril/tool";
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { Platform } from "quasar";
 
 defineOptions({
   name: "ProductItem",
 });
 
+const isMobile = Platform.is.mobile;
 const route = useRoute();
 const router = useRouter();
 const props = defineProps({

@@ -60,14 +60,14 @@ const routes = [
       {
         path: "/user/manage",
         name: "user-detail",
-        component: () => import("pages/UserDetail.vue"),
+        component: () => import("src/pages/UserDetail.vue"),
         meta: { requiresAuth: true, tab: null },
         redirect: "/user/manage/account",
         children: [
           {
             path: "/user/manage/account",
             name: "UserManageAccount",
-            component: () => import("src/pages/desktop/manage/UserAccount.vue"),
+            component: () => import("src/pages/desktop/manage/DesktopUserInfo.vue"),
           },
           {
             path: "/user/order",
@@ -114,11 +114,14 @@ const routes = [
     component: () => import("layouts/LoginLayout.vue"),
     beforeEnter: (to, from, next) => {
       const userStore = useUserStore();
-      if (userStore.isAuthenticated) {
-        next(from.path);
+      const token = jwtDecode(userStore.user.token);
+      const currentTime = Date.now() / 1000;
+      if (token.exp < currentTime) {
+        userStore.clearUser();
       } else {
-        next();
+        console.log("Token is valid");
       }
+      next();
     },
   },
 

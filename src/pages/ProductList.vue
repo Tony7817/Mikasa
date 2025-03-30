@@ -1,6 +1,5 @@
 <template>
-  <DesktopProductList v-if="!$isMobile" />
-  <MobildProductList v-else />
+  <DesktopProductList />
 </template>
 
 <script setup>
@@ -10,7 +9,6 @@ import DesktopProductList from "src/pages//desktop/DesktopProductList.vue";
 defineOptions({
   name: "ProductList",
 });
-
 </script>
 
 <style scoped>

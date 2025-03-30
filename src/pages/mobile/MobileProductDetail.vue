@@ -114,7 +114,10 @@ async function onLoadProduct() {
     const response = await service.getProductDetail(productId, {});
     const data = response.data.data;
     _.assign(product.value, data);
-    console.log(product.value.color);
+    selectedColor.value = product.value.colors.find(
+      (c) => c.is_default === true
+    );
+    selectedImage.value = selectedColor.value.cover_url;
   } catch (error) {
     console.log(error);
     $q.notify({

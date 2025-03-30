@@ -74,7 +74,7 @@
 </template>
 
 <script setup>
-import { useQuasar } from "quasar";
+import { Loading, useQuasar } from "quasar";
 import SizePicker from "src/components/Desktop/SizePicker.vue";
 import { computed, onMounted, ref } from "vue";
 import { tool } from "src/uril/tool";
@@ -110,6 +110,7 @@ const rating = computed(() => {
 });
 
 async function onLoadProduct() {
+  Loading.show();
   try {
     const response = await service.getProductDetail(productId, {});
     const data = response.data.data;
@@ -126,6 +127,7 @@ async function onLoadProduct() {
       position: "top",
     });
   }
+  Loading.hide();
 }
 
 async function addToCart() {

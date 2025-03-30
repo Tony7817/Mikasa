@@ -59,7 +59,7 @@
         <div class="product-grid">
           <div v-for="p in products" :key="p.id" @click="toProductPage(p.id)">
             <div class="">
-              <q-img :src="p.cover_url" fit="cover" style="height: 30vh" />
+              <q-img :src="p.default_color.cover_url" fit="cover" style="height: 30vh" />
             </div>
           </div>
         </div>

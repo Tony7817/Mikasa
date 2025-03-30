@@ -10,11 +10,16 @@ export default boot(async ({ app, router }) => {
       message: "Loading...",
     });
     const userStore = useUserStore();
-    if (
-      to.matched.some((record) => record.meta.requiresAuth) &&
-      !userStore.isAuthenticated
-    ) {
-      next({ name: "login", query: { next: to.fullPath } });
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
+      if (!userStore.user?.token) {
+        next({ name: "login", query: { next: to.fullPath } });
+      }
+      const token = jwtDecode(userStore.user.token);
+      const currentTime = Date.now() / 1000;
+      if (token.exp < currentTime) {
+        userStore.clearUser();
+        next({ name: "login", query: { next: to.fullPath } });
+      }
     } else {
       next();
     }

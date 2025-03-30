@@ -67,7 +67,8 @@ const routes = [
           {
             path: "/user/manage/account",
             name: "UserManageAccount",
-            component: () => import("src/pages/desktop/manage/DesktopUserInfo.vue"),
+            component: () =>
+              import("src/pages/desktop/manage/DesktopUserInfo.vue"),
           },
           {
             path: "/user/order",
@@ -83,17 +84,6 @@ const routes = [
               import("src/pages/desktop/manage/DesktopOrderDetail.vue"),
           },
         ],
-        beforeEnter(to, from, next) {
-          const userStore = useUserStore();
-          const token = jwtDecode(userStore.user.token);
-          const currentTime = Date.now() / 1000;
-          if (token.exp < currentTime) {
-            userStore.clearUser();
-          } else {
-            console.log("Token is valid");
-          }
-          next();
-        },
       },
       {
         path: "/contact",
@@ -112,17 +102,6 @@ const routes = [
     path: "/login",
     name: "login",
     component: () => import("layouts/LoginLayout.vue"),
-    beforeEnter: (to, from, next) => {
-      const userStore = useUserStore();
-      const token = jwtDecode(userStore.user.token);
-      const currentTime = Date.now() / 1000;
-      if (token.exp < currentTime) {
-        userStore.clearUser();
-      } else {
-        console.log("Token is valid");
-      }
-      next();
-    },
   },
 
   // Always leave this as last one,

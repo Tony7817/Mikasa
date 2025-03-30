@@ -18,7 +18,7 @@
           class="q-pa-md"
           v-for="i in 10"
           :key="i"
-          width="256px"
+          :width="isMobile ? '100%' : '256px'"
           height="300px"
         />
       </div>
@@ -43,10 +43,11 @@ import { onMounted } from "vue";
 import { ref } from "vue";
 import { service } from "src/services/api";
 import { merge } from "src/uril/tool";
-import { useQuasar } from "quasar";
+import { Platform, useQuasar } from "quasar";
 import { useRoute, useRouter } from "vue-router";
 import { watch } from "vue";
 
+const isMobile = Platform.is.mobile;
 const products = ref({
   total: 0,
   products: [],

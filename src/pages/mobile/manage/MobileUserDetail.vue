@@ -3,7 +3,9 @@
     <q-page padding>
       <div>
         <div class="row items-center">
-          <div class="text-center q-mt-lg text-h4">We are working on it for now</div>
+          <div class="text-center q-mt-lg text-h4">
+            We are working on it for now
+          </div>
         </div>
       </div>
     </q-page>
@@ -40,7 +42,7 @@ async function onLoadUserInfo() {
 }
 
 onMounted(() => {
-  onLoadUserInfo();
+  // onLoadUserInfo();
 });
 </script>
 

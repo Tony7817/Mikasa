@@ -85,6 +85,7 @@ async function onloadStars(index, done) {
       return;
     }
   } catch (error) {
+    isLastStarLoaded.value = true;
     console.log(error);
     $q.notify({
       type: "negative",

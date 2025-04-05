@@ -14,8 +14,8 @@
       </div>
     </div>
     <div class="text-primary text-h5 text-bold q-ml-md q-mt-sm">
-      <span class="text-h6">{{ tool.getUnit(product.unit) }} </span
-      >{{ product.price }}
+      <span class="text-h6">{{ tool.getUnit(selectedColor.unit) }} </span>
+      <span>{{ tool.formatPrice(selectedColor.price) }}</span>
     </div>
     <div class="q-ml-md" style="font-size: 16px">
       {{ product.description }}
@@ -45,6 +45,18 @@
       >
         Selected {{ selectedSize }}
       </div>
+    </div>
+    <div
+      class="row items-center q-mx-md q-my-md"
+      v-for="c in product.colors"
+      :key="c.id"
+    >
+      <q-avatar
+        @click="selectColor(c)"
+        :size="selectedColor.id === c.id ? '60px' : '50px'"
+      >
+        <q-img :src="c.cover_url" />
+      </q-avatar>
     </div>
     <q-separator class="q-my-md q-mx-md" />
     <div class="q-ml-md q-pb-lg" style="font-size: 16px">
@@ -105,6 +117,11 @@ const product = ref({
   sold_num: 0,
 });
 
+function selectColor(c) {
+  selectedColor.value = c;
+  selectedImage.value = selectedColor.value.images[0];
+}
+
 const rating = computed(() => {
   return product.value.rate ? product.value.rate : 0;
 });
@@ -118,7 +135,7 @@ async function onLoadProduct() {
     selectedColor.value = product.value.colors.find(
       (c) => c.is_default === true
     );
-    selectedImage.value = selectedColor.value.cover_url;
+    selectedImage.value = selectedColor.value.images[0];
   } catch (error) {
     console.log(error);
     $q.notify({

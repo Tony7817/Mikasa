@@ -1,12 +1,14 @@
 import { useQuasar } from "quasar";
+import { Platform } from "quasar";
+import platform from "src/boot/platform";
 import {
   ContactTab,
   HomeTab,
   ProductTab,
   StarsTab,
 } from "src/composables/consts";
-import { useUserStore } from "src/stores/user";
 
+const isMobile = platform.isMobile;
 const $q = useQuasar();
 const routes = [
   {

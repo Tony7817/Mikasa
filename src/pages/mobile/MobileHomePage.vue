@@ -1,11 +1,11 @@
 <template>
   <q-page>
-    <MobileStarList />
+    <MobileProductList />
   </q-page>
 </template>
 
 <script setup>
-import MobileStarList from "src/pages/mobile/MobileStarList.vue";
+import MobileProductList from "src/pages/mobile/MobileProductList.vue";
 </script>
 
 <style lang="css" scoped></style>

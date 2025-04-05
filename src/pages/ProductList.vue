@@ -3,7 +3,6 @@
 </template>
 
 <script setup>
-import MobildProductList from "src/pages/mobile/MobildProductList.vue";
 import DesktopProductList from "src/pages//desktop/DesktopProductList.vue";
 
 defineOptions({

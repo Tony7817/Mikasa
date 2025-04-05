@@ -18,19 +18,6 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-
-    <q-footer class="bg-primary text-white">
-      <q-tabs v-model="tabs">
-        <q-route-tab name="Star" icon="diversity_1" label="Star" to="/stars" />
-        <q-route-tab
-          name="Product"
-          icon="local_mall"
-          label="Product"
-          to="/product"
-        />
-        <q-route-tab name="My" icon="account_circle" label="My" to="/user/manage" />
-      </q-tabs>
-    </q-footer>
   </q-layout>
 </template>
 

@@ -135,7 +135,7 @@ async function onLoadProduct() {
     selectedColor.value = product.value.colors.find(
       (c) => c.is_default === true
     );
-    selectedImage.value = selectedColor.value.images[0];
+    selectedImage.value = selectedColor.value.cover_url;
   } catch (error) {
     console.log(error);
     $q.notify({

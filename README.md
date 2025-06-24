@@ -37,7 +37,7 @@ npm run format
 ```bash
 quasar build
 
-scp -r ./dist/spa/* root@39.105.153.22:/data/index/spa/
+scp -r ./dist/spa/* root@xxxx:/data/index/spa/
 ```
 
 ### Customize the configuration
